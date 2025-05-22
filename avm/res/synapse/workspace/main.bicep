@@ -69,6 +69,9 @@ param publicNetworkAccess string = 'Enabled'
 @description('Optional. List of firewall rules to be created in the workspace.')
 param firewallRules firewallRuleType[]?
 
+@description('Optional. List of Big Data Pools to be created in the workspace.')
+param bigDataPools bigDataPoolType[]?
+
 @description('Optional. Purview Resource ID.')
 param purviewResourceID string = ''
 
@@ -350,6 +353,36 @@ module workspace_firewallRules 'firewall-rules/main.bicep' = [
   }
 ]
 
+// Big Data Pools
+module workspace_bigDataPools 'big-data-pools/main.bicep' = [
+  for (bigDataPool, index) in (bigDataPools ?? []): {
+    name: '${uniqueString(deployment().name, location)}-workspace-BigDataPool-${index}'
+    params: {
+      workspaceName: workspace.name
+      name: bigDataPool.name
+      location: location
+      tags: tags
+      autoPause: bigDataPool.autoPause
+      autoScale: bigDataPool.autoScale
+      cacheSize: bigDataPool.cacheSize
+      // customLibraries: bigDataPool.customLibraries
+      // defaultSparkLogFolder: bigDataPool.defaultSparkLogFolder
+      dynamicExecutorAllocation: bigDataPool.dynamicExecutorAllocation
+      // isAutotuneEnabled: bigDataPool.isAutotuneEnabled
+      // isComputeIsolationEnabled: bigDataPool.isComputeIsolationEnabled
+      // libraryRequirements: bigDataPool.libraryRequirements
+      nodeCount: bigDataPool.nodeCount
+      nodeSize: bigDataPool.nodeSize
+      nodeSizeFamily: bigDataPool.nodeSizeFamily
+      // provisioningState: bigDataPool.provisioningState
+      sessionLevelPackagesEnabled: bigDataPool.sessionLevelPackagesEnabled
+      // sparkConfigProperties: bigDataPool.sparkConfigProperties
+      // sparkEventsFolder: bigDataPool.sparkEventsFolder
+      // sparkVersion: bigDataPool.sparkVersion
+    }
+  }
+]
+
 // Endpoints
 module workspace_privateEndpoints 'br/public:avm/res/network/private-endpoint:0.10.1' = [
   for (privateEndpoint, index) in (privateEndpoints ?? []): {
@@ -517,4 +550,60 @@ type firewallRuleType = {
 
   @description('Required. The end IP address of the firewall rule. Must be IPv4 format. Must be greater than or equal to startIpAddress.')
   endIpAddress: string
+}
+
+import { autoPauseType, autoScaleType, libraryInfoType, dynamicExecutorAllocationType, libraryRequirementsType, sparkConfigPropertiesType } from 'big-data-pools/main.bicep'
+@export()
+@description('The synapse workspace Big Data Pool definition.')
+type bigDataPoolType = {
+  @description('Required. The name of the Big Data Pool.')
+  name: string
+
+  @description('Optional. The auto pause configuration.')
+  autoPause: autoPauseType?
+
+  @description('Optional. The auto scale configuration.')
+  autoScale: autoScaleType?
+
+  @description('Optional. The cache size of the pool.')
+  cacheSize: int?
+
+  @description('Optional. The custom libraries to be installed in the pool.')
+  customLibraries: libraryInfoType[]?
+
+  @description('Optional. The default Spark log folder.')
+  defaultSparkLogFolder: string?
+
+  @description('Optional. The dynamic executor allocation configuration.')
+  dynamicExecutorAllocation: dynamicExecutorAllocationType?
+
+  @description('Optional. Enable or disable autotune.')
+  isAutotuneEnabled: bool?
+
+  @description('Optional. Enable or disable compute isolation.')
+  isComputeIsolationEnabled: bool?
+
+  @description('Optional. The library requirements for the pool.')
+  libraryRequirements: libraryRequirementsType?
+
+  @description('Optional. The number of nodes in the pool.')
+  nodeCount: int?
+
+  @description('Optional. The node size of the pool.')
+  nodeSize: string?
+
+  @description('Optional. The node size family of the pool.')
+  nodeSizeFamily: string?
+
+  @description('Optional. Enable or disable session level packages.')
+  sessionLevelPackagesEnabled: bool?
+
+  @description('Optional. The Spark configuration properties.')
+  sparkConfigProperties: sparkConfigPropertiesType[]?
+
+  @description('Optional. The Spark events folder.')
+  sparkEventsFolder: string?
+
+  @description('Required. The Spark version.')
+  sparkVersion: string
 }

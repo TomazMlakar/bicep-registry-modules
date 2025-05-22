@@ -5,8 +5,8 @@
   "metadata": {
     "_generator": {
       "name": "bicep",
-      "version": "0.33.13.18514",
-      "templateHash": "805764373089430550"
+      "version": "0.33.93.31351",
+      "templateHash": "5014137538481600055"
     },
     "name": "Synapse Workspaces",
     "description": "This module deploys a Synapse Workspace."
@@ -137,6 +137,138 @@
         "description": "The synapse workspace firewall rule's interface."
       }
     },
+    "bigDataPoolType": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "metadata": {
+            "description": "Required. The name of the Big Data Pool."
+          }
+        },
+        "autoPause": {
+          "$ref": "#/definitions/autoPauseType",
+          "nullable": true,
+          "metadata": {
+            "description": "Optional. The auto pause configuration."
+          }
+        },
+        "autoScale": {
+          "$ref": "#/definitions/autoScaleType",
+          "nullable": true,
+          "metadata": {
+            "description": "Optional. The auto scale configuration."
+          }
+        },
+        "cacheSize": {
+          "type": "int",
+          "nullable": true,
+          "metadata": {
+            "description": "Optional. The cache size of the pool."
+          }
+        },
+        "customLibraries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/libraryInfoType"
+          },
+          "nullable": true,
+          "metadata": {
+            "description": "Optional. The custom libraries to be installed in the pool."
+          }
+        },
+        "defaultSparkLogFolder": {
+          "type": "string",
+          "nullable": true,
+          "metadata": {
+            "description": "Optional. The default Spark log folder."
+          }
+        },
+        "dynamicExecutorAllocation": {
+          "$ref": "#/definitions/dynamicExecutorAllocationType",
+          "nullable": true,
+          "metadata": {
+            "description": "Optional. The dynamic executor allocation configuration."
+          }
+        },
+        "isAutotuneEnabled": {
+          "type": "bool",
+          "nullable": true,
+          "metadata": {
+            "description": "Optional. Enable or disable autotune."
+          }
+        },
+        "isComputeIsolationEnabled": {
+          "type": "bool",
+          "nullable": true,
+          "metadata": {
+            "description": "Optional. Enable or disable compute isolation."
+          }
+        },
+        "libraryRequirements": {
+          "$ref": "#/definitions/libraryRequirementsType",
+          "nullable": true,
+          "metadata": {
+            "description": "Optional. The library requirements for the pool."
+          }
+        },
+        "nodeCount": {
+          "type": "int",
+          "nullable": true,
+          "metadata": {
+            "description": "Optional. The number of nodes in the pool."
+          }
+        },
+        "nodeSize": {
+          "type": "string",
+          "nullable": true,
+          "metadata": {
+            "description": "Optional. The node size of the pool."
+          }
+        },
+        "nodeSizeFamily": {
+          "type": "string",
+          "nullable": true,
+          "metadata": {
+            "description": "Optional. The node size family of the pool."
+          }
+        },
+        "sessionLevelPackagesEnabled": {
+          "type": "bool",
+          "nullable": true,
+          "metadata": {
+            "description": "Optional. Enable or disable session level packages."
+          }
+        },
+        "sparkConfigProperties": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sparkConfigPropertiesType"
+          },
+          "nullable": true,
+          "metadata": {
+            "description": "Optional. The Spark configuration properties."
+          }
+        },
+        "sparkEventsFolder": {
+          "type": "string",
+          "nullable": true,
+          "metadata": {
+            "description": "Optional. The Spark events folder."
+          }
+        },
+        "sparkVersion": {
+          "type": "string",
+          "metadata": {
+            "description": "Required. The Spark version."
+          }
+        }
+      },
+      "metadata": {
+        "__bicep_export!": true,
+        "description": "The synapse workspace Big Data Pool definition."
+      }
+    },
     "_1.privateEndpointCustomDnsConfigType": {
       "type": "object",
       "properties": {
@@ -243,6 +375,58 @@
       "metadata": {
         "__bicep_imported_from!": {
           "sourceTemplate": "br:mcr.microsoft.com/bicep/avm/utl/types/avm-common-types:0.5.1"
+        }
+      }
+    },
+    "autoPauseType": {
+      "type": "object",
+      "properties": {
+        "delayInMinutes": {
+          "type": "int",
+          "metadata": {
+            "description": "Required. Synapse workspace Big Data Pools Auto-pausing delay in minutes."
+          }
+        },
+        "enabled": {
+          "type": "bool",
+          "metadata": {
+            "description": "Required. Synapse workspace Big Data Pools Auto-pausing enabled."
+          }
+        }
+      },
+      "metadata": {
+        "description": "The synapse workspace Big Data Pools Auto-pausing properties.",
+        "__bicep_imported_from!": {
+          "sourceTemplate": "big-data-pools/main.bicep"
+        }
+      }
+    },
+    "autoScaleType": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "bool",
+          "metadata": {
+            "description": "Required. Synapse workspace Big Data Pools Auto-scaling enabled."
+          }
+        },
+        "maxNodeCount": {
+          "type": "string",
+          "metadata": {
+            "description": "Required. Synapse workspace Big Data Pools Auto-scaling maximum node count."
+          }
+        },
+        "minNodeCount": {
+          "type": "string",
+          "metadata": {
+            "description": "Required. Synapse workspace Big Data Pools Auto-scaling minimum node count."
+          }
+        }
+      },
+      "metadata": {
+        "description": "The synapse workspace Big Data Pools Auto-scaling properties.",
+        "__bicep_imported_from!": {
+          "sourceTemplate": "big-data-pools/main.bicep"
         }
       }
     },
@@ -377,6 +561,93 @@
         "description": "An AVM-aligned type for a diagnostic setting. To be used if only logs are supported by the resource provider.",
         "__bicep_imported_from!": {
           "sourceTemplate": "br:mcr.microsoft.com/bicep/avm/utl/types/avm-common-types:0.5.1"
+        }
+      }
+    },
+    "dynamicExecutorAllocationType": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "bool",
+          "metadata": {
+            "description": "Required. Synapse workspace Big Data Pools Dynamic Executor Allocation enabled."
+          }
+        },
+        "maxExecutors": {
+          "type": "string",
+          "metadata": {
+            "description": "Required. Synapse workspace Big Data Pools Dynamic Executor Allocation maximum executors."
+          }
+        },
+        "minExecutors": {
+          "type": "string",
+          "metadata": {
+            "description": "Required. Synapse workspace Big Data Pools Dynamic Executor Allocation minimum executors."
+          }
+        }
+      },
+      "metadata": {
+        "description": "The synapse workspace Big Data Pools Dynamic Executor Allocation properties.",
+        "__bicep_imported_from!": {
+          "sourceTemplate": "big-data-pools/main.bicep"
+        }
+      }
+    },
+    "libraryInfoType": {
+      "type": "object",
+      "properties": {
+        "containerName": {
+          "type": "string",
+          "metadata": {
+            "description": "Required. The library name."
+          }
+        },
+        "name": {
+          "type": "string",
+          "metadata": {
+            "description": "Required. The library version."
+          }
+        },
+        "path": {
+          "type": "string",
+          "metadata": {
+            "description": "Required. The library path."
+          }
+        },
+        "type": {
+          "type": "string",
+          "metadata": {
+            "description": "Required. The library type."
+          }
+        }
+      },
+      "metadata": {
+        "description": "The synapse workspace Big Data Pools Custom library/package info.",
+        "__bicep_imported_from!": {
+          "sourceTemplate": "big-data-pools/main.bicep"
+        }
+      }
+    },
+    "libraryRequirementsType": {
+      "type": "object",
+      "properties": {
+        "content": {
+          "type": "string",
+          "metadata": {
+            "description": "Required. The library name."
+          }
+        },
+        "filename": {
+          "type": "string",
+          "metadata": {
+            "description": "Required. The library version."
+          }
+        }
+      },
+      "metadata": {
+        "description": "The synapse workspace Big Data Pools Library version requirements.",
+        "__bicep_imported_from!": {
+          "sourceTemplate": "big-data-pools/main.bicep"
         }
       }
     },
@@ -646,6 +917,35 @@
           "sourceTemplate": "br:mcr.microsoft.com/bicep/avm/utl/types/avm-common-types:0.5.1"
         }
       }
+    },
+    "sparkConfigPropertiesType": {
+      "type": "object",
+      "properties": {
+        "configurationType": {
+          "type": "string",
+          "metadata": {
+            "description": "Required. The configuration type."
+          }
+        },
+        "content": {
+          "type": "string",
+          "metadata": {
+            "description": "Required. The configuration content."
+          }
+        },
+        "filename": {
+          "type": "string",
+          "metadata": {
+            "description": "Required. The configuration filename."
+          }
+        }
+      },
+      "metadata": {
+        "description": "The synapse workspace Big Data Pools Spark configuration file properties.",
+        "__bicep_imported_from!": {
+          "sourceTemplate": "big-data-pools/main.bicep"
+        }
+      }
     }
   },
   "parameters": {
@@ -793,6 +1093,16 @@
       "nullable": true,
       "metadata": {
         "description": "Optional. List of firewall rules to be created in the workspace."
+      }
+    },
+    "bigDataPools": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/bigDataPoolType"
+      },
+      "nullable": true,
+      "metadata": {
+        "description": "Optional. List of Big Data Pools to be created in the workspace."
       }
     },
     "purviewResourceID": {
@@ -1078,8 +1388,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.33.13.18514",
-              "templateHash": "18124614252428623156"
+              "version": "0.33.93.31351",
+              "templateHash": "18061636636403697342"
             },
             "name": "Synapse Workspace Integration Runtimes",
             "description": "This module deploys a Synapse Workspace Integration Runtime."
@@ -1177,8 +1487,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.33.13.18514",
-              "templateHash": "4658877837973777703"
+              "version": "0.33.93.31351",
+              "templateHash": "17872517701455031118"
             }
           },
           "parameters": {
@@ -1265,8 +1575,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.33.13.18514",
-              "templateHash": "18134135357281825028"
+              "version": "0.33.93.31351",
+              "templateHash": "6803045093201001500"
             },
             "name": "Synapse Workspaces Keys",
             "description": "This module deploys a Synapse Workspaces Key."
@@ -1371,8 +1681,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.33.13.18514",
-              "templateHash": "6961828897310133803"
+              "version": "0.33.93.31351",
+              "templateHash": "14545194761901704803"
             },
             "name": "Synapse Workspaces Administrators",
             "description": "This module deploys Synapse Workspaces Administrators."
@@ -1485,8 +1795,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.33.13.18514",
-              "templateHash": "4218971273589711859"
+              "version": "0.33.93.31351",
+              "templateHash": "6182134169539050308"
             },
             "name": "Synapse Workspaces Firewall Rules",
             "description": "This module deploys Synapse Workspaces Firewall Rules."
@@ -1547,6 +1857,398 @@
               "type": "string",
               "metadata": {
                 "description": "The resource group of the deployed firewall rule."
+              },
+              "value": "[resourceGroup().name]"
+            }
+          }
+        }
+      },
+      "dependsOn": [
+        "workspace"
+      ]
+    },
+    "workspace_bigDataPools": {
+      "copy": {
+        "name": "workspace_bigDataPools",
+        "count": "[length(coalesce(parameters('bigDataPools'), createArray()))]"
+      },
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2022-09-01",
+      "name": "[format('{0}-workspace-BigDataPool-{1}', uniqueString(deployment().name, parameters('location')), copyIndex())]",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "workspaceName": {
+            "value": "[parameters('name')]"
+          },
+          "name": {
+            "value": "[coalesce(parameters('bigDataPools'), createArray())[copyIndex()].name]"
+          },
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "tags": {
+            "value": "[parameters('tags')]"
+          },
+          "autoPause": {
+            "value": "[coalesce(parameters('bigDataPools'), createArray())[copyIndex()].autoPause]"
+          },
+          "autoScale": {
+            "value": "[coalesce(parameters('bigDataPools'), createArray())[copyIndex()].autoScale]"
+          },
+          "cacheSize": {
+            "value": "[coalesce(parameters('bigDataPools'), createArray())[copyIndex()].cacheSize]"
+          },
+          "dynamicExecutorAllocation": {
+            "value": "[coalesce(parameters('bigDataPools'), createArray())[copyIndex()].dynamicExecutorAllocation]"
+          },
+          "nodeCount": {
+            "value": "[coalesce(parameters('bigDataPools'), createArray())[copyIndex()].nodeCount]"
+          },
+          "nodeSize": {
+            "value": "[coalesce(parameters('bigDataPools'), createArray())[copyIndex()].nodeSize]"
+          },
+          "nodeSizeFamily": {
+            "value": "[coalesce(parameters('bigDataPools'), createArray())[copyIndex()].nodeSizeFamily]"
+          },
+          "sessionLevelPackagesEnabled": {
+            "value": "[coalesce(parameters('bigDataPools'), createArray())[copyIndex()].sessionLevelPackagesEnabled]"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "languageVersion": "2.0",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.33.93.31351",
+              "templateHash": "6097022141112597316"
+            },
+            "name": "Synapse Workspaces Big Data Pools",
+            "description": "This module deploys Synapse Workspaces Big Data Pools."
+          },
+          "definitions": {
+            "autoPauseType": {
+              "type": "object",
+              "properties": {
+                "delayInMinutes": {
+                  "type": "int",
+                  "metadata": {
+                    "description": "Required. Synapse workspace Big Data Pools Auto-pausing delay in minutes."
+                  }
+                },
+                "enabled": {
+                  "type": "bool",
+                  "metadata": {
+                    "description": "Required. Synapse workspace Big Data Pools Auto-pausing enabled."
+                  }
+                }
+              },
+              "metadata": {
+                "__bicep_export!": true,
+                "description": "The synapse workspace Big Data Pools Auto-pausing properties."
+              }
+            },
+            "autoScaleType": {
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "type": "bool",
+                  "metadata": {
+                    "description": "Required. Synapse workspace Big Data Pools Auto-scaling enabled."
+                  }
+                },
+                "maxNodeCount": {
+                  "type": "string",
+                  "metadata": {
+                    "description": "Required. Synapse workspace Big Data Pools Auto-scaling maximum node count."
+                  }
+                },
+                "minNodeCount": {
+                  "type": "string",
+                  "metadata": {
+                    "description": "Required. Synapse workspace Big Data Pools Auto-scaling minimum node count."
+                  }
+                }
+              },
+              "metadata": {
+                "__bicep_export!": true,
+                "description": "The synapse workspace Big Data Pools Auto-scaling properties."
+              }
+            },
+            "dynamicExecutorAllocationType": {
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "type": "bool",
+                  "metadata": {
+                    "description": "Required. Synapse workspace Big Data Pools Dynamic Executor Allocation enabled."
+                  }
+                },
+                "maxExecutors": {
+                  "type": "string",
+                  "metadata": {
+                    "description": "Required. Synapse workspace Big Data Pools Dynamic Executor Allocation maximum executors."
+                  }
+                },
+                "minExecutors": {
+                  "type": "string",
+                  "metadata": {
+                    "description": "Required. Synapse workspace Big Data Pools Dynamic Executor Allocation minimum executors."
+                  }
+                }
+              },
+              "metadata": {
+                "__bicep_export!": true,
+                "description": "The synapse workspace Big Data Pools Dynamic Executor Allocation properties."
+              }
+            },
+            "libraryRequirementsType": {
+              "type": "object",
+              "properties": {
+                "content": {
+                  "type": "string",
+                  "metadata": {
+                    "description": "Required. The library name."
+                  }
+                },
+                "filename": {
+                  "type": "string",
+                  "metadata": {
+                    "description": "Required. The library version."
+                  }
+                }
+              },
+              "metadata": {
+                "__bicep_export!": true,
+                "description": "The synapse workspace Big Data Pools Library version requirements."
+              }
+            },
+            "sparkConfigPropertiesType": {
+              "type": "object",
+              "properties": {
+                "configurationType": {
+                  "type": "string",
+                  "metadata": {
+                    "description": "Required. The configuration type."
+                  }
+                },
+                "content": {
+                  "type": "string",
+                  "metadata": {
+                    "description": "Required. The configuration content."
+                  }
+                },
+                "filename": {
+                  "type": "string",
+                  "metadata": {
+                    "description": "Required. The configuration filename."
+                  }
+                }
+              },
+              "metadata": {
+                "__bicep_export!": true,
+                "description": "The synapse workspace Big Data Pools Spark configuration file properties."
+              }
+            },
+            "libraryInfoType": {
+              "type": "object",
+              "properties": {
+                "containerName": {
+                  "type": "string",
+                  "metadata": {
+                    "description": "Required. The library name."
+                  }
+                },
+                "name": {
+                  "type": "string",
+                  "metadata": {
+                    "description": "Required. The library version."
+                  }
+                },
+                "path": {
+                  "type": "string",
+                  "metadata": {
+                    "description": "Required. The library path."
+                  }
+                },
+                "type": {
+                  "type": "string",
+                  "metadata": {
+                    "description": "Required. The library type."
+                  }
+                }
+              },
+              "metadata": {
+                "__bicep_export!": true,
+                "description": "The synapse workspace Big Data Pools Custom library/package info."
+              }
+            }
+          },
+          "parameters": {
+            "workspaceName": {
+              "type": "string",
+              "metadata": {
+                "description": "Conditional. The name of the parent Synapse Workspace. Required if the template is used in a standalone deployment."
+              }
+            },
+            "name": {
+              "type": "string",
+              "metadata": {
+                "description": "Required. The name of the Big Data Pool."
+              }
+            },
+            "location": {
+              "type": "string",
+              "metadata": {
+                "description": "Required. The geo-location where the resource lives."
+              }
+            },
+            "tags": {
+              "type": "object",
+              "nullable": true,
+              "metadata": {
+                "description": "Optional. Tags of the resource."
+              }
+            },
+            "autoPause": {
+              "$ref": "#/definitions/autoPauseType",
+              "defaultValue": {
+                "delayInMinutes": 15,
+                "enabled": true
+              },
+              "metadata": {
+                "description": "Optional. Auto-pausing properties."
+              }
+            },
+            "autoScale": {
+              "$ref": "#/definitions/autoScaleType",
+              "defaultValue": {
+                "enabled": true,
+                "maxNodeCount": "5",
+                "minNodeCount": "3"
+              },
+              "metadata": {
+                "description": "Optional. Auto-scaling properties."
+              }
+            },
+            "cacheSize": {
+              "type": "int",
+              "defaultValue": 50,
+              "minValue": 0,
+              "maxValue": 100,
+              "metadata": {
+                "description": "Optional. The cache size."
+              }
+            },
+            "dynamicExecutorAllocation": {
+              "$ref": "#/definitions/dynamicExecutorAllocationType",
+              "defaultValue": {
+                "enabled": false,
+                "maxExecutors": "2",
+                "minExecutors": "1"
+              },
+              "metadata": {
+                "description": "Optional. Dynamic Executor Allocation."
+              }
+            },
+            "nodeCount": {
+              "type": "int",
+              "metadata": {
+                "description": "Conditional. The number of nodes in the Big Data pool."
+              }
+            },
+            "nodeSize": {
+              "type": "string",
+              "allowedValues": [
+                "Large",
+                "Medium",
+                "None",
+                "Small",
+                "XLarge",
+                "XXLarge",
+                "XXXLarge"
+              ],
+              "metadata": {
+                "description": "Required. The level of compute power that each node in the Big Data pool has."
+              }
+            },
+            "nodeSizeFamily": {
+              "type": "string",
+              "allowedValues": [
+                "HardwareAcceleratedFPGA",
+                "HardwareAcceleratedGPU",
+                "MemoryOptimized",
+                "None"
+              ],
+              "metadata": {
+                "description": "Required. The kind of nodes that the Big Data pool provides."
+              }
+            },
+            "sessionLevelPackagesEnabled": {
+              "type": "bool",
+              "defaultValue": true,
+              "metadata": {
+                "description": "Optional. Whether session level packages enabled."
+              }
+            },
+            "sparkVersion": {
+              "type": "string",
+              "nullable": true,
+              "metadata": {
+                "description": "Required. The Apache Spark version."
+              }
+            }
+          },
+          "resources": {
+            "workspace": {
+              "existing": true,
+              "type": "Microsoft.Synapse/workspaces",
+              "apiVersion": "2021-06-01",
+              "name": "[parameters('workspaceName')]"
+            },
+            "bigDataPool": {
+              "type": "Microsoft.Synapse/workspaces/bigDataPools",
+              "apiVersion": "2021-06-01",
+              "name": "[format('{0}/{1}', parameters('workspaceName'), parameters('name'))]",
+              "location": "[parameters('location')]",
+              "tags": "[parameters('tags')]",
+              "properties": {
+                "nodeSizeFamily": "[parameters('nodeSizeFamily')]",
+                "nodeSize": "[parameters('nodeSize')]",
+                "autoScale": "[if(not(empty(parameters('autoScale'))), createObject('enabled', tryGet(parameters('autoScale'), 'enabled'), 'maxNodeCount', json(tryGet(parameters('autoScale'), 'maxNodeCount')), 'minNodeCount', json(tryGet(parameters('autoScale'), 'minNodeCount'))), null())]",
+                "nodeCount": "[if(empty(parameters('autoScale')), parameters('nodeCount'), null())]",
+                "dynamicExecutorAllocation": "[if(not(empty(parameters('dynamicExecutorAllocation'))), createObject('enabled', tryGet(parameters('dynamicExecutorAllocation'), 'enabled'), 'maxExecutors', json(tryGet(parameters('dynamicExecutorAllocation'), 'maxExecutors')), 'minExecutors', json(tryGet(parameters('dynamicExecutorAllocation'), 'minExecutors'))), null())]",
+                "autoPause": "[if(not(empty(parameters('autoPause'))), createObject('enabled', tryGet(parameters('autoPause'), 'enabled'), 'delayInMinutes', tryGet(parameters('autoPause'), 'delayInMinutes')), null())]",
+                "sparkVersion": "[parameters('sparkVersion')]",
+                "sessionLevelPackagesEnabled": "[parameters('sessionLevelPackagesEnabled')]",
+                "cacheSize": "[parameters('cacheSize')]"
+              }
+            }
+          },
+          "outputs": {
+            "name": {
+              "type": "string",
+              "metadata": {
+                "description": "The name of the deployed Big Data Pool."
+              },
+              "value": "[parameters('name')]"
+            },
+            "resourceId": {
+              "type": "string",
+              "metadata": {
+                "description": "The resource ID of the deployed Big Data Pool."
+              },
+              "value": "[resourceId('Microsoft.Synapse/workspaces/bigDataPools', parameters('workspaceName'), parameters('name'))]"
+            },
+            "resourceGroupName": {
+              "type": "string",
+              "metadata": {
+                "description": "The resource group of the deployed Big Data Pool."
               },
               "value": "[resourceGroup().name]"
             }

@@ -23,6 +23,7 @@ This module deploys a Synapse Workspace.
 | `Microsoft.Network/privateEndpoints/privateDnsZoneGroups` | [2023-11-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Network/2023-11-01/privateEndpoints/privateDnsZoneGroups) |
 | `Microsoft.Synapse/workspaces` | [2021-06-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Synapse/2021-06-01/workspaces) |
 | `Microsoft.Synapse/workspaces/administrators` | [2021-06-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Synapse/2021-06-01/workspaces/administrators) |
+| `Microsoft.Synapse/workspaces/bigDataPools` | [2021-06-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Synapse/2021-06-01/workspaces/bigDataPools) |
 | `Microsoft.Synapse/workspaces/firewallRules` | [2021-06-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Synapse/2021-06-01/workspaces/firewallRules) |
 | `Microsoft.Synapse/workspaces/integrationRuntimes` | [2021-06-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Synapse/2021-06-01/workspaces/integrationRuntimes) |
 | `Microsoft.Synapse/workspaces/keys` | [2021-06-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Synapse/2021-06-01/workspaces/keys) |
@@ -35,15 +36,146 @@ The following section provides usage examples for the module, which were used to
 
 >**Note**: To reference the module, please use the following syntax `br/public:avm/res/synapse/workspace:<version>`.
 
-- [Using only defaults](#example-1-using-only-defaults)
-- [Using encryption with Customer-Managed-Key](#example-2-using-encryption-with-customer-managed-key)
+- [Using Big Data Pools](#example-1-using-big-data-pools)
+- [Using only defaults](#example-2-using-only-defaults)
 - [Using encryption with Customer-Managed-Key](#example-3-using-encryption-with-customer-managed-key)
-- [Using firewall rules](#example-4-using-firewall-rules)
-- [Using managed Vnet](#example-5-using-managed-vnet)
-- [Using large parameter set](#example-6-using-large-parameter-set)
-- [WAF-aligned](#example-7-waf-aligned)
+- [Using encryption with Customer-Managed-Key](#example-4-using-encryption-with-customer-managed-key)
+- [Using firewall rules](#example-5-using-firewall-rules)
+- [Using managed Vnet](#example-6-using-managed-vnet)
+- [Using large parameter set](#example-7-using-large-parameter-set)
+- [WAF-aligned](#example-8-waf-aligned)
 
-### Example 1: _Using only defaults_
+### Example 1: _Using Big Data Pools_
+
+This instance deploys the module with the configuration of Big Data Pools.
+
+
+<details>
+
+<summary>via Bicep module</summary>
+
+```bicep
+module workspace 'br/public:avm/res/synapse/workspace:<version>' = {
+  name: 'workspaceDeployment'
+  params: {
+    // Required parameters
+    defaultDataLakeStorageAccountResourceId: '<defaultDataLakeStorageAccountResourceId>'
+    defaultDataLakeStorageFilesystem: '<defaultDataLakeStorageFilesystem>'
+    name: 'swbdp001'
+    sqlAdministratorLogin: 'synwsadmin'
+    // Non-required parameters
+    bigDataPools: [
+      {
+        autoPause: {
+          delayInMinutes: 15
+          enabled: true
+        }
+        autoScale: {
+          enabled: true
+          maxNodeCount: '5'
+          minNodeCount: '3'
+        }
+        cacheSize: 50
+        name: 'depbdp01'
+        nodeSize: 'Small'
+        nodeSizeFamily: 'MemoryOptimized'
+        sparkVersion: '2.4'
+      }
+    ]
+  }
+}
+```
+
+</details>
+<p>
+
+<details>
+
+<summary>via JSON parameters file</summary>
+
+```json
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    // Required parameters
+    "defaultDataLakeStorageAccountResourceId": {
+      "value": "<defaultDataLakeStorageAccountResourceId>"
+    },
+    "defaultDataLakeStorageFilesystem": {
+      "value": "<defaultDataLakeStorageFilesystem>"
+    },
+    "name": {
+      "value": "swbdp001"
+    },
+    "sqlAdministratorLogin": {
+      "value": "synwsadmin"
+    },
+    // Non-required parameters
+    "bigDataPools": {
+      "value": [
+        {
+          "autoPause": {
+            "delayInMinutes": 15,
+            "enabled": true
+          },
+          "autoScale": {
+            "enabled": true,
+            "maxNodeCount": "5",
+            "minNodeCount": "3"
+          },
+          "cacheSize": 50,
+          "name": "depbdp01",
+          "nodeSize": "Small",
+          "nodeSizeFamily": "MemoryOptimized",
+          "sparkVersion": "2.4"
+        }
+      ]
+    }
+  }
+}
+```
+
+</details>
+<p>
+
+<details>
+
+<summary>via Bicep parameters file</summary>
+
+```bicep-params
+using 'br/public:avm/res/synapse/workspace:<version>'
+
+// Required parameters
+param defaultDataLakeStorageAccountResourceId = '<defaultDataLakeStorageAccountResourceId>'
+param defaultDataLakeStorageFilesystem = '<defaultDataLakeStorageFilesystem>'
+param name = 'swbdp001'
+param sqlAdministratorLogin = 'synwsadmin'
+// Non-required parameters
+param bigDataPools = [
+  {
+    autoPause: {
+      delayInMinutes: 15
+      enabled: true
+    }
+    autoScale: {
+      enabled: true
+      maxNodeCount: '5'
+      minNodeCount: '3'
+    }
+    cacheSize: 50
+    name: 'depbdp01'
+    nodeSize: 'Small'
+    nodeSizeFamily: 'MemoryOptimized'
+    sparkVersion: '2.4'
+  }
+]
+```
+
+</details>
+<p>
+
+### Example 2: _Using only defaults_
 
 This instance deploys the module with the minimum set of required parameters.
 
@@ -114,7 +246,7 @@ param sqlAdministratorLogin = 'synwsadmin'
 </details>
 <p>
 
-### Example 2: _Using encryption with Customer-Managed-Key_
+### Example 3: _Using encryption with Customer-Managed-Key_
 
 This instance deploys the module using Customer-Managed-Keys using a System-Assigned Identity to access the Customer-Managed-Key secret.
 
@@ -207,7 +339,7 @@ param encryptionActivateWorkspace = true
 </details>
 <p>
 
-### Example 3: _Using encryption with Customer-Managed-Key_
+### Example 4: _Using encryption with Customer-Managed-Key_
 
 This instance deploys the module using Customer-Managed-Keys using a User-Assigned Identity to access the Customer-Managed-Key secret.
 
@@ -298,7 +430,7 @@ param customerManagedKey = {
 </details>
 <p>
 
-### Example 4: _Using firewall rules_
+### Example 5: _Using firewall rules_
 
 This instance deploys the module with the configuration of firewall rules.
 
@@ -410,7 +542,7 @@ param firewallRules = [
 </details>
 <p>
 
-### Example 5: _Using managed Vnet_
+### Example 6: _Using managed Vnet_
 
 This instance deploys the module using a managed Vnet.
 
@@ -505,7 +637,7 @@ param preventDataExfiltration = true
 </details>
 <p>
 
-### Example 6: _Using large parameter set_
+### Example 7: _Using large parameter set_
 
 This instance deploys the module with most of its features enabled.
 
@@ -945,7 +1077,7 @@ param roleAssignments = [
 </details>
 <p>
 
-### Example 7: _WAF-aligned_
+### Example 8: _WAF-aligned_
 
 This instance deploys the module in alignment with the best-practices of the Azure Well-Architected Framework.
 
@@ -1189,6 +1321,7 @@ param tags = {
 | [`administrator`](#parameter-administrator) | object | The Entra ID administrator for the synapse workspace. |
 | [`allowedAadTenantIdsForLinking`](#parameter-allowedaadtenantidsforlinking) | array | Allowed AAD Tenant IDs For Linking. |
 | [`azureADOnlyAuthentication`](#parameter-azureadonlyauthentication) | bool | Enable or Disable AzureADOnlyAuthentication on All Workspace sub-resource. |
+| [`bigDataPools`](#parameter-bigdatapools) | array | List of Big Data Pools to be created in the workspace. |
 | [`customerManagedKey`](#parameter-customermanagedkey) | object | The customer managed key definition. |
 | [`defaultDataLakeStorageCreateManagedPrivateEndpoint`](#parameter-defaultdatalakestoragecreatemanagedprivateendpoint) | bool | Create managed private endpoint to the default storage account or not. If Yes is selected, a managed private endpoint connection request is sent to the workspace's primary Data Lake Storage Gen2 account for Spark pools to access data. This must be approved by an owner of the storage account. |
 | [`diagnosticSettings`](#parameter-diagnosticsettings) | array | The diagnostic settings of the service. |
@@ -1312,6 +1445,325 @@ Enable or Disable AzureADOnlyAuthentication on All Workspace sub-resource.
 - Required: No
 - Type: bool
 - Default: `False`
+
+### Parameter: `bigDataPools`
+
+List of Big Data Pools to be created in the workspace.
+
+- Required: No
+- Type: array
+
+**Required parameters**
+
+| Parameter | Type | Description |
+| :-- | :-- | :-- |
+| [`name`](#parameter-bigdatapoolsname) | string | The name of the Big Data Pool. |
+| [`sparkVersion`](#parameter-bigdatapoolssparkversion) | string | The Spark version. |
+
+**Optional parameters**
+
+| Parameter | Type | Description |
+| :-- | :-- | :-- |
+| [`autoPause`](#parameter-bigdatapoolsautopause) | object | The auto pause configuration. |
+| [`autoScale`](#parameter-bigdatapoolsautoscale) | object | The auto scale configuration. |
+| [`cacheSize`](#parameter-bigdatapoolscachesize) | int | The cache size of the pool. |
+| [`customLibraries`](#parameter-bigdatapoolscustomlibraries) | array | The custom libraries to be installed in the pool. |
+| [`defaultSparkLogFolder`](#parameter-bigdatapoolsdefaultsparklogfolder) | string | The default Spark log folder. |
+| [`dynamicExecutorAllocation`](#parameter-bigdatapoolsdynamicexecutorallocation) | object | The dynamic executor allocation configuration. |
+| [`isAutotuneEnabled`](#parameter-bigdatapoolsisautotuneenabled) | bool | Enable or disable autotune. |
+| [`isComputeIsolationEnabled`](#parameter-bigdatapoolsiscomputeisolationenabled) | bool | Enable or disable compute isolation. |
+| [`libraryRequirements`](#parameter-bigdatapoolslibraryrequirements) | object | The library requirements for the pool. |
+| [`nodeCount`](#parameter-bigdatapoolsnodecount) | int | The number of nodes in the pool. |
+| [`nodeSize`](#parameter-bigdatapoolsnodesize) | string | The node size of the pool. |
+| [`nodeSizeFamily`](#parameter-bigdatapoolsnodesizefamily) | string | The node size family of the pool. |
+| [`sessionLevelPackagesEnabled`](#parameter-bigdatapoolssessionlevelpackagesenabled) | bool | Enable or disable session level packages. |
+| [`sparkConfigProperties`](#parameter-bigdatapoolssparkconfigproperties) | array | The Spark configuration properties. |
+| [`sparkEventsFolder`](#parameter-bigdatapoolssparkeventsfolder) | string | The Spark events folder. |
+
+### Parameter: `bigDataPools.name`
+
+The name of the Big Data Pool.
+
+- Required: Yes
+- Type: string
+
+### Parameter: `bigDataPools.sparkVersion`
+
+The Spark version.
+
+- Required: Yes
+- Type: string
+
+### Parameter: `bigDataPools.autoPause`
+
+The auto pause configuration.
+
+- Required: No
+- Type: object
+
+**Required parameters**
+
+| Parameter | Type | Description |
+| :-- | :-- | :-- |
+| [`delayInMinutes`](#parameter-bigdatapoolsautopausedelayinminutes) | int | Synapse workspace Big Data Pools Auto-pausing delay in minutes. |
+| [`enabled`](#parameter-bigdatapoolsautopauseenabled) | bool | Synapse workspace Big Data Pools Auto-pausing enabled. |
+
+### Parameter: `bigDataPools.autoPause.delayInMinutes`
+
+Synapse workspace Big Data Pools Auto-pausing delay in minutes.
+
+- Required: Yes
+- Type: int
+
+### Parameter: `bigDataPools.autoPause.enabled`
+
+Synapse workspace Big Data Pools Auto-pausing enabled.
+
+- Required: Yes
+- Type: bool
+
+### Parameter: `bigDataPools.autoScale`
+
+The auto scale configuration.
+
+- Required: No
+- Type: object
+
+**Required parameters**
+
+| Parameter | Type | Description |
+| :-- | :-- | :-- |
+| [`enabled`](#parameter-bigdatapoolsautoscaleenabled) | bool | Synapse workspace Big Data Pools Auto-scaling enabled. |
+| [`maxNodeCount`](#parameter-bigdatapoolsautoscalemaxnodecount) | string | Synapse workspace Big Data Pools Auto-scaling maximum node count. |
+| [`minNodeCount`](#parameter-bigdatapoolsautoscaleminnodecount) | string | Synapse workspace Big Data Pools Auto-scaling minimum node count. |
+
+### Parameter: `bigDataPools.autoScale.enabled`
+
+Synapse workspace Big Data Pools Auto-scaling enabled.
+
+- Required: Yes
+- Type: bool
+
+### Parameter: `bigDataPools.autoScale.maxNodeCount`
+
+Synapse workspace Big Data Pools Auto-scaling maximum node count.
+
+- Required: Yes
+- Type: string
+
+### Parameter: `bigDataPools.autoScale.minNodeCount`
+
+Synapse workspace Big Data Pools Auto-scaling minimum node count.
+
+- Required: Yes
+- Type: string
+
+### Parameter: `bigDataPools.cacheSize`
+
+The cache size of the pool.
+
+- Required: No
+- Type: int
+
+### Parameter: `bigDataPools.customLibraries`
+
+The custom libraries to be installed in the pool.
+
+- Required: No
+- Type: array
+
+**Required parameters**
+
+| Parameter | Type | Description |
+| :-- | :-- | :-- |
+| [`containerName`](#parameter-bigdatapoolscustomlibrariescontainername) | string | The library name. |
+| [`name`](#parameter-bigdatapoolscustomlibrariesname) | string | The library version. |
+| [`path`](#parameter-bigdatapoolscustomlibrariespath) | string | The library path. |
+| [`type`](#parameter-bigdatapoolscustomlibrariestype) | string | The library type. |
+
+### Parameter: `bigDataPools.customLibraries.containerName`
+
+The library name.
+
+- Required: Yes
+- Type: string
+
+### Parameter: `bigDataPools.customLibraries.name`
+
+The library version.
+
+- Required: Yes
+- Type: string
+
+### Parameter: `bigDataPools.customLibraries.path`
+
+The library path.
+
+- Required: Yes
+- Type: string
+
+### Parameter: `bigDataPools.customLibraries.type`
+
+The library type.
+
+- Required: Yes
+- Type: string
+
+### Parameter: `bigDataPools.defaultSparkLogFolder`
+
+The default Spark log folder.
+
+- Required: No
+- Type: string
+
+### Parameter: `bigDataPools.dynamicExecutorAllocation`
+
+The dynamic executor allocation configuration.
+
+- Required: No
+- Type: object
+
+**Required parameters**
+
+| Parameter | Type | Description |
+| :-- | :-- | :-- |
+| [`enabled`](#parameter-bigdatapoolsdynamicexecutorallocationenabled) | bool | Synapse workspace Big Data Pools Dynamic Executor Allocation enabled. |
+| [`maxExecutors`](#parameter-bigdatapoolsdynamicexecutorallocationmaxexecutors) | string | Synapse workspace Big Data Pools Dynamic Executor Allocation maximum executors. |
+| [`minExecutors`](#parameter-bigdatapoolsdynamicexecutorallocationminexecutors) | string | Synapse workspace Big Data Pools Dynamic Executor Allocation minimum executors. |
+
+### Parameter: `bigDataPools.dynamicExecutorAllocation.enabled`
+
+Synapse workspace Big Data Pools Dynamic Executor Allocation enabled.
+
+- Required: Yes
+- Type: bool
+
+### Parameter: `bigDataPools.dynamicExecutorAllocation.maxExecutors`
+
+Synapse workspace Big Data Pools Dynamic Executor Allocation maximum executors.
+
+- Required: Yes
+- Type: string
+
+### Parameter: `bigDataPools.dynamicExecutorAllocation.minExecutors`
+
+Synapse workspace Big Data Pools Dynamic Executor Allocation minimum executors.
+
+- Required: Yes
+- Type: string
+
+### Parameter: `bigDataPools.isAutotuneEnabled`
+
+Enable or disable autotune.
+
+- Required: No
+- Type: bool
+
+### Parameter: `bigDataPools.isComputeIsolationEnabled`
+
+Enable or disable compute isolation.
+
+- Required: No
+- Type: bool
+
+### Parameter: `bigDataPools.libraryRequirements`
+
+The library requirements for the pool.
+
+- Required: No
+- Type: object
+
+**Required parameters**
+
+| Parameter | Type | Description |
+| :-- | :-- | :-- |
+| [`content`](#parameter-bigdatapoolslibraryrequirementscontent) | string | The library name. |
+| [`filename`](#parameter-bigdatapoolslibraryrequirementsfilename) | string | The library version. |
+
+### Parameter: `bigDataPools.libraryRequirements.content`
+
+The library name.
+
+- Required: Yes
+- Type: string
+
+### Parameter: `bigDataPools.libraryRequirements.filename`
+
+The library version.
+
+- Required: Yes
+- Type: string
+
+### Parameter: `bigDataPools.nodeCount`
+
+The number of nodes in the pool.
+
+- Required: No
+- Type: int
+
+### Parameter: `bigDataPools.nodeSize`
+
+The node size of the pool.
+
+- Required: No
+- Type: string
+
+### Parameter: `bigDataPools.nodeSizeFamily`
+
+The node size family of the pool.
+
+- Required: No
+- Type: string
+
+### Parameter: `bigDataPools.sessionLevelPackagesEnabled`
+
+Enable or disable session level packages.
+
+- Required: No
+- Type: bool
+
+### Parameter: `bigDataPools.sparkConfigProperties`
+
+The Spark configuration properties.
+
+- Required: No
+- Type: array
+
+**Required parameters**
+
+| Parameter | Type | Description |
+| :-- | :-- | :-- |
+| [`configurationType`](#parameter-bigdatapoolssparkconfigpropertiesconfigurationtype) | string | The configuration type. |
+| [`content`](#parameter-bigdatapoolssparkconfigpropertiescontent) | string | The configuration content. |
+| [`filename`](#parameter-bigdatapoolssparkconfigpropertiesfilename) | string | The configuration filename. |
+
+### Parameter: `bigDataPools.sparkConfigProperties.configurationType`
+
+The configuration type.
+
+- Required: Yes
+- Type: string
+
+### Parameter: `bigDataPools.sparkConfigProperties.content`
+
+The configuration content.
+
+- Required: Yes
+- Type: string
+
+### Parameter: `bigDataPools.sparkConfigProperties.filename`
+
+The configuration filename.
+
+- Required: Yes
+- Type: string
+
+### Parameter: `bigDataPools.sparkEventsFolder`
+
+The Spark events folder.
+
+- Required: No
+- Type: string
 
 ### Parameter: `customerManagedKey`
 
