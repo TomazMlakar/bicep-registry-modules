@@ -20,7 +20,6 @@ This module deploys Synapse Workspaces Big Data Pools.
 
 | Parameter | Type | Description |
 | :-- | :-- | :-- |
-| [`location`](#parameter-location) | string | The geo-location where the resource lives. |
 | [`name`](#parameter-name) | string | The name of the Big Data Pool. |
 | [`nodeSize`](#parameter-nodesize) | string | The level of compute power that each node in the Big Data pool has. |
 | [`nodeSizeFamily`](#parameter-nodesizefamily) | string | The kind of nodes that the Big Data pool provides. |
@@ -30,7 +29,6 @@ This module deploys Synapse Workspaces Big Data Pools.
 
 | Parameter | Type | Description |
 | :-- | :-- | :-- |
-| [`nodeCount`](#parameter-nodecount) | int | The number of nodes in the Big Data pool. |
 | [`workspaceName`](#parameter-workspacename) | string | The name of the parent Synapse Workspace. Required if the template is used in a standalone deployment. |
 
 **Optional parameters**
@@ -41,15 +39,10 @@ This module deploys Synapse Workspaces Big Data Pools.
 | [`autoScale`](#parameter-autoscale) | object | Auto-scaling properties. |
 | [`cacheSize`](#parameter-cachesize) | int | The cache size. |
 | [`dynamicExecutorAllocation`](#parameter-dynamicexecutorallocation) | object | Dynamic Executor Allocation. |
+| [`location`](#parameter-location) | string | The geo-location where the resource lives. |
+| [`nodeCount`](#parameter-nodecount) | int | The number of nodes in the Big Data pool. |
 | [`sessionLevelPackagesEnabled`](#parameter-sessionlevelpackagesenabled) | bool | Whether session level packages enabled. |
 | [`tags`](#parameter-tags) | object | Tags of the resource. |
-
-### Parameter: `location`
-
-The geo-location where the resource lives.
-
-- Required: Yes
-- Type: string
 
 ### Parameter: `name`
 
@@ -97,15 +90,8 @@ The kind of nodes that the Big Data pool provides.
 
 The Apache Spark version.
 
-- Required: No
-- Type: string
-
-### Parameter: `nodeCount`
-
-The number of nodes in the Big Data pool.
-
 - Required: Yes
-- Type: int
+- Type: string
 
 ### Parameter: `workspaceName`
 
@@ -246,6 +232,22 @@ Synapse workspace Big Data Pools Dynamic Executor Allocation minimum executors.
 
 - Required: Yes
 - Type: string
+
+### Parameter: `location`
+
+The geo-location where the resource lives.
+
+- Required: No
+- Type: string
+- Default: `[resourceGroup().location]`
+
+### Parameter: `nodeCount`
+
+The number of nodes in the Big Data pool.
+
+- Required: No
+- Type: int
+- Default: `3`
 
 ### Parameter: `sessionLevelPackagesEnabled`
 

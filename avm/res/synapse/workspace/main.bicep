@@ -378,7 +378,7 @@ module workspace_bigDataPools 'big-data-pools/main.bicep' = [
       sessionLevelPackagesEnabled: bigDataPool.sessionLevelPackagesEnabled
       // sparkConfigProperties: bigDataPool.sparkConfigProperties
       // sparkEventsFolder: bigDataPool.sparkEventsFolder
-      // sparkVersion: bigDataPool.sparkVersion
+      sparkVersion: bigDataPool.sparkVersion
     }
   }
 ]

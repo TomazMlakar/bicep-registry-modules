@@ -7,8 +7,8 @@ param workspaceName string
 @description('Required. The name of the Big Data Pool.')
 param name string
 
-@description('Required. The geo-location where the resource lives.')
-param location string
+@description('Optional. The geo-location where the resource lives.')
+param location string = resourceGroup().location
 
 @description('Optional. Tags of the resource.')
 param tags object?
@@ -53,8 +53,8 @@ param dynamicExecutorAllocation dynamicExecutorAllocationType = {
 // @description('Library version requirements.')
 // param libraryRequirements libraryRequirementsType?
 
-@description('Conditional. The number of nodes in the Big Data pool.')
-param nodeCount int
+@description('Optional. The number of nodes in the Big Data pool.')
+param nodeCount int = 3
 
 @allowed([
   'Large'
@@ -87,7 +87,7 @@ param sessionLevelPackagesEnabled bool = true
 // param sparkEventsFolder string?
 
 @description('Required. The Apache Spark version.')
-param sparkVersion string?
+param sparkVersion string
 
 resource workspace 'Microsoft.Synapse/workspaces@2021-06-01' existing = {
   name: workspaceName

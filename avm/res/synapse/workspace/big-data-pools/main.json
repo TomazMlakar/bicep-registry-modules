@@ -6,7 +6,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.33.93.31351",
-      "templateHash": "6097022141112597316"
+      "templateHash": "17312687391290283129"
     },
     "name": "Synapse Workspaces Big Data Pools",
     "description": "This module deploys Synapse Workspaces Big Data Pools."
@@ -184,8 +184,9 @@
     },
     "location": {
       "type": "string",
+      "defaultValue": "[resourceGroup().location]",
       "metadata": {
-        "description": "Required. The geo-location where the resource lives."
+        "description": "Optional. The geo-location where the resource lives."
       }
     },
     "tags": {
@@ -238,8 +239,9 @@
     },
     "nodeCount": {
       "type": "int",
+      "defaultValue": 3,
       "metadata": {
-        "description": "Conditional. The number of nodes in the Big Data pool."
+        "description": "Optional. The number of nodes in the Big Data pool."
       }
     },
     "nodeSize": {
@@ -278,7 +280,6 @@
     },
     "sparkVersion": {
       "type": "string",
-      "nullable": true,
       "metadata": {
         "description": "Required. The Apache Spark version."
       }
