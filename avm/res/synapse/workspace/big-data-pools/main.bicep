@@ -105,7 +105,9 @@ resource bigDataPool 'Microsoft.Synapse/workspaces/bigDataPools@2021-06-01' = {
           minNodeCount: autoScale.minNodeCount
           maxNodeCount: autoScale.maxNodeCount
         }
-      : null
+      : {
+          enabled: false
+      }
     nodeCount: empty(autoScale) ? nodeCount : null
     // dynamicExecutorAllocation: !empty(dynamicExecutorAllocation)
     //   ? {
