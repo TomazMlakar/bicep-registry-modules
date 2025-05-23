@@ -53,8 +53,10 @@ param cacheSize int = 50
 // @description('Library version requirements.')
 // param libraryRequirements libraryRequirementsType?
 
-// @description('Optional. The number of nodes in the Big Data pool.')
-// param nodeCount int = 3
+@description('Optional. The number of nodes in the Big Data pool.')
+@minValue(3)
+@maxValue(200)
+param nodeCount int = 3
 
 @allowed([
   'Large'
@@ -109,7 +111,7 @@ resource bigDataPool 'Microsoft.Synapse/workspaces/bigDataPools@2021-06-01' = {
           minNodeCount: json(autoScale.?minNodeCount)
         }
       : null
-    //nodeCount: empty(autoScale) ? nodeCount : null
+    nodeCount: empty(autoScale) ? nodeCount : null
     // dynamicExecutorAllocation: !empty(dynamicExecutorAllocation)
     //   ? {
     //       enabled: dynamicExecutorAllocation.?enabled
@@ -169,10 +171,10 @@ type autoScaleType = {
   enabled: bool
 
   @description('Required. Synapse workspace Big Data Pools Auto-scaling maximum node count.')
-  maxNodeCount: string
+  maxNodeCount: string?
 
   @description('Required. Synapse workspace Big Data Pools Auto-scaling minimum node count.')
-  minNodeCount: string
+  minNodeCount: string?
 }
 
 @export()

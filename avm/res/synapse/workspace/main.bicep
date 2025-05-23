@@ -287,7 +287,7 @@ module workspace_cmk_rbac 'modules/nested_cmkRbac.bicep' = if (encryptionActivat
 
 // - Workspace encryption - Activate Workspace
 module workspace_key 'key/main.bicep' = if (encryptionActivateWorkspace) {
-  name: '${workspace.name}-cmk-activation'
+  name: take('${workspace.name}-cmk-activation', 64)
   params: {
     name: customerManagedKey!.keyName
     isActiveCMK: true
@@ -371,7 +371,7 @@ module workspace_bigDataPools 'big-data-pools/main.bicep' = [
       // isAutotuneEnabled: bigDataPool.isAutotuneEnabled
       // isComputeIsolationEnabled: bigDataPool.isComputeIsolationEnabled
       // libraryRequirements: bigDataPool.libraryRequirements
-      // nodeCount: bigDataPool.nodeCount
+      nodeCount: bigDataPool.nodeCount
       nodeSize: bigDataPool.nodeSize
       nodeSizeFamily: bigDataPool.nodeSizeFamily
       // provisioningState: bigDataPool.provisioningState
@@ -586,8 +586,8 @@ type bigDataPoolType = {
   @description('Optional. The library requirements for the pool.')
   libraryRequirements: libraryRequirementsType?
 
-  // @description('Optional. The number of nodes in the pool.')
-  // nodeCount: int?
+  @description('Optional. The number of nodes in the pool.')
+  nodeCount: int?
 
   @description('Optional. The node size of the pool.')
   nodeSize: string?

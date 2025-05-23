@@ -59,12 +59,7 @@ module testDeployment '../../../main.bicep' = [
           name: 'dep${namePrefix}bdp01'
           nodeSizeFamily: 'MemoryOptimized'
           nodeSize: 'Small'
-          autoScale: {
-            enabled: true
-            maxNodeCount: '5'
-            minNodeCount: '3'
-          }
-          //nodeCount: 3
+          nodeCount: 3
           // dynamicExecutorAllocation: {
           //   enabled: true
           //   maxExecutors: '2'
