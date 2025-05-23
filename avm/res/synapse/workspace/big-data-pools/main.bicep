@@ -110,14 +110,14 @@ resource bigDataPool 'Microsoft.Synapse/workspaces/bigDataPools@2021-06-01' = {
         }
       : null
     nodeCount: empty(autoScale) ? nodeCount : null
-    //dynamicExecutorAllocation: !empty(dynamicExecutorAllocation)
-      ? {
-          enabled: dynamicExecutorAllocation.?enabled
-          // To handle fractional values, we need to convert from string :(
-          maxExecutors: json(dynamicExecutorAllocation.?maxExecutors)
-          minExecutors: json(dynamicExecutorAllocation.?minExecutors)
-        }
-      : null
+    // dynamicExecutorAllocation: !empty(dynamicExecutorAllocation)
+    //   ? {
+    //       enabled: dynamicExecutorAllocation.?enabled
+    //       // To handle fractional values, we need to convert from string :(
+    //       maxExecutors: json(dynamicExecutorAllocation.?maxExecutors)
+    //       minExecutors: json(dynamicExecutorAllocation.?minExecutors)
+    //     }
+    //   : null
     autoPause: !empty(autoPause)
       ? {
           enabled: autoPause.?enabled

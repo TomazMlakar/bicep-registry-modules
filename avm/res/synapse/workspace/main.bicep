@@ -367,7 +367,7 @@ module workspace_bigDataPools 'big-data-pools/main.bicep' = [
       cacheSize: bigDataPool.cacheSize
       // customLibraries: bigDataPool.customLibraries
       // defaultSparkLogFolder: bigDataPool.defaultSparkLogFolder
-      dynamicExecutorAllocation: bigDataPool.dynamicExecutorAllocation
+      //dynamicExecutorAllocation: bigDataPool.dynamicExecutorAllocation
       // isAutotuneEnabled: bigDataPool.isAutotuneEnabled
       // isComputeIsolationEnabled: bigDataPool.isComputeIsolationEnabled
       // libraryRequirements: bigDataPool.libraryRequirements
