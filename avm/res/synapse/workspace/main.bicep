@@ -363,7 +363,7 @@ module workspace_bigDataPools 'big-data-pools/main.bicep' = [
       location: location
       tags: tags
       autoPause: bigDataPool.autoPause
-      autoScale: bigDataPool.autoScale
+      autoScale: bigDataPool.?autoScale
       cacheSize: bigDataPool.cacheSize
       // customLibraries: bigDataPool.customLibraries
       // defaultSparkLogFolder: bigDataPool.defaultSparkLogFolder
@@ -371,7 +371,7 @@ module workspace_bigDataPools 'big-data-pools/main.bicep' = [
       // isAutotuneEnabled: bigDataPool.isAutotuneEnabled
       // isComputeIsolationEnabled: bigDataPool.isComputeIsolationEnabled
       // libraryRequirements: bigDataPool.libraryRequirements
-      nodeCount: bigDataPool.nodeCount
+      nodeCount: bigDataPool.?nodeCount
       nodeSize: bigDataPool.nodeSize
       nodeSizeFamily: bigDataPool.nodeSizeFamily
       // provisioningState: bigDataPool.provisioningState
