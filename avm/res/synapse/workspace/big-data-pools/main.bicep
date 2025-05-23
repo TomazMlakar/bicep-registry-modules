@@ -20,11 +20,7 @@ param autoPause autoPauseType = {
 }
 
 @description('Optional. Auto-scaling properties.')
-param autoScale autoScaleType = {
-  enabled: true
-  maxNodeCount: '5'
-  minNodeCount: '3'
-}
+param autoScale autoScaleType?
 
 @description('Optional. The cache size.')
 @minValue(0)
@@ -105,10 +101,9 @@ resource bigDataPool 'Microsoft.Synapse/workspaces/bigDataPools@2021-06-01' = {
     nodeSize: nodeSize
     autoScale: !empty(autoScale)
       ? {
-          enabled: autoScale.?enabled
-          // To handle fractional values, we need to convert from string :(
-          maxNodeCount: json(autoScale.?maxNodeCount)
-          minNodeCount: json(autoScale.?minNodeCount)
+          enabled: true
+          minNodeCount: autoScale.minNodeCount
+          maxNodeCount: autoScale.maxNodeCount
         }
       : null
     nodeCount: empty(autoScale) ? nodeCount : null
@@ -167,14 +162,15 @@ type autoPauseType = {
 @export()
 @description('The synapse workspace Big Data Pools Auto-scaling properties.')
 type autoScaleType = {
-  @description('Required. Synapse workspace Big Data Pools Auto-scaling enabled.')
-  enabled: bool
-
   @description('Required. Synapse workspace Big Data Pools Auto-scaling maximum node count.')
-  maxNodeCount: string?
+  @minValue(3)
+  @maxValue(200)
+  maxNodeCount: int
 
   @description('Required. Synapse workspace Big Data Pools Auto-scaling minimum node count.')
-  minNodeCount: string?
+  @minValue(3)
+  @maxValue(200)
+  minNodeCount: int
 }
 
 @export()
