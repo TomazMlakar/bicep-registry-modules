@@ -76,8 +76,8 @@ param nodeSize string
   'MemoryOptimized'
   'None'
 ])
-@description('Required. The kind of nodes that the Big Data pool provides.')
-param nodeSizeFamily string
+@description('Optional. The kind of nodes that the Big Data pool provides.')
+param nodeSizeFamily string = 'MemoryOptimized'
 
 // @description('Optional. Whether session level packages enabled.')
 // param sessionLevelPackagesEnabled bool = true
