@@ -37,12 +37,12 @@ param cacheSize int = 50
 // @description('The default folder where Spark logs will be written.')
 // param defaultSparkLogFolder string?
 
-@description('Optional. Dynamic Executor Allocation.')
-param dynamicExecutorAllocation dynamicExecutorAllocationType = {
-  enabled: false
-  maxExecutors: '2'
-  minExecutors: '1'
-}
+// @description('Optional. Dynamic Executor Allocation.')
+// param dynamicExecutorAllocation dynamicExecutorAllocationType = {
+//   enabled: false
+//   maxExecutors: '2'
+//   minExecutors: '1'
+// }
 
 // @description('Whether autotune is required or not.')
 // param isAutotuneEnabled bool = false
@@ -110,7 +110,7 @@ resource bigDataPool 'Microsoft.Synapse/workspaces/bigDataPools@2021-06-01' = {
         }
       : null
     nodeCount: empty(autoScale) ? nodeCount : null
-    dynamicExecutorAllocation: !empty(dynamicExecutorAllocation)
+    //dynamicExecutorAllocation: !empty(dynamicExecutorAllocation)
       ? {
           enabled: dynamicExecutorAllocation.?enabled
           // To handle fractional values, we need to convert from string :(
