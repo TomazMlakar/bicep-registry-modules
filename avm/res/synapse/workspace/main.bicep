@@ -356,7 +356,7 @@ module workspace_firewallRules 'firewall-rules/main.bicep' = [
 // Big Data Pools
 module workspace_bigDataPools 'big-data-pools/main.bicep' = [
   for (bigDataPool, index) in (bigDataPools ?? []): {
-    name: '${uniqueString(deployment().name, location)}-workspace-BigDataPool-${index}'
+    name: '${uniqueString(deployment().name, location)}-workspace-bdp-${index}'
     params: {
       workspaceName: workspace.name
       name: bigDataPool.name
@@ -371,11 +371,11 @@ module workspace_bigDataPools 'big-data-pools/main.bicep' = [
       // isAutotuneEnabled: bigDataPool.isAutotuneEnabled
       // isComputeIsolationEnabled: bigDataPool.isComputeIsolationEnabled
       // libraryRequirements: bigDataPool.libraryRequirements
-      nodeCount: bigDataPool.nodeCount
+      // nodeCount: bigDataPool.nodeCount
       nodeSize: bigDataPool.nodeSize
       nodeSizeFamily: bigDataPool.nodeSizeFamily
       // provisioningState: bigDataPool.provisioningState
-      sessionLevelPackagesEnabled: bigDataPool.sessionLevelPackagesEnabled
+      //sessionLevelPackagesEnabled: bigDataPool.sessionLevelPackagesEnabled
       // sparkConfigProperties: bigDataPool.sparkConfigProperties
       // sparkEventsFolder: bigDataPool.sparkEventsFolder
       sparkVersion: bigDataPool.sparkVersion
@@ -586,8 +586,8 @@ type bigDataPoolType = {
   @description('Optional. The library requirements for the pool.')
   libraryRequirements: libraryRequirementsType?
 
-  @description('Optional. The number of nodes in the pool.')
-  nodeCount: int?
+  // @description('Optional. The number of nodes in the pool.')
+  // nodeCount: int?
 
   @description('Optional. The node size of the pool.')
   nodeSize: string?
