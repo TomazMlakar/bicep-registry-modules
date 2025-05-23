@@ -74,7 +74,7 @@ module testDeployment '../../../main.bicep' = [
             enabled: true
             delayInMinutes: 15
           }
-          sparkVersion: '2.4'
+          sparkVersion: '3.4'
           cacheSize: 50
         }
       ]
