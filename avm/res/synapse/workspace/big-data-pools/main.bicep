@@ -53,8 +53,8 @@ param cacheSize int = 50
 // @description('Library version requirements.')
 // param libraryRequirements libraryRequirementsType?
 
-@description('Optional. The number of nodes in the Big Data pool.')
-param nodeCount int = 3
+// @description('Optional. The number of nodes in the Big Data pool.')
+// param nodeCount int = 3
 
 @allowed([
   'Large'
@@ -77,8 +77,8 @@ param nodeSize string
 @description('Required. The kind of nodes that the Big Data pool provides.')
 param nodeSizeFamily string
 
-@description('Optional. Whether session level packages enabled.')
-param sessionLevelPackagesEnabled bool = true
+// @description('Optional. Whether session level packages enabled.')
+// param sessionLevelPackagesEnabled bool = true
 
 // @description('Spark configuration file to specify additional properties.')
 // param sparkConfigProperties sparkConfigPropertiesType?
@@ -109,7 +109,7 @@ resource bigDataPool 'Microsoft.Synapse/workspaces/bigDataPools@2021-06-01' = {
           minNodeCount: json(autoScale.?minNodeCount)
         }
       : null
-    nodeCount: empty(autoScale) ? nodeCount : null
+    //nodeCount: empty(autoScale) ? nodeCount : null
     // dynamicExecutorAllocation: !empty(dynamicExecutorAllocation)
     //   ? {
     //       enabled: dynamicExecutorAllocation.?enabled
@@ -126,7 +126,7 @@ resource bigDataPool 'Microsoft.Synapse/workspaces/bigDataPools@2021-06-01' = {
       : null
     sparkVersion: sparkVersion
     //sparkConfigProperties: sparkConfigProperties
-    sessionLevelPackagesEnabled: sessionLevelPackagesEnabled
+    //sessionLevelPackagesEnabled: sessionLevelPackagesEnabled
     cacheSize: cacheSize
 
     // customLibraries: customLibraries
