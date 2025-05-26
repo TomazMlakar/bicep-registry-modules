@@ -32,12 +32,8 @@ param cacheSize int = 50
 // @description('The default folder where Spark logs will be written.')
 // param defaultSparkLogFolder string?
 
-// @description('Optional. Dynamic Executor Allocation.')
-// param dynamicExecutorAllocation dynamicExecutorAllocationType = {
-//   enabled: false
-//   maxExecutors: '2'
-//   minExecutors: '1'
-// }
+@description('Optional. Dynamic Executor Allocation.')
+param dynamicExecutorAllocation dynamicExecutorAllocationType?
 
 // @description('Whether autotune is required or not.')
 // param isAutotuneEnabled bool = false
@@ -108,14 +104,16 @@ resource bigDataPool 'Microsoft.Synapse/workspaces/bigDataPools@2021-06-01' = {
           enabled: false
       }
     nodeCount: empty(autoScale) ? nodeCount : null
-    // dynamicExecutorAllocation: !empty(dynamicExecutorAllocation)
-    //   ? {
-    //       enabled: dynamicExecutorAllocation.?enabled
-    //       // To handle fractional values, we need to convert from string :(
-    //       maxExecutors: json(dynamicExecutorAllocation.?maxExecutors)
-    //       minExecutors: json(dynamicExecutorAllocation.?minExecutors)
-    //     }
-    //   : null
+    dynamicExecutorAllocation: !empty(dynamicExecutorAllocation)
+      ? {
+          enabled: true
+          // To handle fractional values, we need to convert from string :(
+          maxExecutors: dynamicExecutorAllocation.maxExecutors
+          minExecutors: dynamicExecutorAllocation.minExecutors
+        }
+      : {
+          enabled: false
+        }
     autoPause: autoPauseDelayInMinutes != -1
       ? {
           enabled: true
@@ -169,14 +167,15 @@ type autoScaleType = {
 @export()
 @description('The synapse workspace Big Data Pools Dynamic Executor Allocation properties.')
 type dynamicExecutorAllocationType = {
-  @description('Required. Synapse workspace Big Data Pools Dynamic Executor Allocation enabled.')
-  enabled: bool
+  @description('Required. Synapse workspace Big Data Pools Dynamic Executor Allocation minimum executors.')
+  @minValue(1)
+  @maxValue(10)
+  minExecutors: int
 
   @description('Required. Synapse workspace Big Data Pools Dynamic Executor Allocation maximum executors.')
-  maxExecutors: string
-
-  @description('Required. Synapse workspace Big Data Pools Dynamic Executor Allocation minimum executors.')
-  minExecutors: string
+  @minValue(1)
+  @maxValue(10)
+  maxExecutors: int
 }
 
 @export()

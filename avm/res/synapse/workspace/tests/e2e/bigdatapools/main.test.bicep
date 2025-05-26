@@ -63,11 +63,10 @@ module testDeployment '../../../main.bicep' = [
             minNodeCount: 3
             maxNodeCount: 5
           }
-          // dynamicExecutorAllocation: {
-          //   enabled: true
-          //   maxExecutors: '2'
-          //   minExecutors: '1'
-          // }
+          dynamicExecutorAllocation: {
+            maxExecutors: 1
+            minExecutors: 5
+          }
           autoPauseDelayInMinutes: 1
           sparkVersion: '3.4'
           cacheSize: 50
