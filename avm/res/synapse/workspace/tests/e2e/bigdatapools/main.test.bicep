@@ -71,6 +71,8 @@ module testDeployment '../../../main.bicep' = [
           sessionLevelPackagesEnabled: true
           sparkVersion: '3.4'
           cacheSize: 50
+          autotuneEnabled: true
+          computeIsolationEnabled: true
         }
       ]
     }

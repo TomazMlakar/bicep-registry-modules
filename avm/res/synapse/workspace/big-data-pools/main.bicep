@@ -65,11 +65,11 @@ param cacheSize int = 50
 // @description('The default folder where Spark logs will be written.')
 // param defaultSparkLogFolder string?
 
-// @description('Whether autotune is required or not.')
-// param isAutotuneEnabled bool = false
+@description('Whether Auto-tune is Enabled or not.')
+param autotuneEnabled bool = false
 
-// @description('Whether compute isolation is required or not.')
-// param isComputeIsolationEnabled bool = false
+@description('Whether Compute Isolation is enabled or not.')
+param computeIsolationEnabled bool = false
 
 // @description('Library version requirements.')
 // param libraryRequirements libraryRequirementsType?
@@ -133,8 +133,8 @@ resource bigDataPool 'Microsoft.Synapse/workspaces/bigDataPools@2021-06-01' = {
 
     // customLibraries: customLibraries
     // defaultSparkLogFolder: defaultSparkLogFolder
-    // isAutotuneEnabled: isAutotuneEnabled
-    // isComputeIsolationEnabled: isComputeIsolationEnabled
+    isAutotuneEnabled: autotuneEnabled
+    isComputeIsolationEnabled: computeIsolationEnabled
     // libraryRequirements: libraryRequirements
 
     // sparkEventsFolder: sparkEventsFolder

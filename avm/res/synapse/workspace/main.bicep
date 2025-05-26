@@ -368,8 +368,8 @@ module workspace_bigDataPools 'big-data-pools/main.bicep' = [
       // customLibraries: bigDataPool.customLibraries
       // defaultSparkLogFolder: bigDataPool.defaultSparkLogFolder
       dynamicExecutorAllocation: bigDataPool.?dynamicExecutorAllocation
-      // isAutotuneEnabled: bigDataPool.isAutotuneEnabled
-      // isComputeIsolationEnabled: bigDataPool.isComputeIsolationEnabled
+      autotuneEnabled: bigDataPool.?autotuneEnabled
+      computeIsolationEnabled: bigDataPool.?computeIsolationEnabled
       // libraryRequirements: bigDataPool.libraryRequirements
       nodeCount: bigDataPool.?nodeCount
       nodeSize: bigDataPool.nodeSize
@@ -590,10 +590,10 @@ type bigDataPoolType = {
   defaultSparkLogFolder: string?
 
   @description('Optional. Enable or disable autotune.')
-  isAutotuneEnabled: bool?
+  autotuneEnabled: bool?
 
   @description('Optional. Enable or disable compute isolation.')
-  isComputeIsolationEnabled: bool?
+  computeIsolationEnabled: bool?
 
   @description('Optional. The library requirements for the pool.')
   libraryRequirements: libraryRequirementsType?
