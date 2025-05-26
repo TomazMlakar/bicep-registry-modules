@@ -362,7 +362,7 @@ module workspace_bigDataPools 'big-data-pools/main.bicep' = [
       name: bigDataPool.name
       location: location
       tags: tags
-      autoPauseDelayInMinutes: bigDataPool.autoPauseDelayInMinutes
+      autoPauseDelayInMinutes: bigDataPool.?autoPauseDelayInMinutes
       autoScale: bigDataPool.?autoScale
       cacheSize: bigDataPool.cacheSize
       // customLibraries: bigDataPool.customLibraries

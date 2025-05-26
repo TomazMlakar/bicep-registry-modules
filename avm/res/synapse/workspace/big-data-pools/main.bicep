@@ -14,8 +14,9 @@ param location string = resourceGroup().location
 param tags object?
 
 @description('Optional. Synapse workspace Big Data Pools Auto-pausing delay in minutes.')
+@minValue(-1)
+@maxValue(10080) // 7 days in minutes
 param autoPauseDelayInMinutes int = -1
-
 
 @description('Optional. Auto-scaling properties.')
 param autoScale autoScaleType?
