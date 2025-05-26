@@ -86,6 +86,21 @@ param sessionLevelPackagesEnabled bool = false
 @description('Optional. Tags of the resource.')
 param tags object?
 
+import { roleAssignmentType } from 'br/public:avm/utl/types/avm-common-types:0.5.1'
+@description('Optional. Array of role assignments to create.')
+param roleAssignments roleAssignmentType[]?
+
+var formattedRoleAssignments = [
+  for (roleAssignment, index) in (roleAssignments ?? []): union(roleAssignment, {
+    roleDefinitionId: builtInRoleNames[?roleAssignment.roleDefinitionIdOrName] ?? (contains(
+        roleAssignment.roleDefinitionIdOrName,
+        '/providers/Microsoft.Authorization/roleDefinitions/'
+      )
+      ? roleAssignment.roleDefinitionIdOrName
+      : subscriptionResourceId('Microsoft.Authorization/roleDefinitions', roleAssignment.roleDefinitionIdOrName))
+  })
+]
+
 resource workspace 'Microsoft.Synapse/workspaces@2021-06-01' existing = {
   name: workspaceName
 }
@@ -140,6 +155,22 @@ resource bigDataPool 'Microsoft.Synapse/workspaces/bigDataPools@2021-06-01' = {
     // sparkEventsFolder: sparkEventsFolder
   }
 }
+
+resource bigDataPool_roleAssignments 'Microsoft.Authorization/roleAssignments@2022-04-01' = [
+  for (roleAssignment, index) in (formattedRoleAssignments ?? []): {
+    name: roleAssignment.?name ?? guid(bigDataPool.id, roleAssignment.principalId, roleAssignment.roleDefinitionId)
+    properties: {
+      roleDefinitionId: roleAssignment.roleDefinitionId
+      principalId: roleAssignment.principalId
+      description: roleAssignment.?description
+      principalType: roleAssignment.?principalType
+      condition: roleAssignment.?condition
+      conditionVersion: !empty(roleAssignment.?condition) ? (roleAssignment.?conditionVersion ?? '2.0') : null // Must only be set if condtion is set
+      delegatedManagedIdentityResourceId: roleAssignment.?delegatedManagedIdentityResourceId
+    }
+    scope: bigDataPool
+  }
+]
 
 @description('The name of the deployed Big Data Pool.')
 output name string = bigDataPool.name

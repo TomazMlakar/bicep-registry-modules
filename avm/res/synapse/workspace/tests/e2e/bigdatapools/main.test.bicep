@@ -72,7 +72,13 @@ module testDeployment '../../../main.bicep' = [
           sparkVersion: '3.4'
           cacheSize: 50
           autotuneEnabled: true
-          computeIsolationEnabled: true
+          roleAssignments: [
+          {
+            roleDefinitionIdOrName: 'Reader'
+            principalId: nestedDependencies.outputs.managedIdentityPrincipalId
+            principalType: 'ServicePrincipal'
+          }
+        ]
         }
       ]
     }

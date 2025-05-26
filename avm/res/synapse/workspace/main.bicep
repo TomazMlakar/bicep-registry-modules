@@ -379,6 +379,7 @@ module workspace_bigDataPools 'big-data-pools/main.bicep' = [
       // sparkConfigProperties: bigDataPool.sparkConfigProperties
       // sparkEventsFolder: bigDataPool.sparkEventsFolder
       sparkVersion: bigDataPool.sparkVersion
+      roleAssignments: bigDataPool.?roleAssignments ?? []
     }
   }
 ]
@@ -606,4 +607,7 @@ type bigDataPoolType = {
 
   @description('Optional. The Spark events folder.')
   sparkEventsFolder: string?
+
+  @description('Optional. Array of role assignments to create.')
+  roleAssignments: roleAssignmentType[]?
 }
