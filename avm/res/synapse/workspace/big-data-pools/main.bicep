@@ -13,7 +13,7 @@ param location string = resourceGroup().location
 @description('Optional. Tags of the resource.')
 param tags object?
 
-@description('Optional. Synapse workspace Big Data Pools Auto-pausing delay in minutes.')
+@description('Optional. Synapse workspace Big Data Pools Auto-pausing delay in minutes (5-10080).')
 @minValue(-1)
 @maxValue(10080) // 7 days in minutes
 param autoPauseDelayInMinutes int = -1
@@ -119,7 +119,7 @@ resource bigDataPool 'Microsoft.Synapse/workspaces/bigDataPools@2021-06-01' = {
     autoPause: autoPauseDelayInMinutes != -1
       ? {
           enabled: true
-          delayInMinutes: autoPauseDelayInMinutes
+          delayInMinutes: autoPauseDelayInMinutes < 5 ? 5 : autoPauseDelayInMinutes // Minimum 5 minutes
         }
       : {
         enabled: false

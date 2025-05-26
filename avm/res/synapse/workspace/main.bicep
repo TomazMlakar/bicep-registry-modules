@@ -559,7 +559,7 @@ type bigDataPoolType = {
   @description('Required. The name of the Big Data Pool.')
   name: string
 
-  @description('Optional. Optional. Synapse workspace Big Data Pools Auto-pausing delay in minutes.')
+  @description('Optional. Synapse workspace Big Data Pools Auto-pausing delay in minutes (5-10080).')
   autoPauseDelayInMinutes: int?
 
   @description('Optional. The auto scale configuration.')
