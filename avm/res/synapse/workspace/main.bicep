@@ -367,7 +367,7 @@ module workspace_bigDataPools 'big-data-pools/main.bicep' = [
       cacheSize: bigDataPool.cacheSize
       // customLibraries: bigDataPool.customLibraries
       // defaultSparkLogFolder: bigDataPool.defaultSparkLogFolder
-      //dynamicExecutorAllocation: bigDataPool.dynamicExecutorAllocation
+      dynamicExecutorAllocation: bigDataPool.?dynamicExecutorAllocation
       // isAutotuneEnabled: bigDataPool.isAutotuneEnabled
       // isComputeIsolationEnabled: bigDataPool.isComputeIsolationEnabled
       // libraryRequirements: bigDataPool.libraryRequirements
@@ -559,11 +559,26 @@ type bigDataPoolType = {
   @description('Required. The name of the Big Data Pool.')
   name: string
 
-  @description('Optional. Synapse workspace Big Data Pools Auto-pausing delay in minutes (5-10080).')
-  autoPauseDelayInMinutes: int?
+  @description('Optional. The node size family of the pool.')
+  nodeSizeFamily: string?
+
+  @description('Optional. The node size of the pool.')
+  nodeSize: string?
 
   @description('Optional. The auto scale configuration.')
   autoScale: autoScaleType?
+
+  @description('Optional. The number of nodes in the Big Data pool if Auto-scaling is disabled.')
+  nodeCount: int?
+
+  @description('Optional. The dynamic executor allocation configuration.')
+  dynamicExecutorAllocation: dynamicExecutorAllocationType?
+
+  @description('Optional. Synapse workspace Big Data Pools Auto-pausing delay in minutes (5-10080). Disabled if value not provided.')
+  autoPauseDelayInMinutes: int?
+
+  @description('Required. The Spark version.')
+  sparkVersion: string
 
   @description('Optional. The cache size of the pool.')
   cacheSize: int?
@@ -574,9 +589,6 @@ type bigDataPoolType = {
   @description('Optional. The default Spark log folder.')
   defaultSparkLogFolder: string?
 
-  @description('Optional. The dynamic executor allocation configuration.')
-  dynamicExecutorAllocation: dynamicExecutorAllocationType?
-
   @description('Optional. Enable or disable autotune.')
   isAutotuneEnabled: bool?
 
@@ -586,15 +598,6 @@ type bigDataPoolType = {
   @description('Optional. The library requirements for the pool.')
   libraryRequirements: libraryRequirementsType?
 
-  @description('Optional. The number of nodes in the pool.')
-  nodeCount: int?
-
-  @description('Optional. The node size of the pool.')
-  nodeSize: string?
-
-  @description('Optional. The node size family of the pool.')
-  nodeSizeFamily: string?
-
   @description('Optional. Enable or disable session level packages.')
   sessionLevelPackagesEnabled: bool?
 
@@ -603,7 +606,4 @@ type bigDataPoolType = {
 
   @description('Optional. The Spark events folder.')
   sparkEventsFolder: string?
-
-  @description('Required. The Spark version.')
-  sparkVersion: string
 }

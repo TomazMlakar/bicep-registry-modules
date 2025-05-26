@@ -1,6 +1,10 @@
 metadata name = 'Synapse Workspaces Big Data Pools'
 metadata description = 'This module deploys Synapse Workspaces Big Data Pools.'
 
+// ================ //
+// Parameters       //
+// ================ //
+
 @description('Conditional. The name of the parent Synapse Workspace. Required if the template is used in a standalone deployment.')
 param workspaceName string
 
@@ -10,44 +14,14 @@ param name string
 @description('Optional. The geo-location where the resource lives.')
 param location string = resourceGroup().location
 
-@description('Optional. Tags of the resource.')
-param tags object?
-
-@description('Optional. Synapse workspace Big Data Pools Auto-pausing delay in minutes (5-10080).')
-@minValue(-1)
-@maxValue(10080) // 7 days in minutes
-param autoPauseDelayInMinutes int = -1
-
-@description('Optional. Auto-scaling properties.')
-param autoScale autoScaleType?
-
-@description('Optional. The cache size.')
-@minValue(0)
-@maxValue(100)
-param cacheSize int = 50
-
-// @description('Optional. List of custom libraries/packages associated with the spark pool.')
-// param customLibraries libraryInfoType[] = []
-
-// @description('The default folder where Spark logs will be written.')
-// param defaultSparkLogFolder string?
-
-@description('Optional. Dynamic Executor Allocation.')
-param dynamicExecutorAllocation dynamicExecutorAllocationType?
-
-// @description('Whether autotune is required or not.')
-// param isAutotuneEnabled bool = false
-
-// @description('Whether compute isolation is required or not.')
-// param isComputeIsolationEnabled bool = false
-
-// @description('Library version requirements.')
-// param libraryRequirements libraryRequirementsType?
-
-@description('Optional. The number of nodes in the Big Data pool.')
-@minValue(3)
-@maxValue(200)
-param nodeCount int = 3
+@description('Optional. The kind of nodes that the Big Data pool provides.')
+@allowed([
+  'HardwareAcceleratedFPGA'
+  'HardwareAcceleratedGPU'
+  'MemoryOptimized'
+  'None'
+])
+param nodeSizeFamily string = 'MemoryOptimized'
 
 @allowed([
   'Large'
@@ -61,14 +35,44 @@ param nodeCount int = 3
 @description('Required. The level of compute power that each node in the Big Data pool has.')
 param nodeSize string
 
-@allowed([
-  'HardwareAcceleratedFPGA'
-  'HardwareAcceleratedGPU'
-  'MemoryOptimized'
-  'None'
-])
-@description('Optional. The kind of nodes that the Big Data pool provides.')
-param nodeSizeFamily string = 'MemoryOptimized'
+@description('Optional. Auto-scaling properties.')
+param autoScale autoScaleType?
+
+@description('Optional. The number of nodes in the Big Data pool if Auto-scaling is disabled.')
+@minValue(3)
+@maxValue(200)
+param nodeCount int = 3
+
+@description('Optional. Dynamic Executor Allocation.')
+param dynamicExecutorAllocation dynamicExecutorAllocationType?
+
+@description('Optional. Synapse workspace Big Data Pools Auto-pausing delay in minutes (5-10080). Disabled if value not provided.')
+@minValue(-1)
+@maxValue(10080) // 7 days in minutes
+param autoPauseDelayInMinutes int = -1
+
+@description('Required. The Apache Spark version.')
+param sparkVersion string
+
+@description('Optional. The cache size.')
+@minValue(0)
+@maxValue(100)
+param cacheSize int = 50
+
+// @description('Optional. List of custom libraries/packages associated with the spark pool.')
+// param customLibraries libraryInfoType[] = []
+
+// @description('The default folder where Spark logs will be written.')
+// param defaultSparkLogFolder string?
+
+// @description('Whether autotune is required or not.')
+// param isAutotuneEnabled bool = false
+
+// @description('Whether compute isolation is required or not.')
+// param isComputeIsolationEnabled bool = false
+
+// @description('Library version requirements.')
+// param libraryRequirements libraryRequirementsType?
 
 // @description('Optional. Whether session level packages enabled.')
 // param sessionLevelPackagesEnabled bool = true
@@ -79,8 +83,8 @@ param nodeSizeFamily string = 'MemoryOptimized'
 // @description('The Spark events folder.')
 // param sparkEventsFolder string?
 
-@description('Required. The Apache Spark version.')
-param sparkVersion string
+@description('Optional. Tags of the resource.')
+param tags object?
 
 resource workspace 'Microsoft.Synapse/workspaces@2021-06-01' existing = {
   name: workspaceName
