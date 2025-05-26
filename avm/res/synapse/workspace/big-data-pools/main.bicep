@@ -9,7 +9,7 @@ metadata description = 'This module deploys Synapse Workspaces Big Data Pools.'
 param workspaceName string
 
 @description('Required. The name of the Big Data Pool.')
-param name string
+param bigDataPoolName string
 
 @description('Optional. The geo-location where the resource lives.')
 param location string = resourceGroup().location
@@ -62,8 +62,8 @@ param cacheSize int = 50
 // @description('Optional. List of custom libraries/packages associated with the spark pool.')
 // param customLibraries libraryInfoType[] = []
 
-// @description('The default folder where Spark logs will be written.')
-// param defaultSparkLogFolder string?
+@description('The default folder where Spark logs will be written.')
+param defaultSparkLogFolder string?
 
 @description('Whether Auto-tune is Enabled or not.')
 param autotuneEnabled bool = false
@@ -120,7 +120,7 @@ resource workspace 'Microsoft.Synapse/workspaces@2021-06-01' existing = {
 }
 
 resource bigDataPool 'Microsoft.Synapse/workspaces/bigDataPools@2021-06-01' = {
-  name: name
+  name: bigDataPoolName
   parent: workspace
   location: location
   tags: tags
@@ -161,7 +161,7 @@ resource bigDataPool 'Microsoft.Synapse/workspaces/bigDataPools@2021-06-01' = {
     cacheSize: cacheSize
 
     // customLibraries: customLibraries
-    // defaultSparkLogFolder: defaultSparkLogFolder
+    defaultSparkLogFolder: !empty(defaultSparkLogFolder) ? defaultSparkLogFolder : null
     isAutotuneEnabled: autotuneEnabled
     isComputeIsolationEnabled: computeIsolationEnabled
     // libraryRequirements: libraryRequirements

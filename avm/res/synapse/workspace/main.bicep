@@ -359,14 +359,14 @@ module workspace_bigDataPools 'big-data-pools/main.bicep' = [
     name: '${uniqueString(deployment().name, location)}-workspace-bdp-${index}'
     params: {
       workspaceName: workspace.name
-      name: bigDataPool.name
+      bigDataPoolName: bigDataPool.name
       location: location
       tags: tags
       autoPauseDelayInMinutes: bigDataPool.?autoPauseDelayInMinutes
       autoScale: bigDataPool.?autoScale
       cacheSize: bigDataPool.cacheSize
       // customLibraries: bigDataPool.customLibraries
-      // defaultSparkLogFolder: bigDataPool.defaultSparkLogFolder
+      defaultSparkLogFolder: bigDataPool.?defaultSparkLogFolder
       dynamicExecutorAllocation: bigDataPool.?dynamicExecutorAllocation
       autotuneEnabled: bigDataPool.?autotuneEnabled
       computeIsolationEnabled: bigDataPool.?computeIsolationEnabled
@@ -558,7 +558,7 @@ import { autoScaleType, libraryInfoType, dynamicExecutorAllocationType, libraryR
 @description('The synapse workspace Big Data Pool definition.')
 type bigDataPoolType = {
   @description('Required. The name of the Big Data Pool.')
-  name: string
+  bigDataPoolName: string
 
   @description('Optional. The node size family of the pool.')
   nodeSizeFamily: string?

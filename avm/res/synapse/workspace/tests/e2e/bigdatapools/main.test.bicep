@@ -57,7 +57,7 @@ module testDeployment '../../../main.bicep' = [
       sqlAdministratorLogin: 'synwsadmin'
       bigDataPools: [
         {
-          name: 'dep${namePrefix}bdp01'
+          bigDataPoolName: 'dep${namePrefix}bdp01'
           nodeSizeFamily: 'MemoryOptimized'
           nodeSize: 'Small'
           autoScale: {
