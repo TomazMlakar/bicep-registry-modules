@@ -359,7 +359,7 @@ module workspace_bigDataPools 'big-data-pools/main.bicep' = [
     name: '${uniqueString(deployment().name, location)}-workspace-bdp-${index}'
     params: {
       workspaceName: workspace.name
-      bigDataPoolName: bigDataPool.name
+      bigDataPoolName: bigDataPool.bigDataPoolName
       location: location
       tags: tags
       autoPauseDelayInMinutes: bigDataPool.?autoPauseDelayInMinutes
