@@ -73,6 +73,8 @@ module testDeployment '../../../main.bicep' = [
           sparkVersion: '3.4'
           cacheSize: 50
           autotuneEnabled: true
+          sparkEventsFolder: 'spark-events'
+          defaultSparkLogFolder: 'spark-logs'
           roleAssignments: [
           {
             roleDefinitionIdOrName: 'Reader'

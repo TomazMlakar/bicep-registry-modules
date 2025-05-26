@@ -366,7 +366,6 @@ module workspace_bigDataPools 'big-data-pools/main.bicep' = [
       autoScale: bigDataPool.?autoScale
       cacheSize: bigDataPool.cacheSize
       // customLibraries: bigDataPool.customLibraries
-      defaultSparkLogFolder: bigDataPool.?defaultSparkLogFolder
       dynamicExecutorAllocation: bigDataPool.?dynamicExecutorAllocation
       autotuneEnabled: bigDataPool.?autotuneEnabled
       computeIsolationEnabled: bigDataPool.?computeIsolationEnabled
@@ -377,7 +376,8 @@ module workspace_bigDataPools 'big-data-pools/main.bicep' = [
       // provisioningState: bigDataPool.provisioningState
       sessionLevelPackagesEnabled: bigDataPool.?sessionLevelPackagesEnabled
       // sparkConfigProperties: bigDataPool.sparkConfigProperties
-      // sparkEventsFolder: bigDataPool.sparkEventsFolder
+      defaultSparkLogFolder: bigDataPool.?defaultSparkLogFolder
+      sparkEventsFolder: bigDataPool.?sparkEventsFolder
       sparkVersion: bigDataPool.sparkVersion
       roleAssignments: bigDataPool.?roleAssignments ?? []
     }

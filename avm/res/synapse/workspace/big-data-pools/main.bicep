@@ -80,8 +80,8 @@ param sessionLevelPackagesEnabled bool = false
 // @description('Spark configuration file to specify additional properties.')
 // param sparkConfigProperties sparkConfigPropertiesType?
 
-// @description('The Spark events folder.')
-// param sparkEventsFolder string?
+@description('The Spark events folder.')
+param sparkEventsFolder string?
 
 @description('Optional. Tags of the resource.')
 param tags object?
@@ -161,12 +161,12 @@ resource bigDataPool 'Microsoft.Synapse/workspaces/bigDataPools@2021-06-01' = {
     cacheSize: cacheSize
 
     // customLibraries: customLibraries
-    defaultSparkLogFolder: !empty(defaultSparkLogFolder) ? defaultSparkLogFolder : null
     isAutotuneEnabled: autotuneEnabled
     isComputeIsolationEnabled: computeIsolationEnabled
     // libraryRequirements: libraryRequirements
 
-    // sparkEventsFolder: sparkEventsFolder
+    sparkEventsFolder: !empty(sparkEventsFolder) ? sparkEventsFolder : null
+    defaultSparkLogFolder: !empty(defaultSparkLogFolder) ? defaultSparkLogFolder : null
   }
 }
 
