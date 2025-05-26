@@ -176,7 +176,7 @@ type dynamicExecutorAllocationType = {
   @maxValue(10)
   minExecutors: int
 
-  @description('Required. Synapse workspace Big Data Pools Dynamic Executor Allocation maximum executors.')
+  @description('Required. Synapse workspace Big Data Pools Dynamic Executor Allocation maximum executors (maxNodeCount-1).')
   @minValue(1)
   @maxValue(10)
   maxExecutors: int
