@@ -68,10 +68,7 @@ module testDeployment '../../../main.bicep' = [
           //   maxExecutors: '2'
           //   minExecutors: '1'
           // }
-          autoPause: {
-            enabled: true
-            delayInMinutes: 15
-          }
+          //autoPauseDelayInMinutes: 15
           sparkVersion: '3.4'
           cacheSize: 50
         }

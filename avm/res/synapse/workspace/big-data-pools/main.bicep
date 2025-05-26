@@ -13,11 +13,9 @@ param location string = resourceGroup().location
 @description('Optional. Tags of the resource.')
 param tags object?
 
-@description('Optional. Auto-pausing properties.')
-param autoPause autoPauseType = {
-  delayInMinutes: 15
-  enabled: true
-}
+@description('Optional. Synapse workspace Big Data Pools Auto-pausing delay in minutes.')
+param autoPauseDelayInMinutes int = -1
+
 
 @description('Optional. Auto-scaling properties.')
 param autoScale autoScaleType?
@@ -117,12 +115,14 @@ resource bigDataPool 'Microsoft.Synapse/workspaces/bigDataPools@2021-06-01' = {
     //       minExecutors: json(dynamicExecutorAllocation.?minExecutors)
     //     }
     //   : null
-    autoPause: !empty(autoPause)
+    autoPause: autoPauseDelayInMinutes != -1
       ? {
-          enabled: autoPause.?enabled
-          delayInMinutes: autoPause.?delayInMinutes
+          enabled: true
+          delayInMinutes: autoPauseDelayInMinutes
         }
-      : null
+      : {
+        enabled: false
+      }
     sparkVersion: sparkVersion
     //sparkConfigProperties: sparkConfigProperties
     //sessionLevelPackagesEnabled: sessionLevelPackagesEnabled
@@ -150,16 +150,6 @@ output resourceGroupName string = resourceGroup().name
 // =============== //
 //   Definitions   //
 // =============== //
-
-@export()
-@description('The synapse workspace Big Data Pools Auto-pausing properties.')
-type autoPauseType = {
-  @description('Required. Synapse workspace Big Data Pools Auto-pausing delay in minutes.')
-  delayInMinutes: int
-
-  @description('Required. Synapse workspace Big Data Pools Auto-pausing enabled.')
-  enabled: bool
-}
 
 @export()
 @description('The synapse workspace Big Data Pools Auto-scaling properties.')

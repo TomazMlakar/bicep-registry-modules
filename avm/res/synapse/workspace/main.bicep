@@ -362,7 +362,7 @@ module workspace_bigDataPools 'big-data-pools/main.bicep' = [
       name: bigDataPool.name
       location: location
       tags: tags
-      autoPause: bigDataPool.autoPause
+      autoPauseDelayInMinutes: bigDataPool.autoPauseDelayInMinutes
       autoScale: bigDataPool.?autoScale
       cacheSize: bigDataPool.cacheSize
       // customLibraries: bigDataPool.customLibraries
@@ -552,15 +552,15 @@ type firewallRuleType = {
   endIpAddress: string
 }
 
-import { autoPauseType, autoScaleType, libraryInfoType, dynamicExecutorAllocationType, libraryRequirementsType, sparkConfigPropertiesType } from 'big-data-pools/main.bicep'
+import { autoScaleType, libraryInfoType, dynamicExecutorAllocationType, libraryRequirementsType, sparkConfigPropertiesType } from 'big-data-pools/main.bicep'
 @export()
 @description('The synapse workspace Big Data Pool definition.')
 type bigDataPoolType = {
   @description('Required. The name of the Big Data Pool.')
   name: string
 
-  @description('Optional. The auto pause configuration.')
-  autoPause: autoPauseType?
+  @description('Optional. Optional. Synapse workspace Big Data Pools Auto-pausing delay in minutes.')
+  autoPauseDelayInMinutes: int?
 
   @description('Optional. The auto scale configuration.')
   autoScale: autoScaleType?
