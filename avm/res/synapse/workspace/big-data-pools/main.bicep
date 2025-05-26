@@ -74,8 +74,8 @@ param cacheSize int = 50
 // @description('Library version requirements.')
 // param libraryRequirements libraryRequirementsType?
 
-// @description('Optional. Whether session level packages enabled.')
-// param sessionLevelPackagesEnabled bool = true
+@description('Optional. Whether session level packages enabled.')
+param sessionLevelPackagesEnabled bool = false
 
 // @description('Spark configuration file to specify additional properties.')
 // param sparkConfigProperties sparkConfigPropertiesType?
@@ -128,7 +128,7 @@ resource bigDataPool 'Microsoft.Synapse/workspaces/bigDataPools@2021-06-01' = {
       }
     sparkVersion: sparkVersion
     //sparkConfigProperties: sparkConfigProperties
-    //sessionLevelPackagesEnabled: sessionLevelPackagesEnabled
+    sessionLevelPackagesEnabled: sessionLevelPackagesEnabled
     cacheSize: cacheSize
 
     // customLibraries: customLibraries

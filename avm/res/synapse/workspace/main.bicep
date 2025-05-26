@@ -375,7 +375,7 @@ module workspace_bigDataPools 'big-data-pools/main.bicep' = [
       nodeSize: bigDataPool.nodeSize
       nodeSizeFamily: bigDataPool.nodeSizeFamily
       // provisioningState: bigDataPool.provisioningState
-      //sessionLevelPackagesEnabled: bigDataPool.sessionLevelPackagesEnabled
+      sessionLevelPackagesEnabled: bigDataPool.?sessionLevelPackagesEnabled
       // sparkConfigProperties: bigDataPool.sparkConfigProperties
       // sparkEventsFolder: bigDataPool.sparkEventsFolder
       sparkVersion: bigDataPool.sparkVersion
