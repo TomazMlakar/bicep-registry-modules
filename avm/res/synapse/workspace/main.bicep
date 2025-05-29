@@ -361,10 +361,10 @@ module workspace_bigDataPools 'big-data-pools/main.bicep' = [
       name: bigDataPool.name
       workspaceName: workspace.name
       location: location
-      tags: tags
+      tags: bigDataPool.?tags ?? tags
       autoPauseDelayInMinutes: bigDataPool.?autoPauseDelayInMinutes
       autoScale: bigDataPool.?autoScale
-      cacheSize: bigDataPool.cacheSize
+      cacheSize: bigDataPool.?cacheSize
       dynamicExecutorAllocation: bigDataPool.?dynamicExecutorAllocation
       autotuneEnabled: bigDataPool.?autotuneEnabled
       computeIsolationEnabled: bigDataPool.?computeIsolationEnabled
@@ -372,7 +372,7 @@ module workspace_bigDataPools 'big-data-pools/main.bicep' = [
       nodeSize: bigDataPool.nodeSize
       nodeSizeFamily: bigDataPool.nodeSizeFamily
       sessionLevelPackagesEnabled: bigDataPool.?sessionLevelPackagesEnabled
-      sparkConfigProperties: bigDataPool.sparkConfigProperties
+      sparkConfigProperties: bigDataPool.?sparkConfigProperties
       defaultSparkLogFolder: bigDataPool.?defaultSparkLogFolder
       sparkEventsFolder: bigDataPool.?sparkEventsFolder
       sparkVersion: bigDataPool.?sparkVersion

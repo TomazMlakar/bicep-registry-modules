@@ -119,6 +119,11 @@ module testDeployment '../../../main.bicep' = [
             name: 'myCustomLockName'
           }
         }
+        {
+          name: 'dep${namePrefix}bdp02'
+          nodeSizeFamily: 'MemoryOptimized'
+          nodeSize: 'Small'
+        }
       ]
     }
   }
