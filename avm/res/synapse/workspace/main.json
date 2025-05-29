@@ -6,7 +6,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.33.93.31351",
-      "templateHash": "7983820114149260236"
+      "templateHash": "17123382096489642549"
     },
     "name": "Synapse Workspaces",
     "description": "This module deploys a Synapse Workspace."
@@ -146,77 +146,11 @@
             "description": "Required. The name of the Big Data Pool."
           }
         },
-        "autoPause": {
-          "$ref": "#/definitions/autoPauseType",
-          "nullable": true,
-          "metadata": {
-            "description": "Optional. The auto pause configuration."
-          }
-        },
-        "autoScale": {
-          "$ref": "#/definitions/autoScaleType",
-          "nullable": true,
-          "metadata": {
-            "description": "Optional. The auto scale configuration."
-          }
-        },
-        "cacheSize": {
-          "type": "int",
-          "nullable": true,
-          "metadata": {
-            "description": "Optional. The cache size of the pool."
-          }
-        },
-        "customLibraries": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/libraryInfoType"
-          },
-          "nullable": true,
-          "metadata": {
-            "description": "Optional. The custom libraries to be installed in the pool."
-          }
-        },
-        "defaultSparkLogFolder": {
+        "nodeSizeFamily": {
           "type": "string",
           "nullable": true,
           "metadata": {
-            "description": "Optional. The default Spark log folder."
-          }
-        },
-        "dynamicExecutorAllocation": {
-          "$ref": "#/definitions/dynamicExecutorAllocationType",
-          "nullable": true,
-          "metadata": {
-            "description": "Optional. The dynamic executor allocation configuration."
-          }
-        },
-        "isAutotuneEnabled": {
-          "type": "bool",
-          "nullable": true,
-          "metadata": {
-            "description": "Optional. Enable or disable autotune."
-          }
-        },
-        "isComputeIsolationEnabled": {
-          "type": "bool",
-          "nullable": true,
-          "metadata": {
-            "description": "Optional. Enable or disable compute isolation."
-          }
-        },
-        "libraryRequirements": {
-          "$ref": "#/definitions/libraryRequirementsType",
-          "nullable": true,
-          "metadata": {
-            "description": "Optional. The library requirements for the pool."
-          }
-        },
-        "nodeCount": {
-          "type": "int",
-          "nullable": true,
-          "metadata": {
-            "description": "Optional. The number of nodes in the pool."
+            "description": "Optional. The node size family of the pool."
           }
         },
         "nodeSize": {
@@ -226,11 +160,46 @@
             "description": "Optional. The node size of the pool."
           }
         },
-        "nodeSizeFamily": {
+        "autoScale": {
+          "$ref": "#/definitions/autoScaleType",
+          "nullable": true,
+          "metadata": {
+            "description": "Optional. The auto scale configuration."
+          }
+        },
+        "nodeCount": {
+          "type": "int",
+          "nullable": true,
+          "metadata": {
+            "description": "Optional. The number of nodes in the Big Data pool if Auto-scaling is disabled."
+          }
+        },
+        "dynamicExecutorAllocation": {
+          "$ref": "#/definitions/dynamicExecutorAllocationType",
+          "nullable": true,
+          "metadata": {
+            "description": "Optional. The dynamic executor allocation configuration."
+          }
+        },
+        "autoPauseDelayInMinutes": {
+          "type": "int",
+          "nullable": true,
+          "metadata": {
+            "description": "Optional. Synapse workspace Big Data Pools Auto-pausing delay in minutes (5-10080). Disabled if value not provided."
+          }
+        },
+        "sparkVersion": {
           "type": "string",
           "nullable": true,
           "metadata": {
-            "description": "Optional. The node size family of the pool."
+            "description": "Optional. The Spark version."
+          }
+        },
+        "sparkConfigProperties": {
+          "$ref": "#/definitions/sparkConfigPropertiesType",
+          "nullable": true,
+          "metadata": {
+            "description": "Optional. The Spark configuration properties."
           }
         },
         "sessionLevelPackagesEnabled": {
@@ -240,14 +209,32 @@
             "description": "Optional. Enable or disable session level packages."
           }
         },
-        "sparkConfigProperties": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/sparkConfigPropertiesType"
-          },
+        "cacheSize": {
+          "type": "int",
           "nullable": true,
           "metadata": {
-            "description": "Optional. The Spark configuration properties."
+            "description": "Optional. The cache size of the pool."
+          }
+        },
+        "defaultSparkLogFolder": {
+          "type": "string",
+          "nullable": true,
+          "metadata": {
+            "description": "Optional. The default Spark log folder."
+          }
+        },
+        "autotuneEnabled": {
+          "type": "bool",
+          "nullable": true,
+          "metadata": {
+            "description": "Optional. Enable or disable autotune."
+          }
+        },
+        "computeIsolationEnabled": {
+          "type": "bool",
+          "nullable": true,
+          "metadata": {
+            "description": "Optional. Enable or disable compute isolation."
           }
         },
         "sparkEventsFolder": {
@@ -257,10 +244,38 @@
             "description": "Optional. The Spark events folder."
           }
         },
-        "sparkVersion": {
-          "type": "string",
+        "diagnosticSettings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/diagnosticSettingFullType"
+          },
+          "nullable": true,
           "metadata": {
-            "description": "Required. The Spark version."
+            "description": "Optional. The diagnostic settings of the service."
+          }
+        },
+        "roleAssignments": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/roleAssignmentType"
+          },
+          "nullable": true,
+          "metadata": {
+            "description": "Optional. Array of role assignments to create."
+          }
+        },
+        "lock": {
+          "$ref": "#/definitions/lockType",
+          "nullable": true,
+          "metadata": {
+            "description": "Optional. The lock settings of the service."
+          }
+        },
+        "tags": {
+          "type": "object",
+          "nullable": true,
+          "metadata": {
+            "description": "Optional. Tags of the resource."
           }
         }
       },
@@ -378,46 +393,21 @@
         }
       }
     },
-    "autoPauseType": {
-      "type": "object",
-      "properties": {
-        "delayInMinutes": {
-          "type": "int",
-          "metadata": {
-            "description": "Required. Synapse workspace Big Data Pools Auto-pausing delay in minutes."
-          }
-        },
-        "enabled": {
-          "type": "bool",
-          "metadata": {
-            "description": "Required. Synapse workspace Big Data Pools Auto-pausing enabled."
-          }
-        }
-      },
-      "metadata": {
-        "description": "The synapse workspace Big Data Pools Auto-pausing properties.",
-        "__bicep_imported_from!": {
-          "sourceTemplate": "big-data-pools/main.bicep"
-        }
-      }
-    },
     "autoScaleType": {
       "type": "object",
       "properties": {
-        "enabled": {
-          "type": "bool",
-          "metadata": {
-            "description": "Required. Synapse workspace Big Data Pools Auto-scaling enabled."
-          }
-        },
         "maxNodeCount": {
-          "type": "string",
+          "type": "int",
+          "minValue": 3,
+          "maxValue": 200,
           "metadata": {
             "description": "Required. Synapse workspace Big Data Pools Auto-scaling maximum node count."
           }
         },
         "minNodeCount": {
-          "type": "string",
+          "type": "int",
+          "minValue": 3,
+          "maxValue": 200,
           "metadata": {
             "description": "Required. Synapse workspace Big Data Pools Auto-scaling minimum node count."
           }
@@ -462,6 +452,128 @@
       },
       "metadata": {
         "description": "An AVM-aligned type for a customer-managed key. To be used if the resource type does not support auto-rotation of the customer-managed key.",
+        "__bicep_imported_from!": {
+          "sourceTemplate": "br:mcr.microsoft.com/bicep/avm/utl/types/avm-common-types:0.5.1"
+        }
+      }
+    },
+    "diagnosticSettingFullType": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "nullable": true,
+          "metadata": {
+            "description": "Optional. The name of the diagnostic setting."
+          }
+        },
+        "logCategoriesAndGroups": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "category": {
+                "type": "string",
+                "nullable": true,
+                "metadata": {
+                  "description": "Optional. Name of a Diagnostic Log category for a resource type this setting is applied to. Set the specific logs to collect here."
+                }
+              },
+              "categoryGroup": {
+                "type": "string",
+                "nullable": true,
+                "metadata": {
+                  "description": "Optional. Name of a Diagnostic Log category group for a resource type this setting is applied to. Set to `allLogs` to collect all logs."
+                }
+              },
+              "enabled": {
+                "type": "bool",
+                "nullable": true,
+                "metadata": {
+                  "description": "Optional. Enable or disable the category explicitly. Default is `true`."
+                }
+              }
+            }
+          },
+          "nullable": true,
+          "metadata": {
+            "description": "Optional. The name of logs that will be streamed. \"allLogs\" includes all possible logs for the resource. Set to `[]` to disable log collection."
+          }
+        },
+        "metricCategories": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "category": {
+                "type": "string",
+                "metadata": {
+                  "description": "Required. Name of a Diagnostic Metric category for a resource type this setting is applied to. Set to `AllMetrics` to collect all metrics."
+                }
+              },
+              "enabled": {
+                "type": "bool",
+                "nullable": true,
+                "metadata": {
+                  "description": "Optional. Enable or disable the category explicitly. Default is `true`."
+                }
+              }
+            }
+          },
+          "nullable": true,
+          "metadata": {
+            "description": "Optional. The name of metrics that will be streamed. \"allMetrics\" includes all possible metrics for the resource. Set to `[]` to disable metric collection."
+          }
+        },
+        "logAnalyticsDestinationType": {
+          "type": "string",
+          "allowedValues": [
+            "AzureDiagnostics",
+            "Dedicated"
+          ],
+          "nullable": true,
+          "metadata": {
+            "description": "Optional. A string indicating whether the export to Log Analytics should use the default destination type, i.e. AzureDiagnostics, or use a destination type."
+          }
+        },
+        "workspaceResourceId": {
+          "type": "string",
+          "nullable": true,
+          "metadata": {
+            "description": "Optional. Resource ID of the diagnostic log analytics workspace. For security reasons, it is recommended to set diagnostic settings to send data to either storage account, log analytics workspace or event hub."
+          }
+        },
+        "storageAccountResourceId": {
+          "type": "string",
+          "nullable": true,
+          "metadata": {
+            "description": "Optional. Resource ID of the diagnostic storage account. For security reasons, it is recommended to set diagnostic settings to send data to either storage account, log analytics workspace or event hub."
+          }
+        },
+        "eventHubAuthorizationRuleResourceId": {
+          "type": "string",
+          "nullable": true,
+          "metadata": {
+            "description": "Optional. Resource ID of the diagnostic event hub authorization rule for the Event Hubs namespace in which the event hub should be created or streamed to."
+          }
+        },
+        "eventHubName": {
+          "type": "string",
+          "nullable": true,
+          "metadata": {
+            "description": "Optional. Name of the diagnostic event hub within the namespace to which logs are streamed. Without this, an event hub is created for each log category. For security reasons, it is recommended to set diagnostic settings to send data to either storage account, log analytics workspace or event hub."
+          }
+        },
+        "marketplacePartnerResourceId": {
+          "type": "string",
+          "nullable": true,
+          "metadata": {
+            "description": "Optional. The full ARM resource ID of the Marketplace resource to which you would like to send Diagnostic Logs."
+          }
+        }
+      },
+      "metadata": {
+        "description": "An AVM-aligned type for a diagnostic setting. To be used if both logs & metrics are supported by the resource provider.",
         "__bicep_imported_from!": {
           "sourceTemplate": "br:mcr.microsoft.com/bicep/avm/utl/types/avm-common-types:0.5.1"
         }
@@ -567,85 +679,25 @@
     "dynamicExecutorAllocationType": {
       "type": "object",
       "properties": {
-        "enabled": {
-          "type": "bool",
+        "minExecutors": {
+          "type": "int",
+          "minValue": 1,
+          "maxValue": 10,
           "metadata": {
-            "description": "Required. Synapse workspace Big Data Pools Dynamic Executor Allocation enabled."
+            "description": "Required. Synapse workspace Big Data Pools Dynamic Executor Allocation minimum executors."
           }
         },
         "maxExecutors": {
-          "type": "string",
+          "type": "int",
+          "minValue": 1,
+          "maxValue": 10,
           "metadata": {
-            "description": "Required. Synapse workspace Big Data Pools Dynamic Executor Allocation maximum executors."
-          }
-        },
-        "minExecutors": {
-          "type": "string",
-          "metadata": {
-            "description": "Required. Synapse workspace Big Data Pools Dynamic Executor Allocation minimum executors."
+            "description": "Required. Synapse workspace Big Data Pools Dynamic Executor Allocation maximum executors (maxNodeCount-1)."
           }
         }
       },
       "metadata": {
         "description": "The synapse workspace Big Data Pools Dynamic Executor Allocation properties.",
-        "__bicep_imported_from!": {
-          "sourceTemplate": "big-data-pools/main.bicep"
-        }
-      }
-    },
-    "libraryInfoType": {
-      "type": "object",
-      "properties": {
-        "containerName": {
-          "type": "string",
-          "metadata": {
-            "description": "Required. The library name."
-          }
-        },
-        "name": {
-          "type": "string",
-          "metadata": {
-            "description": "Required. The library version."
-          }
-        },
-        "path": {
-          "type": "string",
-          "metadata": {
-            "description": "Required. The library path."
-          }
-        },
-        "type": {
-          "type": "string",
-          "metadata": {
-            "description": "Required. The library type."
-          }
-        }
-      },
-      "metadata": {
-        "description": "The synapse workspace Big Data Pools Custom library/package info.",
-        "__bicep_imported_from!": {
-          "sourceTemplate": "big-data-pools/main.bicep"
-        }
-      }
-    },
-    "libraryRequirementsType": {
-      "type": "object",
-      "properties": {
-        "content": {
-          "type": "string",
-          "metadata": {
-            "description": "Required. The library name."
-          }
-        },
-        "filename": {
-          "type": "string",
-          "metadata": {
-            "description": "Required. The library version."
-          }
-        }
-      },
-      "metadata": {
-        "description": "The synapse workspace Big Data Pools Library version requirements.",
         "__bicep_imported_from!": {
           "sourceTemplate": "big-data-pools/main.bicep"
         }
@@ -923,6 +975,10 @@
       "properties": {
         "configurationType": {
           "type": "string",
+          "allowedValues": [
+            "Artifact",
+            "File"
+          ],
           "metadata": {
             "description": "Required. The configuration type."
           }
@@ -1549,7 +1605,7 @@
       "condition": "[parameters('encryptionActivateWorkspace')]",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2022-09-01",
-      "name": "[format('{0}-cmk-activation', parameters('name'))]",
+      "name": "[take(format('{0}-cmk-activation', parameters('name')), 64)]",
       "properties": {
         "expressionEvaluationOptions": {
           "scope": "inner"
@@ -1874,39 +1930,45 @@
       },
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2022-09-01",
-      "name": "[format('{0}-workspace-BigDataPool-{1}', uniqueString(deployment().name, parameters('location')), copyIndex())]",
+      "name": "[format('{0}-workspace-bdp-{1}', uniqueString(deployment().name, parameters('location')), copyIndex())]",
       "properties": {
         "expressionEvaluationOptions": {
           "scope": "inner"
         },
         "mode": "Incremental",
         "parameters": {
-          "workspaceName": {
-            "value": "[parameters('name')]"
-          },
           "name": {
             "value": "[coalesce(parameters('bigDataPools'), createArray())[copyIndex()].name]"
+          },
+          "workspaceName": {
+            "value": "[parameters('name')]"
           },
           "location": {
             "value": "[parameters('location')]"
           },
           "tags": {
-            "value": "[parameters('tags')]"
+            "value": "[coalesce(tryGet(coalesce(parameters('bigDataPools'), createArray())[copyIndex()], 'tags'), parameters('tags'))]"
           },
-          "autoPause": {
-            "value": "[coalesce(parameters('bigDataPools'), createArray())[copyIndex()].autoPause]"
+          "autoPauseDelayInMinutes": {
+            "value": "[tryGet(coalesce(parameters('bigDataPools'), createArray())[copyIndex()], 'autoPauseDelayInMinutes')]"
           },
           "autoScale": {
-            "value": "[coalesce(parameters('bigDataPools'), createArray())[copyIndex()].autoScale]"
+            "value": "[tryGet(coalesce(parameters('bigDataPools'), createArray())[copyIndex()], 'autoScale')]"
           },
           "cacheSize": {
-            "value": "[coalesce(parameters('bigDataPools'), createArray())[copyIndex()].cacheSize]"
+            "value": "[tryGet(coalesce(parameters('bigDataPools'), createArray())[copyIndex()], 'cacheSize')]"
           },
           "dynamicExecutorAllocation": {
-            "value": "[coalesce(parameters('bigDataPools'), createArray())[copyIndex()].dynamicExecutorAllocation]"
+            "value": "[tryGet(coalesce(parameters('bigDataPools'), createArray())[copyIndex()], 'dynamicExecutorAllocation')]"
+          },
+          "autotuneEnabled": {
+            "value": "[tryGet(coalesce(parameters('bigDataPools'), createArray())[copyIndex()], 'autotuneEnabled')]"
+          },
+          "computeIsolationEnabled": {
+            "value": "[tryGet(coalesce(parameters('bigDataPools'), createArray())[copyIndex()], 'computeIsolationEnabled')]"
           },
           "nodeCount": {
-            "value": "[coalesce(parameters('bigDataPools'), createArray())[copyIndex()].nodeCount]"
+            "value": "[tryGet(coalesce(parameters('bigDataPools'), createArray())[copyIndex()], 'nodeCount')]"
           },
           "nodeSize": {
             "value": "[coalesce(parameters('bigDataPools'), createArray())[copyIndex()].nodeSize]"
@@ -1915,10 +1977,28 @@
             "value": "[coalesce(parameters('bigDataPools'), createArray())[copyIndex()].nodeSizeFamily]"
           },
           "sessionLevelPackagesEnabled": {
-            "value": "[coalesce(parameters('bigDataPools'), createArray())[copyIndex()].sessionLevelPackagesEnabled]"
+            "value": "[tryGet(coalesce(parameters('bigDataPools'), createArray())[copyIndex()], 'sessionLevelPackagesEnabled')]"
+          },
+          "sparkConfigProperties": {
+            "value": "[tryGet(coalesce(parameters('bigDataPools'), createArray())[copyIndex()], 'sparkConfigProperties')]"
+          },
+          "defaultSparkLogFolder": {
+            "value": "[tryGet(coalesce(parameters('bigDataPools'), createArray())[copyIndex()], 'defaultSparkLogFolder')]"
+          },
+          "sparkEventsFolder": {
+            "value": "[tryGet(coalesce(parameters('bigDataPools'), createArray())[copyIndex()], 'sparkEventsFolder')]"
           },
           "sparkVersion": {
-            "value": "[coalesce(parameters('bigDataPools'), createArray())[copyIndex()].sparkVersion]"
+            "value": "[tryGet(coalesce(parameters('bigDataPools'), createArray())[copyIndex()], 'sparkVersion')]"
+          },
+          "lock": {
+            "value": "[coalesce(tryGet(coalesce(parameters('bigDataPools'), createArray())[copyIndex()], 'lock'), parameters('lock'))]"
+          },
+          "diagnosticSettings": {
+            "value": "[coalesce(tryGet(coalesce(parameters('bigDataPools'), createArray())[copyIndex()], 'diagnosticSettings'), createArray())]"
+          },
+          "roleAssignments": {
+            "value": "[coalesce(tryGet(coalesce(parameters('bigDataPools'), createArray())[copyIndex()], 'roleAssignments'), createArray())]"
           }
         },
         "template": {
@@ -1929,50 +2009,27 @@
             "_generator": {
               "name": "bicep",
               "version": "0.33.93.31351",
-              "templateHash": "17312687391290283129"
+              "templateHash": "1337758577214977080"
             },
             "name": "Synapse Workspaces Big Data Pools",
             "description": "This module deploys Synapse Workspaces Big Data Pools."
           },
           "definitions": {
-            "autoPauseType": {
-              "type": "object",
-              "properties": {
-                "delayInMinutes": {
-                  "type": "int",
-                  "metadata": {
-                    "description": "Required. Synapse workspace Big Data Pools Auto-pausing delay in minutes."
-                  }
-                },
-                "enabled": {
-                  "type": "bool",
-                  "metadata": {
-                    "description": "Required. Synapse workspace Big Data Pools Auto-pausing enabled."
-                  }
-                }
-              },
-              "metadata": {
-                "__bicep_export!": true,
-                "description": "The synapse workspace Big Data Pools Auto-pausing properties."
-              }
-            },
             "autoScaleType": {
               "type": "object",
               "properties": {
-                "enabled": {
-                  "type": "bool",
-                  "metadata": {
-                    "description": "Required. Synapse workspace Big Data Pools Auto-scaling enabled."
-                  }
-                },
                 "maxNodeCount": {
-                  "type": "string",
+                  "type": "int",
+                  "minValue": 3,
+                  "maxValue": 200,
                   "metadata": {
                     "description": "Required. Synapse workspace Big Data Pools Auto-scaling maximum node count."
                   }
                 },
                 "minNodeCount": {
-                  "type": "string",
+                  "type": "int",
+                  "minValue": 3,
+                  "maxValue": 200,
                   "metadata": {
                     "description": "Required. Synapse workspace Big Data Pools Auto-scaling minimum node count."
                   }
@@ -1986,22 +2043,20 @@
             "dynamicExecutorAllocationType": {
               "type": "object",
               "properties": {
-                "enabled": {
-                  "type": "bool",
+                "minExecutors": {
+                  "type": "int",
+                  "minValue": 1,
+                  "maxValue": 10,
                   "metadata": {
-                    "description": "Required. Synapse workspace Big Data Pools Dynamic Executor Allocation enabled."
+                    "description": "Required. Synapse workspace Big Data Pools Dynamic Executor Allocation minimum executors."
                   }
                 },
                 "maxExecutors": {
-                  "type": "string",
+                  "type": "int",
+                  "minValue": 1,
+                  "maxValue": 10,
                   "metadata": {
-                    "description": "Required. Synapse workspace Big Data Pools Dynamic Executor Allocation maximum executors."
-                  }
-                },
-                "minExecutors": {
-                  "type": "string",
-                  "metadata": {
-                    "description": "Required. Synapse workspace Big Data Pools Dynamic Executor Allocation minimum executors."
+                    "description": "Required. Synapse workspace Big Data Pools Dynamic Executor Allocation maximum executors (maxNodeCount-1)."
                   }
                 }
               },
@@ -2010,32 +2065,15 @@
                 "description": "The synapse workspace Big Data Pools Dynamic Executor Allocation properties."
               }
             },
-            "libraryRequirementsType": {
-              "type": "object",
-              "properties": {
-                "content": {
-                  "type": "string",
-                  "metadata": {
-                    "description": "Required. The library name."
-                  }
-                },
-                "filename": {
-                  "type": "string",
-                  "metadata": {
-                    "description": "Required. The library version."
-                  }
-                }
-              },
-              "metadata": {
-                "__bicep_export!": true,
-                "description": "The synapse workspace Big Data Pools Library version requirements."
-              }
-            },
             "sparkConfigPropertiesType": {
               "type": "object",
               "properties": {
                 "configurationType": {
                   "type": "string",
+                  "allowedValues": [
+                    "Artifact",
+                    "File"
+                  ],
                   "metadata": {
                     "description": "Required. The configuration type."
                   }
@@ -2058,37 +2096,231 @@
                 "description": "The synapse workspace Big Data Pools Spark configuration file properties."
               }
             },
-            "libraryInfoType": {
+            "diagnosticSettingFullType": {
               "type": "object",
               "properties": {
-                "containerName": {
-                  "type": "string",
-                  "metadata": {
-                    "description": "Required. The library name."
-                  }
-                },
                 "name": {
                   "type": "string",
+                  "nullable": true,
                   "metadata": {
-                    "description": "Required. The library version."
+                    "description": "Optional. The name of the diagnostic setting."
                   }
                 },
-                "path": {
-                  "type": "string",
+                "logCategoriesAndGroups": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "category": {
+                        "type": "string",
+                        "nullable": true,
+                        "metadata": {
+                          "description": "Optional. Name of a Diagnostic Log category for a resource type this setting is applied to. Set the specific logs to collect here."
+                        }
+                      },
+                      "categoryGroup": {
+                        "type": "string",
+                        "nullable": true,
+                        "metadata": {
+                          "description": "Optional. Name of a Diagnostic Log category group for a resource type this setting is applied to. Set to `allLogs` to collect all logs."
+                        }
+                      },
+                      "enabled": {
+                        "type": "bool",
+                        "nullable": true,
+                        "metadata": {
+                          "description": "Optional. Enable or disable the category explicitly. Default is `true`."
+                        }
+                      }
+                    }
+                  },
+                  "nullable": true,
                   "metadata": {
-                    "description": "Required. The library path."
+                    "description": "Optional. The name of logs that will be streamed. \"allLogs\" includes all possible logs for the resource. Set to `[]` to disable log collection."
                   }
                 },
-                "type": {
-                  "type": "string",
+                "metricCategories": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "category": {
+                        "type": "string",
+                        "metadata": {
+                          "description": "Required. Name of a Diagnostic Metric category for a resource type this setting is applied to. Set to `AllMetrics` to collect all metrics."
+                        }
+                      },
+                      "enabled": {
+                        "type": "bool",
+                        "nullable": true,
+                        "metadata": {
+                          "description": "Optional. Enable or disable the category explicitly. Default is `true`."
+                        }
+                      }
+                    }
+                  },
+                  "nullable": true,
                   "metadata": {
-                    "description": "Required. The library type."
+                    "description": "Optional. The name of metrics that will be streamed. \"allMetrics\" includes all possible metrics for the resource. Set to `[]` to disable metric collection."
+                  }
+                },
+                "logAnalyticsDestinationType": {
+                  "type": "string",
+                  "allowedValues": [
+                    "AzureDiagnostics",
+                    "Dedicated"
+                  ],
+                  "nullable": true,
+                  "metadata": {
+                    "description": "Optional. A string indicating whether the export to Log Analytics should use the default destination type, i.e. AzureDiagnostics, or use a destination type."
+                  }
+                },
+                "workspaceResourceId": {
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {
+                    "description": "Optional. Resource ID of the diagnostic log analytics workspace. For security reasons, it is recommended to set diagnostic settings to send data to either storage account, log analytics workspace or event hub."
+                  }
+                },
+                "storageAccountResourceId": {
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {
+                    "description": "Optional. Resource ID of the diagnostic storage account. For security reasons, it is recommended to set diagnostic settings to send data to either storage account, log analytics workspace or event hub."
+                  }
+                },
+                "eventHubAuthorizationRuleResourceId": {
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {
+                    "description": "Optional. Resource ID of the diagnostic event hub authorization rule for the Event Hubs namespace in which the event hub should be created or streamed to."
+                  }
+                },
+                "eventHubName": {
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {
+                    "description": "Optional. Name of the diagnostic event hub within the namespace to which logs are streamed. Without this, an event hub is created for each log category. For security reasons, it is recommended to set diagnostic settings to send data to either storage account, log analytics workspace or event hub."
+                  }
+                },
+                "marketplacePartnerResourceId": {
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {
+                    "description": "Optional. The full ARM resource ID of the Marketplace resource to which you would like to send Diagnostic Logs."
                   }
                 }
               },
               "metadata": {
-                "__bicep_export!": true,
-                "description": "The synapse workspace Big Data Pools Custom library/package info."
+                "description": "An AVM-aligned type for a diagnostic setting. To be used if both logs & metrics are supported by the resource provider.",
+                "__bicep_imported_from!": {
+                  "sourceTemplate": "br:mcr.microsoft.com/bicep/avm/utl/types/avm-common-types:0.5.1"
+                }
+              }
+            },
+            "lockType": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {
+                    "description": "Optional. Specify the name of lock."
+                  }
+                },
+                "kind": {
+                  "type": "string",
+                  "allowedValues": [
+                    "CanNotDelete",
+                    "None",
+                    "ReadOnly"
+                  ],
+                  "nullable": true,
+                  "metadata": {
+                    "description": "Optional. Specify the type of lock."
+                  }
+                }
+              },
+              "metadata": {
+                "description": "An AVM-aligned type for a lock.",
+                "__bicep_imported_from!": {
+                  "sourceTemplate": "br:mcr.microsoft.com/bicep/avm/utl/types/avm-common-types:0.5.1"
+                }
+              }
+            },
+            "roleAssignmentType": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {
+                    "description": "Optional. The name (as GUID) of the role assignment. If not provided, a GUID will be generated."
+                  }
+                },
+                "roleDefinitionIdOrName": {
+                  "type": "string",
+                  "metadata": {
+                    "description": "Required. The role to assign. You can provide either the display name of the role definition, the role definition GUID, or its fully qualified ID in the following format: '/providers/Microsoft.Authorization/roleDefinitions/c2f4ef07-c644-48eb-af81-4b1b4947fb11'."
+                  }
+                },
+                "principalId": {
+                  "type": "string",
+                  "metadata": {
+                    "description": "Required. The principal ID of the principal (user/group/identity) to assign the role to."
+                  }
+                },
+                "principalType": {
+                  "type": "string",
+                  "allowedValues": [
+                    "Device",
+                    "ForeignGroup",
+                    "Group",
+                    "ServicePrincipal",
+                    "User"
+                  ],
+                  "nullable": true,
+                  "metadata": {
+                    "description": "Optional. The principal type of the assigned principal ID."
+                  }
+                },
+                "description": {
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {
+                    "description": "Optional. The description of the role assignment."
+                  }
+                },
+                "condition": {
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {
+                    "description": "Optional. The conditions on the role assignment. This limits the resources it can be assigned to. e.g.: @Resource[Microsoft.Storage/storageAccounts/blobServices/containers:ContainerName] StringEqualsIgnoreCase \"foo_storage_container\"."
+                  }
+                },
+                "conditionVersion": {
+                  "type": "string",
+                  "allowedValues": [
+                    "2.0"
+                  ],
+                  "nullable": true,
+                  "metadata": {
+                    "description": "Optional. Version of the condition."
+                  }
+                },
+                "delegatedManagedIdentityResourceId": {
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {
+                    "description": "Optional. The Resource Id of the delegated managed identity resource."
+                  }
+                }
+              },
+              "metadata": {
+                "description": "An AVM-aligned type for a role assignment.",
+                "__bicep_imported_from!": {
+                  "sourceTemplate": "br:mcr.microsoft.com/bicep/avm/utl/types/avm-common-types:0.5.1"
+                }
               }
             }
           },
@@ -2096,7 +2328,7 @@
             "workspaceName": {
               "type": "string",
               "metadata": {
-                "description": "Conditional. The name of the parent Synapse Workspace. Required if the template is used in a standalone deployment."
+                "description": "Required. The name of the parent Synapse Workspace."
               }
             },
             "name": {
@@ -2112,59 +2344,17 @@
                 "description": "Optional. The geo-location where the resource lives."
               }
             },
-            "tags": {
-              "type": "object",
-              "nullable": true,
+            "nodeSizeFamily": {
+              "type": "string",
+              "defaultValue": "MemoryOptimized",
+              "allowedValues": [
+                "HardwareAcceleratedFPGA",
+                "HardwareAcceleratedGPU",
+                "MemoryOptimized",
+                "None"
+              ],
               "metadata": {
-                "description": "Optional. Tags of the resource."
-              }
-            },
-            "autoPause": {
-              "$ref": "#/definitions/autoPauseType",
-              "defaultValue": {
-                "delayInMinutes": 15,
-                "enabled": true
-              },
-              "metadata": {
-                "description": "Optional. Auto-pausing properties."
-              }
-            },
-            "autoScale": {
-              "$ref": "#/definitions/autoScaleType",
-              "defaultValue": {
-                "enabled": true,
-                "maxNodeCount": "5",
-                "minNodeCount": "3"
-              },
-              "metadata": {
-                "description": "Optional. Auto-scaling properties."
-              }
-            },
-            "cacheSize": {
-              "type": "int",
-              "defaultValue": 50,
-              "minValue": 0,
-              "maxValue": 100,
-              "metadata": {
-                "description": "Optional. The cache size."
-              }
-            },
-            "dynamicExecutorAllocation": {
-              "$ref": "#/definitions/dynamicExecutorAllocationType",
-              "defaultValue": {
-                "enabled": false,
-                "maxExecutors": "2",
-                "minExecutors": "1"
-              },
-              "metadata": {
-                "description": "Optional. Dynamic Executor Allocation."
-              }
-            },
-            "nodeCount": {
-              "type": "int",
-              "defaultValue": 3,
-              "metadata": {
-                "description": "Optional. The number of nodes in the Big Data pool."
+                "description": "Optional. The kind of nodes that the Big Data pool provides."
               }
             },
             "nodeSize": {
@@ -2182,30 +2372,149 @@
                 "description": "Required. The level of compute power that each node in the Big Data pool has."
               }
             },
-            "nodeSizeFamily": {
-              "type": "string",
-              "allowedValues": [
-                "HardwareAcceleratedFPGA",
-                "HardwareAcceleratedGPU",
-                "MemoryOptimized",
-                "None"
-              ],
+            "autoScale": {
+              "$ref": "#/definitions/autoScaleType",
+              "nullable": true,
               "metadata": {
-                "description": "Required. The kind of nodes that the Big Data pool provides."
+                "description": "Optional. Auto-scaling properties."
               }
             },
-            "sessionLevelPackagesEnabled": {
-              "type": "bool",
-              "defaultValue": true,
+            "nodeCount": {
+              "type": "int",
+              "defaultValue": 3,
+              "minValue": 3,
+              "maxValue": 200,
               "metadata": {
-                "description": "Optional. Whether session level packages enabled."
+                "description": "Optional. The number of nodes in the Big Data pool if Auto-scaling is disabled."
+              }
+            },
+            "dynamicExecutorAllocation": {
+              "$ref": "#/definitions/dynamicExecutorAllocationType",
+              "nullable": true,
+              "metadata": {
+                "description": "Optional. Dynamic Executor Allocation."
+              }
+            },
+            "autoPauseDelayInMinutes": {
+              "type": "int",
+              "defaultValue": -1,
+              "minValue": -1,
+              "maxValue": 10080,
+              "metadata": {
+                "description": "Optional. Synapse workspace Big Data Pools Auto-pausing delay in minutes (5-10080). Disabled if value not provided."
               }
             },
             "sparkVersion": {
               "type": "string",
+              "defaultValue": "3.4",
+              "allowedValues": [
+                "3.4",
+                "3.5"
+              ],
               "metadata": {
                 "description": "Required. The Apache Spark version."
               }
+            },
+            "sparkConfigProperties": {
+              "$ref": "#/definitions/sparkConfigPropertiesType",
+              "nullable": true,
+              "metadata": {
+                "description": "Optional. Spark configuration file to specify additional properties."
+              }
+            },
+            "sessionLevelPackagesEnabled": {
+              "type": "bool",
+              "defaultValue": false,
+              "metadata": {
+                "description": "Optional. Whether session level packages enabled. Disabled if value not provided."
+              }
+            },
+            "cacheSize": {
+              "type": "int",
+              "defaultValue": 50,
+              "minValue": 0,
+              "maxValue": 100,
+              "metadata": {
+                "description": "Optional. The cache size."
+              }
+            },
+            "defaultSparkLogFolder": {
+              "type": "string",
+              "nullable": true,
+              "metadata": {
+                "description": "Optional. The default folder where Spark logs will be written."
+              }
+            },
+            "autotuneEnabled": {
+              "type": "bool",
+              "defaultValue": false,
+              "metadata": {
+                "description": "Optional. Whether Auto-tune is Enabled or not. Disabled if value not provided."
+              }
+            },
+            "computeIsolationEnabled": {
+              "type": "bool",
+              "defaultValue": false,
+              "metadata": {
+                "description": "Optional. Whether Compute Isolation is enabled or not. Disabled if value not provided."
+              }
+            },
+            "sparkEventsFolder": {
+              "type": "string",
+              "nullable": true,
+              "metadata": {
+                "description": "Optional. The Spark events folder."
+              }
+            },
+            "diagnosticSettings": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/diagnosticSettingFullType"
+              },
+              "nullable": true,
+              "metadata": {
+                "description": "Optional. The diagnostic settings of the service."
+              }
+            },
+            "roleAssignments": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/roleAssignmentType"
+              },
+              "nullable": true,
+              "metadata": {
+                "description": "Optional. Array of role assignments to create."
+              }
+            },
+            "lock": {
+              "$ref": "#/definitions/lockType",
+              "nullable": true,
+              "metadata": {
+                "description": "Optional. The lock settings of the service."
+              }
+            },
+            "tags": {
+              "type": "object",
+              "nullable": true,
+              "metadata": {
+                "description": "Optional. Tags of the resource."
+              }
+            }
+          },
+          "variables": {
+            "copy": [
+              {
+                "name": "formattedRoleAssignments",
+                "count": "[length(coalesce(parameters('roleAssignments'), createArray()))]",
+                "input": "[union(coalesce(parameters('roleAssignments'), createArray())[copyIndex('formattedRoleAssignments')], createObject('roleDefinitionId', coalesce(tryGet(variables('builtInRoleNames'), coalesce(parameters('roleAssignments'), createArray())[copyIndex('formattedRoleAssignments')].roleDefinitionIdOrName), if(contains(coalesce(parameters('roleAssignments'), createArray())[copyIndex('formattedRoleAssignments')].roleDefinitionIdOrName, '/providers/Microsoft.Authorization/roleDefinitions/'), coalesce(parameters('roleAssignments'), createArray())[copyIndex('formattedRoleAssignments')].roleDefinitionIdOrName, subscriptionResourceId('Microsoft.Authorization/roleDefinitions', coalesce(parameters('roleAssignments'), createArray())[copyIndex('formattedRoleAssignments')].roleDefinitionIdOrName)))))]"
+              }
+            ],
+            "builtInRoleNames": {
+              "Contributor": "[subscriptionResourceId('Microsoft.Authorization/roleDefinitions', 'b24988ac-6180-42a0-ab88-20f7382dd24c')]",
+              "Owner": "[subscriptionResourceId('Microsoft.Authorization/roleDefinitions', '8e3af657-a8ff-443c-a75c-2fe8c4bcb635')]",
+              "Reader": "[subscriptionResourceId('Microsoft.Authorization/roleDefinitions', 'acdd72a7-3385-48ef-bd42-f606fba81ae7')]",
+              "Role Based Access Control Administrator": "[subscriptionResourceId('Microsoft.Authorization/roleDefinitions', 'f58310d9-a9f6-439a-9e8d-f62e7b41a168')]",
+              "User Access Administrator": "[subscriptionResourceId('Microsoft.Authorization/roleDefinitions', '18d7d88d-d35e-4fb5-a5c3-7773c20a72d9')]"
             }
           },
           "resources": {
@@ -2224,14 +2533,96 @@
               "properties": {
                 "nodeSizeFamily": "[parameters('nodeSizeFamily')]",
                 "nodeSize": "[parameters('nodeSize')]",
-                "autoScale": "[if(not(empty(parameters('autoScale'))), createObject('enabled', tryGet(parameters('autoScale'), 'enabled'), 'maxNodeCount', json(tryGet(parameters('autoScale'), 'maxNodeCount')), 'minNodeCount', json(tryGet(parameters('autoScale'), 'minNodeCount'))), null())]",
+                "autoScale": "[if(not(empty(parameters('autoScale'))), createObject('enabled', true(), 'minNodeCount', tryGet(parameters('autoScale'), 'minNodeCount'), 'maxNodeCount', tryGet(parameters('autoScale'), 'maxNodeCount')), createObject('enabled', false()))]",
                 "nodeCount": "[if(empty(parameters('autoScale')), parameters('nodeCount'), null())]",
-                "dynamicExecutorAllocation": "[if(not(empty(parameters('dynamicExecutorAllocation'))), createObject('enabled', tryGet(parameters('dynamicExecutorAllocation'), 'enabled'), 'maxExecutors', json(tryGet(parameters('dynamicExecutorAllocation'), 'maxExecutors')), 'minExecutors', json(tryGet(parameters('dynamicExecutorAllocation'), 'minExecutors'))), null())]",
-                "autoPause": "[if(not(empty(parameters('autoPause'))), createObject('enabled', tryGet(parameters('autoPause'), 'enabled'), 'delayInMinutes', tryGet(parameters('autoPause'), 'delayInMinutes')), null())]",
+                "dynamicExecutorAllocation": "[if(not(empty(parameters('dynamicExecutorAllocation'))), createObject('enabled', true(), 'minExecutors', tryGet(parameters('dynamicExecutorAllocation'), 'minExecutors'), 'maxExecutors', tryGet(parameters('dynamicExecutorAllocation'), 'maxExecutors')), createObject('enabled', false()))]",
+                "autoPause": "[if(not(equals(parameters('autoPauseDelayInMinutes'), -1)), createObject('enabled', true(), 'delayInMinutes', if(less(parameters('autoPauseDelayInMinutes'), 5), 5, parameters('autoPauseDelayInMinutes'))), createObject('enabled', false()))]",
                 "sparkVersion": "[parameters('sparkVersion')]",
+                "sparkConfigProperties": "[parameters('sparkConfigProperties')]",
                 "sessionLevelPackagesEnabled": "[parameters('sessionLevelPackagesEnabled')]",
-                "cacheSize": "[parameters('cacheSize')]"
+                "cacheSize": "[parameters('cacheSize')]",
+                "defaultSparkLogFolder": "[if(not(empty(parameters('defaultSparkLogFolder'))), parameters('defaultSparkLogFolder'), null())]",
+                "isAutotuneEnabled": "[parameters('autotuneEnabled')]",
+                "isComputeIsolationEnabled": "[parameters('computeIsolationEnabled')]",
+                "sparkEventsFolder": "[if(not(empty(parameters('sparkEventsFolder'))), parameters('sparkEventsFolder'), null())]"
               }
+            },
+            "bigDataPool_lock": {
+              "condition": "[and(not(empty(coalesce(parameters('lock'), createObject()))), not(equals(tryGet(parameters('lock'), 'kind'), 'None')))]",
+              "type": "Microsoft.Authorization/locks",
+              "apiVersion": "2020-05-01",
+              "scope": "[format('Microsoft.Synapse/workspaces/{0}/bigDataPools/{1}', parameters('workspaceName'), parameters('name'))]",
+              "name": "[coalesce(tryGet(parameters('lock'), 'name'), format('lock-{0}', parameters('name')))]",
+              "properties": {
+                "level": "[coalesce(tryGet(parameters('lock'), 'kind'), '')]",
+                "notes": "[if(equals(tryGet(parameters('lock'), 'kind'), 'CanNotDelete'), 'Cannot delete resource or child resources.', 'Cannot delete or modify the resource or child resources.')]"
+              },
+              "dependsOn": [
+                "bigDataPool"
+              ]
+            },
+            "bigDataPool_diagnosticSettings": {
+              "copy": {
+                "name": "bigDataPool_diagnosticSettings",
+                "count": "[length(coalesce(parameters('diagnosticSettings'), createArray()))]"
+              },
+              "type": "Microsoft.Insights/diagnosticSettings",
+              "apiVersion": "2021-05-01-preview",
+              "scope": "[format('Microsoft.Synapse/workspaces/{0}/bigDataPools/{1}', parameters('workspaceName'), parameters('name'))]",
+              "name": "[coalesce(tryGet(coalesce(parameters('diagnosticSettings'), createArray())[copyIndex()], 'name'), format('{0}-diagnosticSettings', parameters('name')))]",
+              "properties": {
+                "copy": [
+                  {
+                    "name": "metrics",
+                    "count": "[length(coalesce(tryGet(coalesce(parameters('diagnosticSettings'), createArray())[copyIndex()], 'metricCategories'), createArray(createObject('category', 'AllMetrics'))))]",
+                    "input": {
+                      "category": "[coalesce(tryGet(coalesce(parameters('diagnosticSettings'), createArray())[copyIndex()], 'metricCategories'), createArray(createObject('category', 'AllMetrics')))[copyIndex('metrics')].category]",
+                      "enabled": "[coalesce(tryGet(coalesce(tryGet(coalesce(parameters('diagnosticSettings'), createArray())[copyIndex()], 'metricCategories'), createArray(createObject('category', 'AllMetrics')))[copyIndex('metrics')], 'enabled'), true())]",
+                      "timeGrain": null
+                    }
+                  },
+                  {
+                    "name": "logs",
+                    "count": "[length(coalesce(tryGet(coalesce(parameters('diagnosticSettings'), createArray())[copyIndex()], 'logCategoriesAndGroups'), createArray(createObject('categoryGroup', 'allLogs'))))]",
+                    "input": {
+                      "categoryGroup": "[tryGet(coalesce(tryGet(coalesce(parameters('diagnosticSettings'), createArray())[copyIndex()], 'logCategoriesAndGroups'), createArray(createObject('categoryGroup', 'allLogs')))[copyIndex('logs')], 'categoryGroup')]",
+                      "category": "[tryGet(coalesce(tryGet(coalesce(parameters('diagnosticSettings'), createArray())[copyIndex()], 'logCategoriesAndGroups'), createArray(createObject('categoryGroup', 'allLogs')))[copyIndex('logs')], 'category')]",
+                      "enabled": "[coalesce(tryGet(coalesce(tryGet(coalesce(parameters('diagnosticSettings'), createArray())[copyIndex()], 'logCategoriesAndGroups'), createArray(createObject('categoryGroup', 'allLogs')))[copyIndex('logs')], 'enabled'), true())]"
+                    }
+                  }
+                ],
+                "storageAccountId": "[tryGet(coalesce(parameters('diagnosticSettings'), createArray())[copyIndex()], 'storageAccountResourceId')]",
+                "workspaceId": "[tryGet(coalesce(parameters('diagnosticSettings'), createArray())[copyIndex()], 'workspaceResourceId')]",
+                "eventHubAuthorizationRuleId": "[tryGet(coalesce(parameters('diagnosticSettings'), createArray())[copyIndex()], 'eventHubAuthorizationRuleResourceId')]",
+                "eventHubName": "[tryGet(coalesce(parameters('diagnosticSettings'), createArray())[copyIndex()], 'eventHubName')]",
+                "marketplacePartnerId": "[tryGet(coalesce(parameters('diagnosticSettings'), createArray())[copyIndex()], 'marketplacePartnerResourceId')]",
+                "logAnalyticsDestinationType": "[tryGet(coalesce(parameters('diagnosticSettings'), createArray())[copyIndex()], 'logAnalyticsDestinationType')]"
+              },
+              "dependsOn": [
+                "bigDataPool"
+              ]
+            },
+            "bigDataPool_roleAssignments": {
+              "copy": {
+                "name": "bigDataPool_roleAssignments",
+                "count": "[length(coalesce(variables('formattedRoleAssignments'), createArray()))]"
+              },
+              "type": "Microsoft.Authorization/roleAssignments",
+              "apiVersion": "2022-04-01",
+              "scope": "[format('Microsoft.Synapse/workspaces/{0}/bigDataPools/{1}', parameters('workspaceName'), parameters('name'))]",
+              "name": "[coalesce(tryGet(coalesce(variables('formattedRoleAssignments'), createArray())[copyIndex()], 'name'), guid(resourceId('Microsoft.Synapse/workspaces/bigDataPools', parameters('workspaceName'), parameters('name')), coalesce(variables('formattedRoleAssignments'), createArray())[copyIndex()].principalId, coalesce(variables('formattedRoleAssignments'), createArray())[copyIndex()].roleDefinitionId))]",
+              "properties": {
+                "roleDefinitionId": "[coalesce(variables('formattedRoleAssignments'), createArray())[copyIndex()].roleDefinitionId]",
+                "principalId": "[coalesce(variables('formattedRoleAssignments'), createArray())[copyIndex()].principalId]",
+                "description": "[tryGet(coalesce(variables('formattedRoleAssignments'), createArray())[copyIndex()], 'description')]",
+                "principalType": "[tryGet(coalesce(variables('formattedRoleAssignments'), createArray())[copyIndex()], 'principalType')]",
+                "condition": "[tryGet(coalesce(variables('formattedRoleAssignments'), createArray())[copyIndex()], 'condition')]",
+                "conditionVersion": "[if(not(empty(tryGet(coalesce(variables('formattedRoleAssignments'), createArray())[copyIndex()], 'condition'))), coalesce(tryGet(coalesce(variables('formattedRoleAssignments'), createArray())[copyIndex()], 'conditionVersion'), '2.0'), null())]",
+                "delegatedManagedIdentityResourceId": "[tryGet(coalesce(variables('formattedRoleAssignments'), createArray())[copyIndex()], 'delegatedManagedIdentityResourceId')]"
+              },
+              "dependsOn": [
+                "bigDataPool"
+              ]
             }
           },
           "outputs": {

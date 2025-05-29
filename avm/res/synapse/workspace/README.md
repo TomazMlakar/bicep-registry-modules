@@ -66,20 +66,26 @@ module workspace 'br/public:avm/res/synapse/workspace:<version>' = {
     // Non-required parameters
     bigDataPools: [
       {
-        autoPause: {
-          delayInMinutes: 15
-          enabled: true
-        }
+        autoPauseDelayInMinutes: 10
         autoScale: {
-          enabled: true
-          maxNodeCount: '5'
-          minNodeCount: '3'
+          maxNodeCount: 5
+          minNodeCount: 3
         }
+        autotuneEnabled: true
         cacheSize: 50
+        dynamicExecutorAllocation: {
+          maxExecutors: 4
+          minExecutors: 1
+        }
         name: 'depbdp01'
         nodeSize: 'Small'
         nodeSizeFamily: 'MemoryOptimized'
-        sparkVersion: '2.4'
+        sessionLevelPackagesEnabled: true
+      }
+      {
+        name: 'depbdp02'
+        nodeSize: 'Small'
+        nodeSizeFamily: 'MemoryOptimized'
       }
     ]
   }
@@ -115,20 +121,26 @@ module workspace 'br/public:avm/res/synapse/workspace:<version>' = {
     "bigDataPools": {
       "value": [
         {
-          "autoPause": {
-            "delayInMinutes": 15,
-            "enabled": true
-          },
+          "autoPauseDelayInMinutes": 10,
           "autoScale": {
-            "enabled": true,
-            "maxNodeCount": "5",
-            "minNodeCount": "3"
+            "maxNodeCount": 5,
+            "minNodeCount": 3
           },
+          "autotuneEnabled": true,
           "cacheSize": 50,
+          "dynamicExecutorAllocation": {
+            "maxExecutors": 4,
+            "minExecutors": 1
+          },
           "name": "depbdp01",
           "nodeSize": "Small",
           "nodeSizeFamily": "MemoryOptimized",
-          "sparkVersion": "2.4"
+          "sessionLevelPackagesEnabled": true
+        },
+        {
+          "name": "depbdp02",
+          "nodeSize": "Small",
+          "nodeSizeFamily": "MemoryOptimized"
         }
       ]
     }
@@ -154,20 +166,26 @@ param sqlAdministratorLogin = 'synwsadmin'
 // Non-required parameters
 param bigDataPools = [
   {
-    autoPause: {
-      delayInMinutes: 15
-      enabled: true
-    }
+    autoPauseDelayInMinutes: 10
     autoScale: {
-      enabled: true
-      maxNodeCount: '5'
-      minNodeCount: '3'
+      maxNodeCount: 5
+      minNodeCount: 3
     }
+    autotuneEnabled: true
     cacheSize: 50
+    dynamicExecutorAllocation: {
+      maxExecutors: 4
+      minExecutors: 1
+    }
     name: 'depbdp01'
     nodeSize: 'Small'
     nodeSizeFamily: 'MemoryOptimized'
-    sparkVersion: '2.4'
+    sessionLevelPackagesEnabled: true
+  }
+  {
+    name: 'depbdp02'
+    nodeSize: 'Small'
+    nodeSizeFamily: 'MemoryOptimized'
   }
 ]
 ```
@@ -661,6 +679,57 @@ module workspace 'br/public:avm/res/synapse/workspace:<version>' = {
       login: 'dep-msi-swmax'
       sid: '<sid>'
     }
+    bigDataPools: [
+      {
+        autoPauseDelayInMinutes: 5
+        autoScale: {
+          maxNodeCount: 10
+          minNodeCount: 3
+        }
+        autotuneEnabled: true
+        cacheSize: 50
+        defaultSparkLogFolder: '/logs'
+        diagnosticSettings: [
+          {
+            eventHubAuthorizationRuleResourceId: '<eventHubAuthorizationRuleResourceId>'
+            eventHubName: '<eventHubName>'
+            metricCategories: [
+              {
+                category: 'AllMetrics'
+              }
+            ]
+            name: 'customSetting'
+            storageAccountResourceId: '<storageAccountResourceId>'
+            workspaceResourceId: '<workspaceResourceId>'
+          }
+        ]
+        dynamicExecutorAllocation: {
+          maxExecutors: 9
+          minExecutors: 1
+        }
+        lock: {
+          kind: 'CanNotDelete'
+          name: 'myCustomLockName'
+        }
+        name: 'depbdp01'
+        nodeSize: 'Large'
+        nodeSizeFamily: 'MemoryOptimized'
+        roleAssignments: [
+          {
+            principalId: '<principalId>'
+            principalType: 'ServicePrincipal'
+            roleDefinitionIdOrName: 'Reader'
+          }
+        ]
+        sessionLevelPackagesEnabled: true
+        sparkConfigProperties: {
+          configurationType: 'File'
+          content: '<content>'
+          filename: 'spark-defaults.conf'
+        }
+        sparkEventsFolder: '/events'
+      }
+    ]
     diagnosticSettings: [
       {
         eventHubAuthorizationRuleResourceId: '<eventHubAuthorizationRuleResourceId>'
@@ -808,6 +877,59 @@ module workspace 'br/public:avm/res/synapse/workspace:<version>' = {
         "login": "dep-msi-swmax",
         "sid": "<sid>"
       }
+    },
+    "bigDataPools": {
+      "value": [
+        {
+          "autoPauseDelayInMinutes": 5,
+          "autoScale": {
+            "maxNodeCount": 10,
+            "minNodeCount": 3
+          },
+          "autotuneEnabled": true,
+          "cacheSize": 50,
+          "defaultSparkLogFolder": "/logs",
+          "diagnosticSettings": [
+            {
+              "eventHubAuthorizationRuleResourceId": "<eventHubAuthorizationRuleResourceId>",
+              "eventHubName": "<eventHubName>",
+              "metricCategories": [
+                {
+                  "category": "AllMetrics"
+                }
+              ],
+              "name": "customSetting",
+              "storageAccountResourceId": "<storageAccountResourceId>",
+              "workspaceResourceId": "<workspaceResourceId>"
+            }
+          ],
+          "dynamicExecutorAllocation": {
+            "maxExecutors": 9,
+            "minExecutors": 1
+          },
+          "lock": {
+            "kind": "CanNotDelete",
+            "name": "myCustomLockName"
+          },
+          "name": "depbdp01",
+          "nodeSize": "Large",
+          "nodeSizeFamily": "MemoryOptimized",
+          "roleAssignments": [
+            {
+              "principalId": "<principalId>",
+              "principalType": "ServicePrincipal",
+              "roleDefinitionIdOrName": "Reader"
+            }
+          ],
+          "sessionLevelPackagesEnabled": true,
+          "sparkConfigProperties": {
+            "configurationType": "File",
+            "content": "<content>",
+            "filename": "spark-defaults.conf"
+          },
+          "sparkEventsFolder": "/events"
+        }
+      ]
     },
     "diagnosticSettings": {
       "value": [
@@ -961,6 +1083,57 @@ param administrator = {
   login: 'dep-msi-swmax'
   sid: '<sid>'
 }
+param bigDataPools = [
+  {
+    autoPauseDelayInMinutes: 5
+    autoScale: {
+      maxNodeCount: 10
+      minNodeCount: 3
+    }
+    autotuneEnabled: true
+    cacheSize: 50
+    defaultSparkLogFolder: '/logs'
+    diagnosticSettings: [
+      {
+        eventHubAuthorizationRuleResourceId: '<eventHubAuthorizationRuleResourceId>'
+        eventHubName: '<eventHubName>'
+        metricCategories: [
+          {
+            category: 'AllMetrics'
+          }
+        ]
+        name: 'customSetting'
+        storageAccountResourceId: '<storageAccountResourceId>'
+        workspaceResourceId: '<workspaceResourceId>'
+      }
+    ]
+    dynamicExecutorAllocation: {
+      maxExecutors: 9
+      minExecutors: 1
+    }
+    lock: {
+      kind: 'CanNotDelete'
+      name: 'myCustomLockName'
+    }
+    name: 'depbdp01'
+    nodeSize: 'Large'
+    nodeSizeFamily: 'MemoryOptimized'
+    roleAssignments: [
+      {
+        principalId: '<principalId>'
+        principalType: 'ServicePrincipal'
+        roleDefinitionIdOrName: 'Reader'
+      }
+    ]
+    sessionLevelPackagesEnabled: true
+    sparkConfigProperties: {
+      configurationType: 'File'
+      content: '<content>'
+      filename: 'spark-defaults.conf'
+    }
+    sparkEventsFolder: '/events'
+  }
+]
 param diagnosticSettings = [
   {
     eventHubAuthorizationRuleResourceId: '<eventHubAuthorizationRuleResourceId>'
@@ -1458,27 +1631,29 @@ List of Big Data Pools to be created in the workspace.
 | Parameter | Type | Description |
 | :-- | :-- | :-- |
 | [`name`](#parameter-bigdatapoolsname) | string | The name of the Big Data Pool. |
-| [`sparkVersion`](#parameter-bigdatapoolssparkversion) | string | The Spark version. |
 
 **Optional parameters**
 
 | Parameter | Type | Description |
 | :-- | :-- | :-- |
-| [`autoPause`](#parameter-bigdatapoolsautopause) | object | The auto pause configuration. |
+| [`autoPauseDelayInMinutes`](#parameter-bigdatapoolsautopausedelayinminutes) | int | Synapse workspace Big Data Pools Auto-pausing delay in minutes (5-10080). Disabled if value not provided. |
 | [`autoScale`](#parameter-bigdatapoolsautoscale) | object | The auto scale configuration. |
+| [`autotuneEnabled`](#parameter-bigdatapoolsautotuneenabled) | bool | Enable or disable autotune. |
 | [`cacheSize`](#parameter-bigdatapoolscachesize) | int | The cache size of the pool. |
-| [`customLibraries`](#parameter-bigdatapoolscustomlibraries) | array | The custom libraries to be installed in the pool. |
+| [`computeIsolationEnabled`](#parameter-bigdatapoolscomputeisolationenabled) | bool | Enable or disable compute isolation. |
 | [`defaultSparkLogFolder`](#parameter-bigdatapoolsdefaultsparklogfolder) | string | The default Spark log folder. |
+| [`diagnosticSettings`](#parameter-bigdatapoolsdiagnosticsettings) | array | The diagnostic settings of the service. |
 | [`dynamicExecutorAllocation`](#parameter-bigdatapoolsdynamicexecutorallocation) | object | The dynamic executor allocation configuration. |
-| [`isAutotuneEnabled`](#parameter-bigdatapoolsisautotuneenabled) | bool | Enable or disable autotune. |
-| [`isComputeIsolationEnabled`](#parameter-bigdatapoolsiscomputeisolationenabled) | bool | Enable or disable compute isolation. |
-| [`libraryRequirements`](#parameter-bigdatapoolslibraryrequirements) | object | The library requirements for the pool. |
-| [`nodeCount`](#parameter-bigdatapoolsnodecount) | int | The number of nodes in the pool. |
+| [`lock`](#parameter-bigdatapoolslock) | object | The lock settings of the service. |
+| [`nodeCount`](#parameter-bigdatapoolsnodecount) | int | The number of nodes in the Big Data pool if Auto-scaling is disabled. |
 | [`nodeSize`](#parameter-bigdatapoolsnodesize) | string | The node size of the pool. |
 | [`nodeSizeFamily`](#parameter-bigdatapoolsnodesizefamily) | string | The node size family of the pool. |
+| [`roleAssignments`](#parameter-bigdatapoolsroleassignments) | array | Array of role assignments to create. |
 | [`sessionLevelPackagesEnabled`](#parameter-bigdatapoolssessionlevelpackagesenabled) | bool | Enable or disable session level packages. |
-| [`sparkConfigProperties`](#parameter-bigdatapoolssparkconfigproperties) | array | The Spark configuration properties. |
+| [`sparkConfigProperties`](#parameter-bigdatapoolssparkconfigproperties) | object | The Spark configuration properties. |
 | [`sparkEventsFolder`](#parameter-bigdatapoolssparkeventsfolder) | string | The Spark events folder. |
+| [`sparkVersion`](#parameter-bigdatapoolssparkversion) | string | The Spark version. |
+| [`tags`](#parameter-bigdatapoolstags) | object | Tags of the resource. |
 
 ### Parameter: `bigDataPools.name`
 
@@ -1487,40 +1662,12 @@ The name of the Big Data Pool.
 - Required: Yes
 - Type: string
 
-### Parameter: `bigDataPools.sparkVersion`
+### Parameter: `bigDataPools.autoPauseDelayInMinutes`
 
-The Spark version.
-
-- Required: Yes
-- Type: string
-
-### Parameter: `bigDataPools.autoPause`
-
-The auto pause configuration.
+Synapse workspace Big Data Pools Auto-pausing delay in minutes (5-10080). Disabled if value not provided.
 
 - Required: No
-- Type: object
-
-**Required parameters**
-
-| Parameter | Type | Description |
-| :-- | :-- | :-- |
-| [`delayInMinutes`](#parameter-bigdatapoolsautopausedelayinminutes) | int | Synapse workspace Big Data Pools Auto-pausing delay in minutes. |
-| [`enabled`](#parameter-bigdatapoolsautopauseenabled) | bool | Synapse workspace Big Data Pools Auto-pausing enabled. |
-
-### Parameter: `bigDataPools.autoPause.delayInMinutes`
-
-Synapse workspace Big Data Pools Auto-pausing delay in minutes.
-
-- Required: Yes
 - Type: int
-
-### Parameter: `bigDataPools.autoPause.enabled`
-
-Synapse workspace Big Data Pools Auto-pausing enabled.
-
-- Required: Yes
-- Type: bool
 
 ### Parameter: `bigDataPools.autoScale`
 
@@ -1533,30 +1680,33 @@ The auto scale configuration.
 
 | Parameter | Type | Description |
 | :-- | :-- | :-- |
-| [`enabled`](#parameter-bigdatapoolsautoscaleenabled) | bool | Synapse workspace Big Data Pools Auto-scaling enabled. |
-| [`maxNodeCount`](#parameter-bigdatapoolsautoscalemaxnodecount) | string | Synapse workspace Big Data Pools Auto-scaling maximum node count. |
-| [`minNodeCount`](#parameter-bigdatapoolsautoscaleminnodecount) | string | Synapse workspace Big Data Pools Auto-scaling minimum node count. |
-
-### Parameter: `bigDataPools.autoScale.enabled`
-
-Synapse workspace Big Data Pools Auto-scaling enabled.
-
-- Required: Yes
-- Type: bool
+| [`maxNodeCount`](#parameter-bigdatapoolsautoscalemaxnodecount) | int | Synapse workspace Big Data Pools Auto-scaling maximum node count. |
+| [`minNodeCount`](#parameter-bigdatapoolsautoscaleminnodecount) | int | Synapse workspace Big Data Pools Auto-scaling minimum node count. |
 
 ### Parameter: `bigDataPools.autoScale.maxNodeCount`
 
 Synapse workspace Big Data Pools Auto-scaling maximum node count.
 
 - Required: Yes
-- Type: string
+- Type: int
+- MinValue: 3
+- MaxValue: 200
 
 ### Parameter: `bigDataPools.autoScale.minNodeCount`
 
 Synapse workspace Big Data Pools Auto-scaling minimum node count.
 
 - Required: Yes
-- Type: string
+- Type: int
+- MinValue: 3
+- MaxValue: 200
+
+### Parameter: `bigDataPools.autotuneEnabled`
+
+Enable or disable autotune.
+
+- Required: No
+- Type: bool
 
 ### Parameter: `bigDataPools.cacheSize`
 
@@ -1565,9 +1715,115 @@ The cache size of the pool.
 - Required: No
 - Type: int
 
-### Parameter: `bigDataPools.customLibraries`
+### Parameter: `bigDataPools.computeIsolationEnabled`
 
-The custom libraries to be installed in the pool.
+Enable or disable compute isolation.
+
+- Required: No
+- Type: bool
+
+### Parameter: `bigDataPools.defaultSparkLogFolder`
+
+The default Spark log folder.
+
+- Required: No
+- Type: string
+
+### Parameter: `bigDataPools.diagnosticSettings`
+
+The diagnostic settings of the service.
+
+- Required: No
+- Type: array
+
+**Optional parameters**
+
+| Parameter | Type | Description |
+| :-- | :-- | :-- |
+| [`eventHubAuthorizationRuleResourceId`](#parameter-bigdatapoolsdiagnosticsettingseventhubauthorizationruleresourceid) | string | Resource ID of the diagnostic event hub authorization rule for the Event Hubs namespace in which the event hub should be created or streamed to. |
+| [`eventHubName`](#parameter-bigdatapoolsdiagnosticsettingseventhubname) | string | Name of the diagnostic event hub within the namespace to which logs are streamed. Without this, an event hub is created for each log category. For security reasons, it is recommended to set diagnostic settings to send data to either storage account, log analytics workspace or event hub. |
+| [`logAnalyticsDestinationType`](#parameter-bigdatapoolsdiagnosticsettingsloganalyticsdestinationtype) | string | A string indicating whether the export to Log Analytics should use the default destination type, i.e. AzureDiagnostics, or use a destination type. |
+| [`logCategoriesAndGroups`](#parameter-bigdatapoolsdiagnosticsettingslogcategoriesandgroups) | array | The name of logs that will be streamed. "allLogs" includes all possible logs for the resource. Set to `[]` to disable log collection. |
+| [`marketplacePartnerResourceId`](#parameter-bigdatapoolsdiagnosticsettingsmarketplacepartnerresourceid) | string | The full ARM resource ID of the Marketplace resource to which you would like to send Diagnostic Logs. |
+| [`metricCategories`](#parameter-bigdatapoolsdiagnosticsettingsmetriccategories) | array | The name of metrics that will be streamed. "allMetrics" includes all possible metrics for the resource. Set to `[]` to disable metric collection. |
+| [`name`](#parameter-bigdatapoolsdiagnosticsettingsname) | string | The name of the diagnostic setting. |
+| [`storageAccountResourceId`](#parameter-bigdatapoolsdiagnosticsettingsstorageaccountresourceid) | string | Resource ID of the diagnostic storage account. For security reasons, it is recommended to set diagnostic settings to send data to either storage account, log analytics workspace or event hub. |
+| [`workspaceResourceId`](#parameter-bigdatapoolsdiagnosticsettingsworkspaceresourceid) | string | Resource ID of the diagnostic log analytics workspace. For security reasons, it is recommended to set diagnostic settings to send data to either storage account, log analytics workspace or event hub. |
+
+### Parameter: `bigDataPools.diagnosticSettings.eventHubAuthorizationRuleResourceId`
+
+Resource ID of the diagnostic event hub authorization rule for the Event Hubs namespace in which the event hub should be created or streamed to.
+
+- Required: No
+- Type: string
+
+### Parameter: `bigDataPools.diagnosticSettings.eventHubName`
+
+Name of the diagnostic event hub within the namespace to which logs are streamed. Without this, an event hub is created for each log category. For security reasons, it is recommended to set diagnostic settings to send data to either storage account, log analytics workspace or event hub.
+
+- Required: No
+- Type: string
+
+### Parameter: `bigDataPools.diagnosticSettings.logAnalyticsDestinationType`
+
+A string indicating whether the export to Log Analytics should use the default destination type, i.e. AzureDiagnostics, or use a destination type.
+
+- Required: No
+- Type: string
+- Allowed:
+  ```Bicep
+  [
+    'AzureDiagnostics'
+    'Dedicated'
+  ]
+  ```
+
+### Parameter: `bigDataPools.diagnosticSettings.logCategoriesAndGroups`
+
+The name of logs that will be streamed. "allLogs" includes all possible logs for the resource. Set to `[]` to disable log collection.
+
+- Required: No
+- Type: array
+
+**Optional parameters**
+
+| Parameter | Type | Description |
+| :-- | :-- | :-- |
+| [`category`](#parameter-bigdatapoolsdiagnosticsettingslogcategoriesandgroupscategory) | string | Name of a Diagnostic Log category for a resource type this setting is applied to. Set the specific logs to collect here. |
+| [`categoryGroup`](#parameter-bigdatapoolsdiagnosticsettingslogcategoriesandgroupscategorygroup) | string | Name of a Diagnostic Log category group for a resource type this setting is applied to. Set to `allLogs` to collect all logs. |
+| [`enabled`](#parameter-bigdatapoolsdiagnosticsettingslogcategoriesandgroupsenabled) | bool | Enable or disable the category explicitly. Default is `true`. |
+
+### Parameter: `bigDataPools.diagnosticSettings.logCategoriesAndGroups.category`
+
+Name of a Diagnostic Log category for a resource type this setting is applied to. Set the specific logs to collect here.
+
+- Required: No
+- Type: string
+
+### Parameter: `bigDataPools.diagnosticSettings.logCategoriesAndGroups.categoryGroup`
+
+Name of a Diagnostic Log category group for a resource type this setting is applied to. Set to `allLogs` to collect all logs.
+
+- Required: No
+- Type: string
+
+### Parameter: `bigDataPools.diagnosticSettings.logCategoriesAndGroups.enabled`
+
+Enable or disable the category explicitly. Default is `true`.
+
+- Required: No
+- Type: bool
+
+### Parameter: `bigDataPools.diagnosticSettings.marketplacePartnerResourceId`
+
+The full ARM resource ID of the Marketplace resource to which you would like to send Diagnostic Logs.
+
+- Required: No
+- Type: string
+
+### Parameter: `bigDataPools.diagnosticSettings.metricCategories`
+
+The name of metrics that will be streamed. "allMetrics" includes all possible metrics for the resource. Set to `[]` to disable metric collection.
 
 - Required: No
 - Type: array
@@ -1576,42 +1832,45 @@ The custom libraries to be installed in the pool.
 
 | Parameter | Type | Description |
 | :-- | :-- | :-- |
-| [`containerName`](#parameter-bigdatapoolscustomlibrariescontainername) | string | The library name. |
-| [`name`](#parameter-bigdatapoolscustomlibrariesname) | string | The library version. |
-| [`path`](#parameter-bigdatapoolscustomlibrariespath) | string | The library path. |
-| [`type`](#parameter-bigdatapoolscustomlibrariestype) | string | The library type. |
+| [`category`](#parameter-bigdatapoolsdiagnosticsettingsmetriccategoriescategory) | string | Name of a Diagnostic Metric category for a resource type this setting is applied to. Set to `AllMetrics` to collect all metrics. |
 
-### Parameter: `bigDataPools.customLibraries.containerName`
+**Optional parameters**
 
-The library name.
+| Parameter | Type | Description |
+| :-- | :-- | :-- |
+| [`enabled`](#parameter-bigdatapoolsdiagnosticsettingsmetriccategoriesenabled) | bool | Enable or disable the category explicitly. Default is `true`. |
 
-- Required: Yes
-- Type: string
+### Parameter: `bigDataPools.diagnosticSettings.metricCategories.category`
 
-### Parameter: `bigDataPools.customLibraries.name`
-
-The library version.
+Name of a Diagnostic Metric category for a resource type this setting is applied to. Set to `AllMetrics` to collect all metrics.
 
 - Required: Yes
 - Type: string
 
-### Parameter: `bigDataPools.customLibraries.path`
+### Parameter: `bigDataPools.diagnosticSettings.metricCategories.enabled`
 
-The library path.
+Enable or disable the category explicitly. Default is `true`.
 
-- Required: Yes
+- Required: No
+- Type: bool
+
+### Parameter: `bigDataPools.diagnosticSettings.name`
+
+The name of the diagnostic setting.
+
+- Required: No
 - Type: string
 
-### Parameter: `bigDataPools.customLibraries.type`
+### Parameter: `bigDataPools.diagnosticSettings.storageAccountResourceId`
 
-The library type.
+Resource ID of the diagnostic storage account. For security reasons, it is recommended to set diagnostic settings to send data to either storage account, log analytics workspace or event hub.
 
-- Required: Yes
+- Required: No
 - Type: string
 
-### Parameter: `bigDataPools.defaultSparkLogFolder`
+### Parameter: `bigDataPools.diagnosticSettings.workspaceResourceId`
 
-The default Spark log folder.
+Resource ID of the diagnostic log analytics workspace. For security reasons, it is recommended to set diagnostic settings to send data to either storage account, log analytics workspace or event hub.
 
 - Required: No
 - Type: string
@@ -1627,76 +1886,66 @@ The dynamic executor allocation configuration.
 
 | Parameter | Type | Description |
 | :-- | :-- | :-- |
-| [`enabled`](#parameter-bigdatapoolsdynamicexecutorallocationenabled) | bool | Synapse workspace Big Data Pools Dynamic Executor Allocation enabled. |
-| [`maxExecutors`](#parameter-bigdatapoolsdynamicexecutorallocationmaxexecutors) | string | Synapse workspace Big Data Pools Dynamic Executor Allocation maximum executors. |
-| [`minExecutors`](#parameter-bigdatapoolsdynamicexecutorallocationminexecutors) | string | Synapse workspace Big Data Pools Dynamic Executor Allocation minimum executors. |
-
-### Parameter: `bigDataPools.dynamicExecutorAllocation.enabled`
-
-Synapse workspace Big Data Pools Dynamic Executor Allocation enabled.
-
-- Required: Yes
-- Type: bool
+| [`maxExecutors`](#parameter-bigdatapoolsdynamicexecutorallocationmaxexecutors) | int | Synapse workspace Big Data Pools Dynamic Executor Allocation maximum executors (maxNodeCount-1). |
+| [`minExecutors`](#parameter-bigdatapoolsdynamicexecutorallocationminexecutors) | int | Synapse workspace Big Data Pools Dynamic Executor Allocation minimum executors. |
 
 ### Parameter: `bigDataPools.dynamicExecutorAllocation.maxExecutors`
 
-Synapse workspace Big Data Pools Dynamic Executor Allocation maximum executors.
+Synapse workspace Big Data Pools Dynamic Executor Allocation maximum executors (maxNodeCount-1).
 
 - Required: Yes
-- Type: string
+- Type: int
+- MinValue: 1
+- MaxValue: 10
 
 ### Parameter: `bigDataPools.dynamicExecutorAllocation.minExecutors`
 
 Synapse workspace Big Data Pools Dynamic Executor Allocation minimum executors.
 
 - Required: Yes
-- Type: string
+- Type: int
+- MinValue: 1
+- MaxValue: 10
 
-### Parameter: `bigDataPools.isAutotuneEnabled`
+### Parameter: `bigDataPools.lock`
 
-Enable or disable autotune.
-
-- Required: No
-- Type: bool
-
-### Parameter: `bigDataPools.isComputeIsolationEnabled`
-
-Enable or disable compute isolation.
-
-- Required: No
-- Type: bool
-
-### Parameter: `bigDataPools.libraryRequirements`
-
-The library requirements for the pool.
+The lock settings of the service.
 
 - Required: No
 - Type: object
 
-**Required parameters**
+**Optional parameters**
 
 | Parameter | Type | Description |
 | :-- | :-- | :-- |
-| [`content`](#parameter-bigdatapoolslibraryrequirementscontent) | string | The library name. |
-| [`filename`](#parameter-bigdatapoolslibraryrequirementsfilename) | string | The library version. |
+| [`kind`](#parameter-bigdatapoolslockkind) | string | Specify the type of lock. |
+| [`name`](#parameter-bigdatapoolslockname) | string | Specify the name of lock. |
 
-### Parameter: `bigDataPools.libraryRequirements.content`
+### Parameter: `bigDataPools.lock.kind`
 
-The library name.
+Specify the type of lock.
 
-- Required: Yes
+- Required: No
 - Type: string
+- Allowed:
+  ```Bicep
+  [
+    'CanNotDelete'
+    'None'
+    'ReadOnly'
+  ]
+  ```
 
-### Parameter: `bigDataPools.libraryRequirements.filename`
+### Parameter: `bigDataPools.lock.name`
 
-The library version.
+Specify the name of lock.
 
-- Required: Yes
+- Required: No
 - Type: string
 
 ### Parameter: `bigDataPools.nodeCount`
 
-The number of nodes in the pool.
+The number of nodes in the Big Data pool if Auto-scaling is disabled.
 
 - Required: No
 - Type: int
@@ -1715,6 +1964,109 @@ The node size family of the pool.
 - Required: No
 - Type: string
 
+### Parameter: `bigDataPools.roleAssignments`
+
+Array of role assignments to create.
+
+- Required: No
+- Type: array
+- Roles configurable by name:
+  - `'Contributor'`
+  - `'Owner'`
+  - `'Reader'`
+  - `'Role Based Access Control Administrator'`
+  - `'User Access Administrator'`
+
+**Required parameters**
+
+| Parameter | Type | Description |
+| :-- | :-- | :-- |
+| [`principalId`](#parameter-bigdatapoolsroleassignmentsprincipalid) | string | The principal ID of the principal (user/group/identity) to assign the role to. |
+| [`roleDefinitionIdOrName`](#parameter-bigdatapoolsroleassignmentsroledefinitionidorname) | string | The role to assign. You can provide either the display name of the role definition, the role definition GUID, or its fully qualified ID in the following format: '/providers/Microsoft.Authorization/roleDefinitions/c2f4ef07-c644-48eb-af81-4b1b4947fb11'. |
+
+**Optional parameters**
+
+| Parameter | Type | Description |
+| :-- | :-- | :-- |
+| [`condition`](#parameter-bigdatapoolsroleassignmentscondition) | string | The conditions on the role assignment. This limits the resources it can be assigned to. e.g.: @Resource[Microsoft.Storage/storageAccounts/blobServices/containers:ContainerName] StringEqualsIgnoreCase "foo_storage_container". |
+| [`conditionVersion`](#parameter-bigdatapoolsroleassignmentsconditionversion) | string | Version of the condition. |
+| [`delegatedManagedIdentityResourceId`](#parameter-bigdatapoolsroleassignmentsdelegatedmanagedidentityresourceid) | string | The Resource Id of the delegated managed identity resource. |
+| [`description`](#parameter-bigdatapoolsroleassignmentsdescription) | string | The description of the role assignment. |
+| [`name`](#parameter-bigdatapoolsroleassignmentsname) | string | The name (as GUID) of the role assignment. If not provided, a GUID will be generated. |
+| [`principalType`](#parameter-bigdatapoolsroleassignmentsprincipaltype) | string | The principal type of the assigned principal ID. |
+
+### Parameter: `bigDataPools.roleAssignments.principalId`
+
+The principal ID of the principal (user/group/identity) to assign the role to.
+
+- Required: Yes
+- Type: string
+
+### Parameter: `bigDataPools.roleAssignments.roleDefinitionIdOrName`
+
+The role to assign. You can provide either the display name of the role definition, the role definition GUID, or its fully qualified ID in the following format: '/providers/Microsoft.Authorization/roleDefinitions/c2f4ef07-c644-48eb-af81-4b1b4947fb11'.
+
+- Required: Yes
+- Type: string
+
+### Parameter: `bigDataPools.roleAssignments.condition`
+
+The conditions on the role assignment. This limits the resources it can be assigned to. e.g.: @Resource[Microsoft.Storage/storageAccounts/blobServices/containers:ContainerName] StringEqualsIgnoreCase "foo_storage_container".
+
+- Required: No
+- Type: string
+
+### Parameter: `bigDataPools.roleAssignments.conditionVersion`
+
+Version of the condition.
+
+- Required: No
+- Type: string
+- Allowed:
+  ```Bicep
+  [
+    '2.0'
+  ]
+  ```
+
+### Parameter: `bigDataPools.roleAssignments.delegatedManagedIdentityResourceId`
+
+The Resource Id of the delegated managed identity resource.
+
+- Required: No
+- Type: string
+
+### Parameter: `bigDataPools.roleAssignments.description`
+
+The description of the role assignment.
+
+- Required: No
+- Type: string
+
+### Parameter: `bigDataPools.roleAssignments.name`
+
+The name (as GUID) of the role assignment. If not provided, a GUID will be generated.
+
+- Required: No
+- Type: string
+
+### Parameter: `bigDataPools.roleAssignments.principalType`
+
+The principal type of the assigned principal ID.
+
+- Required: No
+- Type: string
+- Allowed:
+  ```Bicep
+  [
+    'Device'
+    'ForeignGroup'
+    'Group'
+    'ServicePrincipal'
+    'User'
+  ]
+  ```
+
 ### Parameter: `bigDataPools.sessionLevelPackagesEnabled`
 
 Enable or disable session level packages.
@@ -1727,7 +2079,7 @@ Enable or disable session level packages.
 The Spark configuration properties.
 
 - Required: No
-- Type: array
+- Type: object
 
 **Required parameters**
 
@@ -1743,6 +2095,13 @@ The configuration type.
 
 - Required: Yes
 - Type: string
+- Allowed:
+  ```Bicep
+  [
+    'Artifact'
+    'File'
+  ]
+  ```
 
 ### Parameter: `bigDataPools.sparkConfigProperties.content`
 
@@ -1764,6 +2123,20 @@ The Spark events folder.
 
 - Required: No
 - Type: string
+
+### Parameter: `bigDataPools.sparkVersion`
+
+The Spark version.
+
+- Required: No
+- Type: string
+
+### Parameter: `bigDataPools.tags`
+
+Tags of the resource.
+
+- Required: No
+- Type: object
 
 ### Parameter: `customerManagedKey`
 

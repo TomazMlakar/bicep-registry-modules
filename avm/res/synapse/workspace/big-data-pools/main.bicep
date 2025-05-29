@@ -58,7 +58,7 @@ param autoPauseDelayInMinutes int = -1
 ])
 param sparkVersion string = '3.4'
 
-@description('Spark configuration file to specify additional properties.')
+@description('Optional. Spark configuration file to specify additional properties.')
 param sparkConfigProperties sparkConfigPropertiesType?
 
 @description('Optional. Whether session level packages enabled. Disabled if value not provided.')
@@ -69,7 +69,7 @@ param sessionLevelPackagesEnabled bool = false
 @maxValue(100)
 param cacheSize int = 50
 
-@description('The default folder where Spark logs will be written.')
+@description('Optional. The default folder where Spark logs will be written.')
 param defaultSparkLogFolder string?
 
 @description('Optional. Whether Auto-tune is Enabled or not. Disabled if value not provided.')
@@ -136,8 +136,8 @@ resource bigDataPool 'Microsoft.Synapse/workspaces/bigDataPools@2021-06-01' = {
     autoScale: !empty(autoScale)
       ? {
           enabled: true
-          minNodeCount: autoScale.minNodeCount
-          maxNodeCount: autoScale.maxNodeCount
+          minNodeCount: autoScale.?minNodeCount
+          maxNodeCount: autoScale.?maxNodeCount
         }
       : {
           enabled: false
@@ -146,9 +146,8 @@ resource bigDataPool 'Microsoft.Synapse/workspaces/bigDataPools@2021-06-01' = {
     dynamicExecutorAllocation: !empty(dynamicExecutorAllocation)
       ? {
           enabled: true
-          // To handle fractional values, we need to convert from string :(
-          maxExecutors: dynamicExecutorAllocation.maxExecutors
-          minExecutors: dynamicExecutorAllocation.minExecutors
+          minExecutors: dynamicExecutorAllocation.?minExecutors
+          maxExecutors: dynamicExecutorAllocation.?maxExecutors
         }
       : {
           enabled: false
