@@ -1,7 +1,7 @@
 targetScope = 'subscription'
 
-metadata name = 'Using Big Data Pools'
-metadata description = 'This instance deploys the module with the configuration of Big Data Pools.'
+metadata name = 'Using encryption with Customer-Managed-Key'
+metadata description = 'This instance deploys the module using Customer-Managed-Keys using a System-Assigned Identity to access the Customer-Managed-Key secret.'
 
 // ========== //
 // Parameters //
@@ -11,14 +11,17 @@ metadata description = 'This instance deploys the module with the configuration 
 @maxLength(90)
 param resourceGroupName string = 'dep-${namePrefix}-synapse.workspaces-${serviceShort}-rg'
 
+@description('Optional. The location to deploy resources to.')
+param resourceLocation string = deployment().location
+
 @description('Optional. A short identifier for the kind of deployment. Should be kept short to not run into resource-name length-constraints.')
-param serviceShort string = 'swbdp'
+param serviceShort string = 'swensa'
+
+@description('Generated. Used as a basis for unique resource names.')
+param baseTime string = utcNow('u')
 
 @description('Optional. A token to inject into the name of each resource.')
 param namePrefix string = '#_namePrefix_#'
-
-#disable-next-line no-hardcoded-location
-var enforcedLocation = 'northeurope'
 
 // ============ //
 // Dependencies //
@@ -28,16 +31,17 @@ var enforcedLocation = 'northeurope'
 // =================
 resource resourceGroup 'Microsoft.Resources/resourceGroups@2022-09-01' = {
   name: resourceGroupName
-  location: enforcedLocation
+  location: resourceLocation
 }
 
 module nestedDependencies 'dependencies.bicep' = {
   scope: resourceGroup
-  name: '${uniqueString(deployment().name, enforcedLocation)}-nestedDependencies'
+  name: '${uniqueString(deployment().name, resourceLocation)}-nestedDependencies'
   params: {
-    location: enforcedLocation
+    // Adding base time to make the name unique as purge protection must be enabled (but may not be longer than 24 characters total)
+    keyVaultName: 'dep-${namePrefix}-kv-${serviceShort}-${substring(uniqueString(baseTime), 0, 3)}'
     storageAccountName: 'dep${namePrefix}sa${serviceShort}01'
-    managedIdentityName: 'dep-${namePrefix}-msi-${serviceShort}'
+    location: resourceLocation
   }
 }
 
@@ -49,36 +53,17 @@ module nestedDependencies 'dependencies.bicep' = {
 module testDeployment '../../../main.bicep' = [
   for iteration in ['init', 'idem']: {
     scope: resourceGroup
-    name: '${uniqueString(deployment().name, enforcedLocation)}-test-${serviceShort}-${iteration}'
+    name: '${uniqueString(deployment().name, resourceLocation)}-test-${serviceShort}-${iteration}'
     params: {
       name: '${namePrefix}${serviceShort}001'
       defaultDataLakeStorageAccountResourceId: nestedDependencies.outputs.storageAccountResourceId
       defaultDataLakeStorageFilesystem: nestedDependencies.outputs.storageContainerName
       sqlAdministratorLogin: 'synwsadmin'
-      bigDataPools: [
-        {
-          name: 'dep${namePrefix}bdp01'
-          nodeSizeFamily: 'MemoryOptimized'
-          nodeSize: 'Small'
-          autoScale: {
-            minNodeCount: 3
-            maxNodeCount: 5
-          }
-          dynamicExecutorAllocation: {
-            minExecutors: 1
-            maxExecutors: 4
-          }
-          autoPauseDelayInMinutes: 10
-          sessionLevelPackagesEnabled: true
-          cacheSize: 50
-          autotuneEnabled: true
-        }
-        {
-          name: 'dep${namePrefix}bdp02'
-          nodeSizeFamily: 'MemoryOptimized'
-          nodeSize: 'Small'
-        }
-      ]
+      customerManagedKey: {
+        keyName: nestedDependencies.outputs.keyVaultEncryptionKeyName
+        keyVaultResourceId: nestedDependencies.outputs.keyVaultResourceId
+      }
+      encryptionActivateWorkspace: true
     }
   }
 ]
