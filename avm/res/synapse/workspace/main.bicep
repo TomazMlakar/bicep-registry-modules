@@ -365,17 +365,14 @@ module workspace_bigDataPools 'big-data-pools/main.bicep' = [
       autoPauseDelayInMinutes: bigDataPool.?autoPauseDelayInMinutes
       autoScale: bigDataPool.?autoScale
       cacheSize: bigDataPool.cacheSize
-      // customLibraries: bigDataPool.customLibraries
       dynamicExecutorAllocation: bigDataPool.?dynamicExecutorAllocation
       autotuneEnabled: bigDataPool.?autotuneEnabled
       computeIsolationEnabled: bigDataPool.?computeIsolationEnabled
-      libraryRequirements: bigDataPool.libraryRequirements
       nodeCount: bigDataPool.?nodeCount
       nodeSize: bigDataPool.nodeSize
       nodeSizeFamily: bigDataPool.nodeSizeFamily
-      // provisioningState: bigDataPool.provisioningState
       sessionLevelPackagesEnabled: bigDataPool.?sessionLevelPackagesEnabled
-      // sparkConfigProperties: bigDataPool.sparkConfigProperties
+      sparkConfigProperties: bigDataPool.sparkConfigProperties
       defaultSparkLogFolder: bigDataPool.?defaultSparkLogFolder
       sparkEventsFolder: bigDataPool.?sparkEventsFolder
       sparkVersion: bigDataPool.sparkVersion
@@ -587,9 +584,6 @@ type bigDataPoolType = {
   @description('Optional. The cache size of the pool.')
   cacheSize: int?
 
-  @description('Optional. The custom libraries to be installed in the pool.')
-  customLibraries: libraryInfoType[]?
-
   @description('Optional. The default Spark log folder.')
   defaultSparkLogFolder: string?
 
@@ -599,14 +593,12 @@ type bigDataPoolType = {
   @description('Optional. Enable or disable compute isolation.')
   computeIsolationEnabled: bool?
 
-  @description('Optional. The library requirements for the pool.')
-  libraryRequirements: libraryRequirementsType?
-
   @description('Optional. Enable or disable session level packages.')
   sessionLevelPackagesEnabled: bool?
 
   @description('Optional. The Spark configuration properties.')
-  sparkConfigProperties: sparkConfigPropertiesType[]?
+  sparkConfigProperties: object?
+  //sparkConfigProperties: sparkConfigPropertiesType[]?
 
   @description('Optional. The Spark events folder.')
   sparkEventsFolder: string?

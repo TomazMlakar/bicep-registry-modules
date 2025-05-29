@@ -87,12 +87,12 @@ module testDeployment '../../../main.bicep' = [
           sparkVersion: '3.4'
           cacheSize: 50
           autotuneEnabled: true
-          libraryRequirements: {
-            filename: 'requirements.txt'
-            content: loadTextContent('./requirements.txt')
-          }
           sparkEventsFolder: 'sparkevents'
           defaultSparkLogFolder: 'sparklogs'
+          sparkConfigProperties: {
+            'spark.sql.shuffle.partitions': '200'
+            'spark.executor.memory': '4g'
+          }
           roleAssignments: [
             {
               roleDefinitionIdOrName: 'Reader'
