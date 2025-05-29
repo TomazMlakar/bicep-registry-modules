@@ -552,7 +552,7 @@ type firewallRuleType = {
   endIpAddress: string
 }
 
-import { autoScaleType, libraryInfoType, dynamicExecutorAllocationType, sparkConfigPropertiesType } from 'big-data-pools/main.bicep'
+import { autoScaleType, dynamicExecutorAllocationType, sparkConfigPropertiesType } from 'big-data-pools/main.bicep'
 import { diagnosticSettingFullType } from 'br/public:avm/utl/types/avm-common-types:0.5.1'
 @export()
 @description('The synapse workspace Big Data Pool definition.')

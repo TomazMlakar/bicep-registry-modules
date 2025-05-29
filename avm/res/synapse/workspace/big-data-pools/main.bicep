@@ -279,19 +279,3 @@ type sparkConfigPropertiesType = {
   @description('Required. The configuration filename.')
   filename: string
 }
-
-@export()
-@description('The synapse workspace Big Data Pools Custom library/package info.')
-type libraryInfoType = {
-  @description('Required. The library name.')
-  containerName: string
-
-  @description('Required. The library version.')
-  name: string
-
-  @description('Required. The library path.')
-  path: string
-
-  @description('Required. The library type.')
-  type: string
-}
