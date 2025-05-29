@@ -369,7 +369,7 @@ module workspace_bigDataPools 'big-data-pools/main.bicep' = [
       dynamicExecutorAllocation: bigDataPool.?dynamicExecutorAllocation
       autotuneEnabled: bigDataPool.?autotuneEnabled
       computeIsolationEnabled: bigDataPool.?computeIsolationEnabled
-      // libraryRequirements: bigDataPool.libraryRequirements
+      libraryRequirements: bigDataPool.libraryRequirements
       nodeCount: bigDataPool.?nodeCount
       nodeSize: bigDataPool.nodeSize
       nodeSizeFamily: bigDataPool.nodeSizeFamily
