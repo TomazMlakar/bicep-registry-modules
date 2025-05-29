@@ -380,6 +380,7 @@ module workspace_bigDataPools 'big-data-pools/main.bicep' = [
       sparkEventsFolder: bigDataPool.?sparkEventsFolder
       sparkVersion: bigDataPool.sparkVersion
       roleAssignments: bigDataPool.?roleAssignments ?? []
+      diagnosticSettings: bigDataPool.?diagnosticSettings ?? []
     }
   }
 ]
@@ -554,6 +555,7 @@ type firewallRuleType = {
 }
 
 import { autoScaleType, libraryInfoType, dynamicExecutorAllocationType, libraryRequirementsType, sparkConfigPropertiesType } from 'big-data-pools/main.bicep'
+import { diagnosticSettingFullType } from 'br/public:avm/utl/types/avm-common-types:0.5.1'
 @export()
 @description('The synapse workspace Big Data Pool definition.')
 type bigDataPoolType = {
@@ -610,4 +612,7 @@ type bigDataPoolType = {
 
   @description('Optional. Array of role assignments to create.')
   roleAssignments: roleAssignmentType[]?
+
+  @description('Optional. The diagnostic settings of the service.')
+  diagnosticSettings: diagnosticSettingFullType[]?
 }
