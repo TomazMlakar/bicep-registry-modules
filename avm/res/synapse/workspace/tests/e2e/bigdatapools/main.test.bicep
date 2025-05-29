@@ -87,8 +87,8 @@ module testDeployment '../../../main.bicep' = [
           sparkVersion: '3.4'
           cacheSize: 50
           autotuneEnabled: true
-          sparkEventsFolder: 'sparkevents'
-          defaultSparkLogFolder: 'sparklogs'
+          sparkEventsFolder: '/events'
+          defaultSparkLogFolder: '/logs'
           sparkConfigProperties: {
             configurationType: 'File'
             filename: 'spark-defaults.conf'

@@ -266,20 +266,12 @@ type dynamicExecutorAllocationType = {
 }
 
 @export()
-@description('The synapse workspace Big Data Pools Library version requirements.')
-type libraryRequirementsType = {
-  @description('Required. The library name.')
-  content: string
-
-  @description('Required. The library version.')
-  filename: string
-}
-
-@export()
 @description('The synapse workspace Big Data Pools Spark configuration file properties.')
 type sparkConfigPropertiesType = {
   @description('Required. The configuration type.')
-  configurationType: string
+  configurationType: (
+    | 'Artifact'
+    | 'File')
 
   @description('Required. The configuration content.')
   content: string
