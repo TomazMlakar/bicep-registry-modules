@@ -597,8 +597,7 @@ type bigDataPoolType = {
   sessionLevelPackagesEnabled: bool?
 
   @description('Optional. The Spark configuration properties.')
-  sparkConfigProperties: object?
-  //sparkConfigProperties: sparkConfigPropertiesType[]?
+  sparkConfigProperties: sparkConfigPropertiesType?
 
   @description('Optional. The Spark events folder.')
   sparkEventsFolder: string?

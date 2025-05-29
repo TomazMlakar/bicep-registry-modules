@@ -90,8 +90,9 @@ module testDeployment '../../../main.bicep' = [
           sparkEventsFolder: 'sparkevents'
           defaultSparkLogFolder: 'sparklogs'
           sparkConfigProperties: {
-            'spark.sql.shuffle.partitions': '200'
-            'spark.executor.memory': '4g'
+            configurationType: 'File'
+            filename: 'spark-defaults.conf'
+            content: loadTextContent('./spark-defaults.conf')
           }
           roleAssignments: [
             {

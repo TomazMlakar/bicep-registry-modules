@@ -72,7 +72,7 @@ param computeIsolationEnabled bool = false
 param sessionLevelPackagesEnabled bool = false
 
 @description('Spark configuration file to specify additional properties.')
-param sparkConfigProperties object? //sparkConfigPropertiesType?
+param sparkConfigProperties sparkConfigPropertiesType?
 
 @description('Optional. The Spark events folder.')
 param sparkEventsFolder string?
