@@ -375,7 +375,7 @@ module workspace_bigDataPools 'big-data-pools/main.bicep' = [
       sparkConfigProperties: bigDataPool.sparkConfigProperties
       defaultSparkLogFolder: bigDataPool.?defaultSparkLogFolder
       sparkEventsFolder: bigDataPool.?sparkEventsFolder
-      sparkVersion: bigDataPool.sparkVersion
+      sparkVersion: bigDataPool.?sparkVersion
       lock: bigDataPool.?lock ?? lock
       diagnosticSettings: bigDataPool.?diagnosticSettings ?? []
       roleAssignments: bigDataPool.?roleAssignments ?? []
@@ -578,8 +578,8 @@ type bigDataPoolType = {
   @description('Optional. Synapse workspace Big Data Pools Auto-pausing delay in minutes (5-10080). Disabled if value not provided.')
   autoPauseDelayInMinutes: int?
 
-  @description('Required. The Spark version.')
-  sparkVersion: string
+  @description('Optional. The Spark version.')
+  sparkVersion: string?
 
   @description('Optional. The Spark configuration properties.')
   sparkConfigProperties: sparkConfigPropertiesType?

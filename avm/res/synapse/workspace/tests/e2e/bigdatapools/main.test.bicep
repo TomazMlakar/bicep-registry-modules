@@ -84,7 +84,6 @@ module testDeployment '../../../main.bicep' = [
           }
           autoPauseDelayInMinutes: 10
           sessionLevelPackagesEnabled: true
-          sparkVersion: '3.4'
           cacheSize: 50
           autotuneEnabled: true
           sparkEventsFolder: '/events'

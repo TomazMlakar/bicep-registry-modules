@@ -52,7 +52,11 @@ param dynamicExecutorAllocation dynamicExecutorAllocationType?
 param autoPauseDelayInMinutes int = -1
 
 @description('Required. The Apache Spark version.')
-param sparkVersion string
+@allowed([
+  '3.4'
+  '3.5'
+])
+param sparkVersion string = '3.4'
 
 @description('Spark configuration file to specify additional properties.')
 param sparkConfigProperties sparkConfigPropertiesType?
