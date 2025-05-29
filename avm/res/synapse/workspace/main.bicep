@@ -379,8 +379,9 @@ module workspace_bigDataPools 'big-data-pools/main.bicep' = [
       defaultSparkLogFolder: bigDataPool.?defaultSparkLogFolder
       sparkEventsFolder: bigDataPool.?sparkEventsFolder
       sparkVersion: bigDataPool.sparkVersion
-      roleAssignments: bigDataPool.?roleAssignments ?? []
+      lock: bigDataPool.?lock ?? lock
       diagnosticSettings: bigDataPool.?diagnosticSettings ?? []
+      roleAssignments: bigDataPool.?roleAssignments ?? []
     }
   }
 ]
@@ -610,9 +611,12 @@ type bigDataPoolType = {
   @description('Optional. The Spark events folder.')
   sparkEventsFolder: string?
 
-  @description('Optional. Array of role assignments to create.')
-  roleAssignments: roleAssignmentType[]?
-
   @description('Optional. The diagnostic settings of the service.')
   diagnosticSettings: diagnosticSettingFullType[]?
+
+  @description('Optional. The lock settings of the service.')
+  lock: lockType?
+
+  @description('Optional. Array of role assignments to create.')
+  roleAssignments: roleAssignmentType[]?
 }
