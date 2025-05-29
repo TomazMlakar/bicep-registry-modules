@@ -5,11 +5,11 @@ metadata description = 'This module deploys Synapse Workspaces Big Data Pools.'
 // Parameters       //
 // ================ //
 
-@description('Conditional. The name of the parent Synapse Workspace. Required if the template is used in a standalone deployment.')
+@description('Required. The name of the parent Synapse Workspace.')
 param workspaceName string
 
 @description('Required. The name of the Big Data Pool.')
-param bigDataPoolName string
+param name string
 
 @description('Optional. The geo-location where the resource lives.')
 param location string = resourceGroup().location
@@ -54,6 +54,12 @@ param autoPauseDelayInMinutes int = -1
 @description('Required. The Apache Spark version.')
 param sparkVersion string
 
+@description('Spark configuration file to specify additional properties.')
+param sparkConfigProperties sparkConfigPropertiesType?
+
+@description('Optional. Whether session level packages enabled. Disabled if value not provided.')
+param sessionLevelPackagesEnabled bool = false
+
 @description('Optional. The cache size.')
 @minValue(0)
 @maxValue(100)
@@ -68,29 +74,23 @@ param autotuneEnabled bool = false
 @description('Optional. Whether Compute Isolation is enabled or not. Disabled if value not provided.')
 param computeIsolationEnabled bool = false
 
-@description('Optional. Whether session level packages enabled. Disabled if value not provided.')
-param sessionLevelPackagesEnabled bool = false
-
-@description('Spark configuration file to specify additional properties.')
-param sparkConfigProperties sparkConfigPropertiesType?
-
 @description('Optional. The Spark events folder.')
 param sparkEventsFolder string?
 
-@description('Optional. Tags of the resource.')
-param tags object?
-
-import { lockType } from 'br/public:avm/utl/types/avm-common-types:0.5.1'
-@description('Optional. The lock settings of the service.')
-param lock lockType?
+import { diagnosticSettingFullType } from 'br/public:avm/utl/types/avm-common-types:0.5.1'
+@description('Optional. The diagnostic settings of the service.')
+param diagnosticSettings diagnosticSettingFullType[]?
 
 import { roleAssignmentType } from 'br/public:avm/utl/types/avm-common-types:0.5.1'
 @description('Optional. Array of role assignments to create.')
 param roleAssignments roleAssignmentType[]?
 
-import { diagnosticSettingFullType } from 'br/public:avm/utl/types/avm-common-types:0.5.1'
-@description('Optional. The diagnostic settings of the service.')
-param diagnosticSettings diagnosticSettingFullType[]?
+import { lockType } from 'br/public:avm/utl/types/avm-common-types:0.5.1'
+@description('Optional. The lock settings of the service.')
+param lock lockType?
+
+@description('Optional. Tags of the resource.')
+param tags object?
 
 var builtInRoleNames = {
   Contributor: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', 'b24988ac-6180-42a0-ab88-20f7382dd24c')
@@ -122,7 +122,7 @@ resource workspace 'Microsoft.Synapse/workspaces@2021-06-01' existing = {
 }
 
 resource bigDataPool 'Microsoft.Synapse/workspaces/bigDataPools@2021-06-01' = {
-  name: bigDataPoolName
+  name: name
   parent: workspace
   location: location
   tags: tags
@@ -161,15 +161,15 @@ resource bigDataPool 'Microsoft.Synapse/workspaces/bigDataPools@2021-06-01' = {
     sparkConfigProperties: sparkConfigProperties
     sessionLevelPackagesEnabled: sessionLevelPackagesEnabled
     cacheSize: cacheSize
+    defaultSparkLogFolder: !empty(defaultSparkLogFolder) ? defaultSparkLogFolder : null
     isAutotuneEnabled: autotuneEnabled
     isComputeIsolationEnabled: computeIsolationEnabled
     sparkEventsFolder: !empty(sparkEventsFolder) ? sparkEventsFolder : null
-    defaultSparkLogFolder: !empty(defaultSparkLogFolder) ? defaultSparkLogFolder : null
   }
 }
 
 resource bigDataPool_lock 'Microsoft.Authorization/locks@2020-05-01' = if (!empty(lock ?? {}) && lock.?kind != 'None') {
-  name: lock.?name ?? 'lock-${bigDataPoolName}'
+  name: lock.?name ?? 'lock-${name}'
   properties: {
     level: lock.?kind ?? ''
     notes: lock.?kind == 'CanNotDelete'
@@ -181,7 +181,7 @@ resource bigDataPool_lock 'Microsoft.Authorization/locks@2020-05-01' = if (!empt
 
 resource bigDataPool_diagnosticSettings 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = [
   for (diagnosticSetting, index) in (diagnosticSettings ?? []): {
-    name: diagnosticSetting.?name ?? '${bigDataPoolName}-diagnosticSettings'
+    name: diagnosticSetting.?name ?? '${name}-diagnosticSettings'
     properties: {
       storageAccountId: diagnosticSetting.?storageAccountResourceId
       workspaceId: diagnosticSetting.?workspaceResourceId

@@ -358,8 +358,8 @@ module workspace_bigDataPools 'big-data-pools/main.bicep' = [
   for (bigDataPool, index) in (bigDataPools ?? []): {
     name: '${uniqueString(deployment().name, location)}-workspace-bdp-${index}'
     params: {
+      name: bigDataPool.name
       workspaceName: workspace.name
-      bigDataPoolName: bigDataPool.bigDataPoolName
       location: location
       tags: tags
       autoPauseDelayInMinutes: bigDataPool.?autoPauseDelayInMinutes
@@ -558,7 +558,7 @@ import { diagnosticSettingFullType } from 'br/public:avm/utl/types/avm-common-ty
 @description('The synapse workspace Big Data Pool definition.')
 type bigDataPoolType = {
   @description('Required. The name of the Big Data Pool.')
-  bigDataPoolName: string
+  name: string
 
   @description('Optional. The node size family of the pool.')
   nodeSizeFamily: string?
@@ -581,6 +581,12 @@ type bigDataPoolType = {
   @description('Required. The Spark version.')
   sparkVersion: string
 
+  @description('Optional. The Spark configuration properties.')
+  sparkConfigProperties: sparkConfigPropertiesType?
+
+  @description('Optional. Enable or disable session level packages.')
+  sessionLevelPackagesEnabled: bool?
+
   @description('Optional. The cache size of the pool.')
   cacheSize: int?
 
@@ -593,21 +599,18 @@ type bigDataPoolType = {
   @description('Optional. Enable or disable compute isolation.')
   computeIsolationEnabled: bool?
 
-  @description('Optional. Enable or disable session level packages.')
-  sessionLevelPackagesEnabled: bool?
-
-  @description('Optional. The Spark configuration properties.')
-  sparkConfigProperties: sparkConfigPropertiesType?
-
   @description('Optional. The Spark events folder.')
   sparkEventsFolder: string?
 
   @description('Optional. The diagnostic settings of the service.')
   diagnosticSettings: diagnosticSettingFullType[]?
 
+  @description('Optional. Array of role assignments to create.')
+  roleAssignments: roleAssignmentType[]?
+
   @description('Optional. The lock settings of the service.')
   lock: lockType?
 
-  @description('Optional. Array of role assignments to create.')
-  roleAssignments: roleAssignmentType[]?
+  @description('Optional. Tags of the resource.')
+  tags: object?
 }
