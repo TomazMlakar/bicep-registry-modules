@@ -395,8 +395,8 @@ module workspace_sqlPools 'sql-pool/main.bicep' = [
       workspaceName: workspace.name
       location: location
       collation: sqlPool.?collation
-      maxSizeBytes: sqlPool.maxSizeBytes
-      sku: sqlPool.sku
+      maxSizeBytes: sqlPool.?maxSizeBytes
+      sku: sqlPool.?sku
       restorePointInTime: sqlPool.?restorePointInTime
       recoverableDatabaseId: sqlPool.?recoverableDatabaseId
       storageAccountType: sqlPool.?storageAccountType
