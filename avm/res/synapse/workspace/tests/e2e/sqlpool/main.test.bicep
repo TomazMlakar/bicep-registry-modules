@@ -57,11 +57,11 @@ module testDeployment '../../../main.bicep' = [
       sqlPools: [
         {
           name: 'dep${namePrefix}sqlp01'
-          // sku: {
-          //   name: 'DW100c'
-          //   tier: 'DataWarehouse'
-          //   capacity: 100
-          // }
+          sku: {
+            name: 'DW100c'
+            tier: 'DataWarehouse'
+            capacity: 100
+          }
         }
       ]
     }

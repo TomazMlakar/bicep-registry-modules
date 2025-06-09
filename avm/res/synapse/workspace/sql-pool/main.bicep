@@ -175,10 +175,12 @@ type skuType = {
     | 'DW2000c'
     | 'DW2500c'
     | 'DW3000c'
-    | 'DW3500c'
-    | 'DW4000c'
     | 'DW5000c'
-    | 'DW6000c')
+    | 'DW6000c'
+    | 'DW7500c'
+    | 'DW10000c'
+    | 'DW15000c'
+    | 'DW30000c')
 
   @description('Required. The tier of the Synapse Workspace SQL Pool SKU.')
   tier: ('DataWarehouse' | 'Hyperscale')
