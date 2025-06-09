@@ -45,7 +45,7 @@ module nestedDependencies 'dependencies.bicep' = {
 // ===========
 module diagnosticDependencies '../../../../../../../utilities/e2e-template-assets/templates/diagnostic.dependencies.bicep' = {
   scope: resourceGroup
-  name: '${uniqueString(deployment().name, resourceLocation)}-diagnosticDependencies'
+  name: '${uniqueString(deployment().name, enforcedLocation)}-diagnosticDependencies'
   params: {
     storageAccountName: 'dep${namePrefix}diasa${serviceShort}03'
     logAnalyticsWorkspaceName: 'dep-${namePrefix}-law-${serviceShort}'
