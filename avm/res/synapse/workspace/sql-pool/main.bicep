@@ -37,7 +37,7 @@ param sku (
     | 'DW7500c'
     | 'DW10000c'
     | 'DW15000c'
-    | 'DW30000c')
+    | 'DW30000c')?
 
 @description('Optional. The restore point in time to restore from (ISO8601 format).')
 param restorePointInTime string?
