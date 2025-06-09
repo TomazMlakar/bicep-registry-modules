@@ -640,7 +640,6 @@ type bigDataPoolType = {
   tags: object?
 }
 
-import { skuType } from 'sql-pool/main.bicep'
 @export()
 @description('The synapse workspace SQL Pool definition.')
 type sqlPoolType = {
@@ -654,7 +653,23 @@ type sqlPoolType = {
   maxSizeBytes: int?
 
   @description('Required. The performance level of the SQL pool.')
-  sku: skuType?
+  sku: (
+    | 'DW100c'
+    | 'DW200c'
+    | 'DW300c'
+    | 'DW400c'
+    | 'DW500c'
+    | 'DW1000c'
+    | 'DW1500c'
+    | 'DW2000c'
+    | 'DW2500c'
+    | 'DW3000c'
+    | 'DW5000c'
+    | 'DW6000c'
+    | 'DW7500c'
+    | 'DW10000c'
+    | 'DW15000c'
+    | 'DW30000c')?
 
   @description('Optional. The restore point in time to restore from (ISO8601 format).')
   restorePointInTime: string?

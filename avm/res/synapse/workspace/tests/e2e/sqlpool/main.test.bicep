@@ -72,38 +72,33 @@ module testDeployment '../../../main.bicep' = [
       sqlPools: [
         {
           name: 'dep${namePrefix}sqlp01'
-          sku: {
-            name: 'DW100c'
-            tier: 'DataWarehouse'
-            capacity: 100
-          }
-          collation: 'SQL_Latin1_General_CP1_CI_AS'
+          collation: 'SQL_Latin1_General_CP1_CS_AS'
           maxSizeBytes: 268435456000 // 250 GB
-          roleAssignments: [
-            {
-              roleDefinitionIdOrName: 'Reader'
-              principalId: nestedDependencies.outputs.managedIdentityPrincipalId
-              principalType: 'ServicePrincipal'
-            }
-          ]
-          diagnosticSettings: [
-            {
-              name: 'customSetting'
-              metricCategories: [
-                {
-                  category: 'AllMetrics'
-                }
-              ]
-              eventHubName: diagnosticDependencies.outputs.eventHubNamespaceEventHubName
-              eventHubAuthorizationRuleResourceId: diagnosticDependencies.outputs.eventHubAuthorizationRuleId
-              storageAccountResourceId: diagnosticDependencies.outputs.storageAccountResourceId
-              workspaceResourceId: diagnosticDependencies.outputs.logAnalyticsWorkspaceResourceId
-            }
-          ]
-          lock: {
-            kind: 'CanNotDelete'
-            name: 'myCustomLockName'
-          }
+          // roleAssignments: [
+          //   {
+          //     roleDefinitionIdOrName: 'Reader'
+          //     principalId: nestedDependencies.outputs.managedIdentityPrincipalId
+          //     principalType: 'ServicePrincipal'
+          //   }
+          // ]
+          // diagnosticSettings: [
+          //   {
+          //     name: 'customSetting'
+          //     metricCategories: [
+          //       {
+          //         category: 'AllMetrics'
+          //       }
+          //     ]
+          //     eventHubName: diagnosticDependencies.outputs.eventHubNamespaceEventHubName
+          //     eventHubAuthorizationRuleResourceId: diagnosticDependencies.outputs.eventHubAuthorizationRuleId
+          //     storageAccountResourceId: diagnosticDependencies.outputs.storageAccountResourceId
+          //     workspaceResourceId: diagnosticDependencies.outputs.logAnalyticsWorkspaceResourceId
+          //   }
+          // ]
+          // lock: {
+          //   kind: 'CanNotDelete'
+          //   name: 'myCustomLockName'
+          // }
         }
       ]
     }

@@ -21,7 +21,23 @@ param collation string?
 param maxSizeBytes int?
 
 @description('Required. The performance level of the SQL pool.')
-param sku skuType?
+param sku (
+    | 'DW100c'
+    | 'DW200c'
+    | 'DW300c'
+    | 'DW400c'
+    | 'DW500c'
+    | 'DW1000c'
+    | 'DW1500c'
+    | 'DW2000c'
+    | 'DW2500c'
+    | 'DW3000c'
+    | 'DW5000c'
+    | 'DW6000c'
+    | 'DW7500c'
+    | 'DW10000c'
+    | 'DW15000c'
+    | 'DW30000c')
 
 @description('Optional. The restore point in time to restore from (ISO8601 format).')
 param restorePointInTime string?
@@ -81,7 +97,9 @@ resource sqlPool 'Microsoft.Synapse/workspaces/sqlPools@2021-06-01' = {
   parent: workspace
   location: location
   tags: tags
-  sku: sku
+  sku: {
+    name: sku
+  }
   properties: {
     collation: collation
     maxSizeBytes: maxSizeBytes
@@ -155,36 +173,3 @@ output resourceId string = sqlPool.id
 
 @description('The resource group of the deployed SQL Pool.')
 output resourceGroupName string = resourceGroup().name
-
-// =============== //
-//   Definitions   //
-// =============== //
-
-@export()
-@description('Synapse Workspace SQL Pool SKU properties.')
-type skuType = {
-  @description('Required. The name of the Synapse Workspace SQL Pool SKU.')
-  name: (
-    | 'DW100c'
-    | 'DW200c'
-    | 'DW300c'
-    | 'DW400c'
-    | 'DW500c'
-    | 'DW1000c'
-    | 'DW1500c'
-    | 'DW2000c'
-    | 'DW2500c'
-    | 'DW3000c'
-    | 'DW5000c'
-    | 'DW6000c'
-    | 'DW7500c'
-    | 'DW10000c'
-    | 'DW15000c'
-    | 'DW30000c')
-
-  @description('Required. The tier of the Synapse Workspace SQL Pool SKU.')
-  tier: ('DataWarehouse' | 'Hyperscale')
-
-  @description('Optional. The family of the Synapse Workspace SQL Pool SKU.')
-  capacity: int
-}
