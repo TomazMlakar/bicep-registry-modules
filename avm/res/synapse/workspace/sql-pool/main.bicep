@@ -97,9 +97,9 @@ resource sqlPool 'Microsoft.Synapse/workspaces/sqlPools@2021-06-01' = {
   parent: workspace
   location: location
   tags: tags
-  sku: {
+  sku: !empty(sku) ? {
     name: sku
-  }
+  } : null
   properties: {
     collation: collation
     maxSizeBytes: maxSizeBytes
