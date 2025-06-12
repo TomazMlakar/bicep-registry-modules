@@ -75,7 +75,7 @@ module testDeployment '../../../main.bicep' = [
           collation: 'SQL_Latin1_General_CP1_CS_AS'
           maxSizeBytes: 1099511627776 // 1 TB
           sku: 'DW200c'
-          storageAccountType: 'LRS'
+          storageAccountType: 'GRS'
           // roleAssignments: [
           //   {
           //     roleDefinitionIdOrName: 'Reader'
