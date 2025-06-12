@@ -77,6 +77,7 @@ module testDeployment '../../../main.bicep' = [
           sku: 'DW200c'
           storageAccountType: 'GRS'
           metadataSync: true
+          metadataSyncIntervalInMinutes: 30
           transparentDataEncryption: 'Enabled'
           // roleAssignments: [
           //   {
