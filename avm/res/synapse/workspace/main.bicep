@@ -400,6 +400,9 @@ module workspace_sqlPools 'sql-pool/main.bicep' = [
       restorePointInTime: sqlPool.?restorePointInTime
       recoverableDatabaseId: sqlPool.?recoverableDatabaseId
       storageAccountType: sqlPool.?storageAccountType
+      metadataSync: sqlPool.?metadataSync
+      metadataSyncIntervalInMinutes: sqlPool.?metadataSyncIntervalInMinutes
+      transparentDataEncryption: sqlPool.?transparentDataEncryption
       diagnosticSettings: sqlPool.?diagnosticSettings ?? []
       roleAssignments: sqlPool.?roleAssignments ?? []
       lock: sqlPool.?lock ?? lock

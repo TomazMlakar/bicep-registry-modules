@@ -55,6 +55,8 @@ param storageAccountType (
 param metadataSync bool = false
 
 @description('Optional. The metadata sync interval in minutes.')
+@minValue(1)
+@maxValue(1440)
 param metadataSyncIntervalInMinutes int?
 
 @description('Optional. Enable database transparent data encryption.')
