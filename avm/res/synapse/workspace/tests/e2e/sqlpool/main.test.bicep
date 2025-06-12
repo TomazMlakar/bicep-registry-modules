@@ -76,6 +76,8 @@ module testDeployment '../../../main.bicep' = [
           maxSizeBytes: 1099511627776 // 1 TB
           sku: 'DW200c'
           storageAccountType: 'GRS'
+          metadataSync: true
+          transparentDataEncryption: 'Enabled'
           // roleAssignments: [
           //   {
           //     roleDefinitionIdOrName: 'Reader'
@@ -83,20 +85,20 @@ module testDeployment '../../../main.bicep' = [
           //     principalType: 'ServicePrincipal'
           //   }
           // ]
-          // diagnosticSettings: [
-          //   {
-          //     name: 'customSetting'
-          //     metricCategories: [
-          //       {
-          //         category: 'AllMetrics'
-          //       }
-          //     ]
-          //     eventHubName: diagnosticDependencies.outputs.eventHubNamespaceEventHubName
-          //     eventHubAuthorizationRuleResourceId: diagnosticDependencies.outputs.eventHubAuthorizationRuleId
-          //     storageAccountResourceId: diagnosticDependencies.outputs.storageAccountResourceId
-          //     workspaceResourceId: diagnosticDependencies.outputs.logAnalyticsWorkspaceResourceId
-          //   }
-          // ]
+          diagnosticSettings: [
+            {
+              name: 'customSetting'
+              metricCategories: [
+                {
+                  category: 'AllMetrics'
+                }
+              ]
+              eventHubName: diagnosticDependencies.outputs.eventHubNamespaceEventHubName
+              eventHubAuthorizationRuleResourceId: diagnosticDependencies.outputs.eventHubAuthorizationRuleId
+              storageAccountResourceId: diagnosticDependencies.outputs.storageAccountResourceId
+              workspaceResourceId: diagnosticDependencies.outputs.logAnalyticsWorkspaceResourceId
+            }
+          ]
           // lock: {
           //   kind: 'CanNotDelete'
           //   name: 'myCustomLockName'
