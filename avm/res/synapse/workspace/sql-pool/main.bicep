@@ -131,7 +131,7 @@ resource sqlPool_metadataSync 'Microsoft.Synapse/workspaces/sqlPools/metadataSyn
   parent: sqlPool
   properties: {
     enabled: metadataSync
-    syncIntervalInMinutes: metadataSyncIntervalInMinutes
+    syncIntervalInMinutes: metadataSyncIntervalInMinutes ?? 60 // Default to 60 minutes if not specified
   }
 }
 
