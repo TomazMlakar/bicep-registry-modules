@@ -683,6 +683,18 @@ type sqlPoolType = {
     | 'LRS'
     | 'ZRS')?
 
+  @description('Optional. The metadata sync interval in minutes.')
+  metadataSync: bool?
+
+  @description('Optional. The metadata sync interval in minutes.')
+  metadataSyncIntervalInMinutes: int?
+
+  @description('Optional. Enable database transparent data encryption.')
+  transparentDataEncryption: (
+    | 'Enabled'
+    | 'Disabled'
+    | 'NotSpecified')?
+
   @description('Optional. The diagnostic settings of the service.')
   diagnosticSettings: diagnosticSettingFullType[]?
 
