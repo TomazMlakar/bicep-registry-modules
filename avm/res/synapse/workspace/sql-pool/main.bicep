@@ -46,7 +46,10 @@ param restorePointInTime string?
 param recoverableDatabaseId string?
 
 @description('Optional. The storage account type to use for the SQL pool.')
-param storageAccountType string?
+param storageAccountType (
+    | 'GRS'
+    | 'LRS'
+    | 'ZRS') = 'GRS'
 
 import { diagnosticSettingFullType } from 'br/public:avm/utl/types/avm-common-types:0.5.1'
 @description('Optional. The diagnostic settings of the service.')

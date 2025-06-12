@@ -678,7 +678,10 @@ type sqlPoolType = {
   recoverableDatabaseId: string?
 
   @description('Optional. The storage account type to use for the SQL pool.')
-  storageAccountType: string?
+  storageAccountType: (
+    | 'GRS'
+    | 'LRS'
+    | 'ZRS')?
 
   @description('Optional. The diagnostic settings of the service.')
   diagnosticSettings: diagnosticSettingFullType[]?
