@@ -4,8 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       erport:
-        description: 'ERPort value'
-        required: true
+        description: 'Optional ERPort value'
         default: ''
 
 jobs:
