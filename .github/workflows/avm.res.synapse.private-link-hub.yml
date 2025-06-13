@@ -5,6 +5,7 @@ on:
     inputs:
       erports:
         description: 'Comma-separated list of ERPort values (e.g., ERPort1,ERPort2)'
+        default: 'ERPort1,ERPort2'
         required: true
 
 jobs:
