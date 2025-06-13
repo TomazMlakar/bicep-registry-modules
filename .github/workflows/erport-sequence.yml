@@ -9,6 +9,7 @@ on:
 
 jobs:
   approval-1:
+    name: "${{ inputs.erport }} - update approval"
     runs-on: ubuntu-latest
     environment:
         name: approval-erport-update
@@ -17,6 +18,7 @@ jobs:
         run: echo "Final approval granted for ${{ inputs.erport }}"
 
   powershell-step:
+    name: "Update ERPort - ${{ inputs.erport }}"
     needs: approval-1
     runs-on: windows-latest
     steps:
@@ -25,6 +27,7 @@ jobs:
           Write-Host "Running script for ${{ inputs.erport }}"
 
   approval-2:
+    name: "${{ inputs.erport }} - confirm update"
     needs: powershell-step
     environment:
         name: approval-erport-confirmation
