@@ -15,11 +15,13 @@ jobs:
       matrix:
         erport: [ERPort1, ERPort2]  # Replace with dynamic parsing if needed
     steps:
-      - name: Trigger reusable workflow for ${{ matrix.erport }}
-        uses: ./.github/workflows/erport-sequence.yml
-        with:
-          erport: ${{ matrix.erport }}
-
+      - name: First Manual Approval for ${{ matrix.erport }}
+        uses: hmarr/auto-approve-action@v3  # Replace with manual gate if needed
+      - name: Run PowerShell Script for ${{ matrix.erport }}
+        run: |
+          Write-Host "Running script for ${{ matrix.erport }}"
+      - name: Final Manual Approval for ${{ matrix.erport }}
+        uses: hmarr/auto-approve-action@v3  # Replace with manual gate if needed
 
 # on:
 #   workflow_dispatch:
