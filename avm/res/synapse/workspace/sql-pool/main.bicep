@@ -117,7 +117,7 @@ resource sqlPool 'Microsoft.Synapse/workspaces/sqlPools@2021-06-01' = {
   }
 }
 
-resource sqlPool_transparentDataEncryption 'Microsoft.Synapse/workspaces/sqlPools/transparentDataEncryption@2021-06-01' = if (transparentDataEncryption != 'Enabled') {
+resource sqlPool_transparentDataEncryption 'Microsoft.Synapse/workspaces/sqlPools/transparentDataEncryption@2021-06-01' = {
   name: 'current'
   parent: sqlPool
   properties: {
