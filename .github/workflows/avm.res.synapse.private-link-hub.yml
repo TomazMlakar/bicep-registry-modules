@@ -11,23 +11,14 @@ on:
 jobs:
   prepare-matrix:
     runs-on: ubuntu-latest
-    outputs:
-      matrix: ${{ steps.set-matrix.outputs.matrix }}
-    steps:
-      - id: set-matrix
-        run: |
-          erports="${{ github.event.inputs.erports }}"
-          json=$(echo "$erports" | jq -R 'split(",") | map({erport: .})')
-          echo "matrix=$(jq -c --argjson val "$json" '{include: $val}')" >> $GITHUB_OUTPUT
-
-  run-erport:
-    needs: prepare-matrix
     strategy:
-      matrix: ${{ fromJson(needs.prepare-matrix.outputs.matrix) }}
-    uses: ./.github/workflows/erport-sequence.yml
-    with:
-      erport: ${{ matrix.erport }}
-
+      matrix:
+        erport: [ERPort1, ERPort2]
+    steps:
+      - name: Trigger reusable workflow for ${{ matrix.erport }}
+        uses: ./.github/workflows/erport-sequence.yml
+        with:
+          erport: ${{ matrix.erport }}
 
 # on:
 #   workflow_dispatch:
