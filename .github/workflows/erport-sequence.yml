@@ -11,7 +11,7 @@ jobs:
   approval-1:
     runs-on: ubuntu-latest
     environment:
-        name: approval-stage-2
+        name: approval-erport-update
     steps:
       - name: Awaiting Final Manual Approval for ${{ inputs.erport }}
         run: echo "Final approval granted for ${{ inputs.erport }}"
@@ -26,6 +26,8 @@ jobs:
 
   approval-2:
     needs: powershell-step
+    environment:
+        name: approval-erport-confirmation
     runs-on: ubuntu-latest
     steps:
       - name: Awaiting Final Manual Approval for ${{ inputs.erport }}
