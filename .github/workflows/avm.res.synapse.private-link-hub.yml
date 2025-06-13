@@ -44,7 +44,7 @@ jobs:
       id-token: write
       contents: read
     concurrency:
-      group: ${{ github.workflow }}-${{ github.ref }} # Unique concurrency group for subscriptions with similar workload identifier (e.g. "pxs-azure-fferrara")
+      group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }} # Unique concurrency group for subscriptions with similar workload identifier (e.g. "pxs-azure-fferrara")
       cancel-in-progress: false
     strategy:
       matrix:
