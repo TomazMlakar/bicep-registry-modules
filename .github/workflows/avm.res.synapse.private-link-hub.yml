@@ -19,6 +19,7 @@ jobs:
       matrix:
         erport: [ERPort1, ERPort2]  # Replace with dynamic parsing if needed
     steps:
+      - uses: actions/checkout@v2
       - name: Trigger reusable workflow for ${{ matrix.erport }}
         uses: ./.github/workflows/erport-sequence.yml@users/tomlakar/synapse-sql-pool-dev
         with:
