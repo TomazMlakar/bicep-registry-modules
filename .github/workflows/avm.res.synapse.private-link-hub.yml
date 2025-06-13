@@ -20,18 +20,18 @@ jobs:
 
   fanout:
     name: "Fanout for ERPort Sequence"
+    needs: checkout
     permissions:
       id-token: write
       contents: read
+    concurrency:
+      group: ${{ github.workflow }} # Unique concurrency group for subscriptions with similar workload identifier (e.g. "pxs-azure-fferrara")
     strategy:
       matrix:
         erport: [ERPort1, ERPort2]  # Replace with dynamic parsing if needed
     uses: ./.github/workflows/erport-sequence.yml #@users/tomlakar/synapse-sql-pool-dev
     with:
       erport: ${{ matrix.erport }}
-
-    # steps:
-    #   - name: Trigger reusable workflow for ${{ matrix.erport }}
 
 
 # on:
