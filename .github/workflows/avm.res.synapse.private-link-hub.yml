@@ -4,21 +4,22 @@ on:
   workflow_dispatch:
     inputs:
       erports:
-        description: 'Comma-separated list of ERPort values (e.g., ERPort1,ERPort2)'
-        default: 'ERPort1,ERPort2'
+        description: 'Comma-separated list of ERPort values'
         required: true
+        default: 'ERPort1,ERPort2'
 
 jobs:
-  prepare-matrix:
+  fanout:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        erport: [ERPort1, ERPort2]
+        erport: [ERPort1, ERPort2]  # Replace with dynamic parsing if needed
     steps:
       - name: Trigger reusable workflow for ${{ matrix.erport }}
         uses: ./.github/workflows/erport-sequence.yml
         with:
           erport: ${{ matrix.erport }}
+
 
 # on:
 #   workflow_dispatch:
