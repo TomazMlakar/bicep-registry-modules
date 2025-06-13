@@ -43,9 +43,9 @@ jobs:
     permissions:
       id-token: write
       contents: read
-    concurrency:
-      group: ${{ github.workflow }}-${{ github.ref }} # Unique concurrency group for subscriptions with similar workload identifier (e.g. "pxs-azure-fferrara")
-      cancel-in-progress: false
+    # concurrency:
+    #   group: ${{ github.workflow }}-${{ github.ref }} # Unique concurrency group for subscriptions with similar workload identifier (e.g. "pxs-azure-fferrara")
+    #   cancel-in-progress: false
     strategy:
       matrix:
         erport: ${{ fromJson(needs.prepare-matrix.outputs.matrix) }} #[ERPort1, ERPort2]
