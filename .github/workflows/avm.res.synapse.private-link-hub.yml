@@ -27,7 +27,7 @@ jobs:
       - id: set-matrix
         shell: pwsh
         run: |
-          $erPortsArray = @('ERPort1', 'ERPort2', 'ERPort3', 'ERPort4') # Example ERPorts, replace with output from PS script
+          $erPortsArray = @('ERPort1-Link1', 'ERPort1-Link2', 'ERPort2-Link1', 'ERPort1-Link2') # Example ERPorts, replace with output from PS script
           $erPort = "${{ github.event.inputs.erport }}"
           if (![String]::IsNullOrEmpty($erPort)) {
               $erPortsArray = $erPortsArray | Where-Object { $_ -eq $erPort }
