@@ -16,12 +16,24 @@ jobs:
         erport: [ERPort1, ERPort2]  # Replace with dynamic parsing if needed
     steps:
       - name: First Manual Approval for ${{ matrix.erport }}
-        uses: hmarr/auto-approve-action@v3  # Replace with manual gate if needed
+        uses: trstringer/manual-approval@v1
+        with:
+          secret: ${{ secrets.GITHUB_TOKEN }}
+          approvers: TomazMlakar
+          minimum-approvals: 1
+          issue-title: "Please approve the first step for ${{ matrix.erport }}"
+          issue-body: "Please approve or deny the deployment."
       - name: Run PowerShell Script for ${{ matrix.erport }}
         run: |
           Write-Host "Running script for ${{ matrix.erport }}"
       - name: Final Manual Approval for ${{ matrix.erport }}
-        uses: hmarr/auto-approve-action@v3  # Replace with manual gate if needed
+        uses: trstringer/manual-approval@v1
+        with:
+          secret: ${{ secrets.GITHUB_TOKEN }}
+          approvers: TomazMlakar
+          minimum-approvals: 1
+          issue-title: "Please approve the last step for ${{ matrix.erport }}"
+          issue-body: "Please approve or deny the deployment."
 
 # on:
 #   workflow_dispatch:
