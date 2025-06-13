@@ -10,7 +10,12 @@ on:
 
 jobs:
   fanout:
+    name: "Fanout for ERPort Sequence"
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+      issues: write
     strategy:
       matrix:
         erport: [ERPort1, ERPort2]  # Replace with dynamic parsing if needed
