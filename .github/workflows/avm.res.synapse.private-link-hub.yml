@@ -30,6 +30,7 @@ jobs:
       - id: set-matrix
         shell: pwsh
         run: |
+          $erports = "${{ github.event.inputs.erports }}"
           $erportsArray = $erports -split ',' | ForEach-Object { $_.Trim() }
           $matrixMetadataArray = $erportsArray | ConvertTo-Json -AsArray -Compress
           Write-Host "Matrix Metadata: $matrixMetadataArray"
