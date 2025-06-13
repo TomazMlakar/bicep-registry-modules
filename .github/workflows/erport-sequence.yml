@@ -6,29 +6,18 @@ on:
       erport:
         required: true
         type: string
-      approval_decision:
-        required: true
-        type: string  # Expected values: 'approve' or 'reject'
 
 jobs:
-  check-approval:
+  approval-1:
     runs-on: ubuntu-latest
-    outputs:
-      proceed: ${{ steps.set-output.outputs.proceed }}
+    environment:
+      name: erport-approval-${{ inputs.erport }}
     steps:
-      - name: Evaluate approval decision
-        id: set-output
-        run: |
-          if [[ "${{ inputs.approval_decision }}" == "approve" ]]; then
-            echo "proceed=true" >> $GITHUB_OUTPUT
-          else
-            echo "Workflow rejected for ${{ inputs.erport }}"
-            echo "proceed=false" >> $GITHUB_OUTPUT
-          fi
+      - name: Awaiting Manual Approval for ${{ inputs.erport }}
+        run: echo "Approved to proceed with ${{ inputs.erport }}"
 
   powershell-step:
-    needs: check-approval
-    if: needs.check-approval.outputs.proceed == 'true'
+    needs: approval-1
     runs-on: windows-latest
     steps:
       - name: Run PowerShell Script for ${{ inputs.erport }}
@@ -36,12 +25,11 @@ jobs:
         run: |
           Write-Host "Running PowerShell script for ${{ inputs.erport }}"
 
-  final-approval:
+  approval-2:
     needs: powershell-step
-    if: success()
     runs-on: ubuntu-latest
     environment:
-      name: approval-stage-2
+      name: erport-final-approval-${{ inputs.erport }}
     steps:
-      - name: Awaiting Final Manual Approval for ${{ inputs.erport }}
+      - name: Final Manual Approval for ${{ inputs.erport }}
         run: echo "Final approval granted for ${{ inputs.erport }}"

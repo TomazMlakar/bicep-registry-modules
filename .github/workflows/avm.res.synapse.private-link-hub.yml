@@ -6,10 +6,6 @@ on:
       erports:
         description: 'Comma-separated list of ERPort values (e.g., ERPort1,ERPort2)'
         required: true
-      approval_decision:
-        description: 'Approve to continue? (approve/reject)'
-        required: true
-        default: 'reject'
 
 jobs:
   prepare-matrix:
@@ -30,7 +26,6 @@ jobs:
     uses: ./.github/workflows/erport-sequence.yml
     with:
       erport: ${{ matrix.erport }}
-      approval_decision: ${{ github.event.inputs.approval_decision }}
 
 
 # on:
