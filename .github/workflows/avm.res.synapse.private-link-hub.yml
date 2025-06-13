@@ -9,21 +9,30 @@ on:
         default: 'ERPort1,ERPort2'
 
 jobs:
+  checkout:
+    name: "Checkout Repository"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
   fanout:
     name: "Fanout for ERPort Sequence"
-    runs-on: ubuntu-latest
     permissions:
       id-token: write
       contents: read
     strategy:
       matrix:
         erport: [ERPort1, ERPort2]  # Replace with dynamic parsing if needed
-    steps:
-      - uses: actions/checkout@v2
-      - name: Trigger reusable workflow for ${{ matrix.erport }}
-        uses: ./.github/workflows/erport-sequence.yml@users/tomlakar/synapse-sql-pool-dev
-        with:
-          erport: ${{ matrix.erport }}
+    uses: ./.github/workflows/erport-sequence.yml #@users/tomlakar/synapse-sql-pool-dev
+    with:
+      erport: ${{ matrix.erport }}
+
+    # steps:
+    #   - name: Trigger reusable workflow for ${{ matrix.erport }}
+
 
 # on:
 #   workflow_dispatch:
