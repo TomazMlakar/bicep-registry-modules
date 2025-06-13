@@ -126,7 +126,7 @@ resource sqlPool 'Microsoft.Synapse/workspaces/sqlPools@2021-06-01' = {
   }
 }
 
-resource sqlPool_metadataSync 'Microsoft.Synapse/workspaces/sqlPools/metadataSync@2021-06-01' = if (metadataSync) {
+resource sqlPool_metadataSync 'Microsoft.Synapse/workspaces/sqlPools/metadataSync@2021-06-01' = {
   name: 'config'
   parent: sqlPool
   properties: {
