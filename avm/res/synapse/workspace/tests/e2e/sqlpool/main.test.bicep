@@ -76,8 +76,6 @@ module testDeployment '../../../main.bicep' = [
           maxSizeBytes: 1099511627776 // 1 TB
           sku: 'DW200c'
           storageAccountType: 'GRS'
-          metadataSync: true
-          metadataSyncIntervalInMinutes: 30
           transparentDataEncryption: 'Enabled'
           // roleAssignments: [
           //   {

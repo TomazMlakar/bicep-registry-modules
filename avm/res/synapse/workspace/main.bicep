@@ -400,8 +400,6 @@ module workspace_sqlPools 'sql-pool/main.bicep' = [
       restorePointInTime: sqlPool.?restorePointInTime
       recoverableDatabaseId: sqlPool.?recoverableDatabaseId
       storageAccountType: sqlPool.?storageAccountType
-      metadataSync: sqlPool.?metadataSync
-      metadataSyncIntervalInMinutes: sqlPool.?metadataSyncIntervalInMinutes
       transparentDataEncryption: sqlPool.?transparentDataEncryption
       diagnosticSettings: sqlPool.?diagnosticSettings ?? []
       roleAssignments: sqlPool.?roleAssignments ?? []
@@ -686,17 +684,10 @@ type sqlPoolType = {
     | 'LRS'
     | 'ZRS')?
 
-  @description('Optional. The metadata sync interval in minutes.')
-  metadataSync: bool?
-
-  @description('Optional. The metadata sync interval in minutes.')
-  metadataSyncIntervalInMinutes: int?
-
   @description('Optional. Enable database transparent data encryption.')
   transparentDataEncryption: (
     | 'Enabled'
-    | 'Disabled'
-    | 'NotSpecified')?
+    | 'Disabled')?
 
   @description('Optional. The diagnostic settings of the service.')
   diagnosticSettings: diagnosticSettingFullType[]?

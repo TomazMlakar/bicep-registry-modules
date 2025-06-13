@@ -1,0 +1,47 @@
+name: ERPort Sequence
+
+on:
+  workflow_call:
+    inputs:
+      erport:
+        required: true
+        type: string
+      approval_decision:
+        required: true
+        type: string  # Expected values: 'approve' or 'reject'
+
+jobs:
+  check-approval:
+    runs-on: ubuntu-latest
+    outputs:
+      proceed: ${{ steps.set-output.outputs.proceed }}
+    steps:
+      - name: Evaluate approval decision
+        id: set-output
+        run: |
+          if [[ "${{ inputs.approval_decision }}" == "approve" ]]; then
+            echo "proceed=true" >> $GITHUB_OUTPUT
+          else
+            echo "Workflow rejected for ${{ inputs.erport }}"
+            echo "proceed=false" >> $GITHUB_OUTPUT
+          fi
+
+  powershell-step:
+    needs: check-approval
+    if: needs.check-approval.outputs.proceed == 'true'
+    runs-on: windows-latest
+    steps:
+      - name: Run PowerShell Script for ${{ inputs.erport }}
+        shell: pwsh
+        run: |
+          Write-Host "Running PowerShell script for ${{ inputs.erport }}"
+
+  final-approval:
+    needs: powershell-step
+    if: success()
+    runs-on: ubuntu-latest
+    environment:
+      name: approval-stage-2
+    steps:
+      - name: Awaiting Final Manual Approval for ${{ inputs.erport }}
+        run: echo "Final approval granted for ${{ inputs.erport }}"

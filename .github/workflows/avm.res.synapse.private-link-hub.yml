@@ -3,86 +3,119 @@ name: "avm.res.synapse.private-link-hub"
 on:
   workflow_dispatch:
     inputs:
-      staticValidation:
-        type: boolean
-        description: "Execute static validation"
-        required: false
-        default: true
-      deploymentValidation:
-        type: boolean
-        description: "Execute deployment validation"
-        required: false
-        default: true
-      removeDeployment:
-        type: boolean
-        description: "Remove deployed module"
-        required: false
-        default: true
-      customLocation:
-        type: string
-        description: "Default location overwrite (e.g., eastus)"
-        required: false
-  push:
-    branches:
-      - main
-    paths:
-      - ".github/actions/templates/avm-**"
-      - ".github/workflows/avm.template.module.yml"
-      - ".github/workflows/avm.res.synapse.private-link-hub.yml"
-      - "avm/res/synapse/private-link-hub/**"
-      - "utilities/pipelines/**"
-      - "!utilities/pipelines/platform/**"
-      - "!*/**/README.md"
-
-env:
-  modulePath: "avm/res/synapse/private-link-hub"
-  workflowPath: ".github/workflows/avm.res.synapse.private-link-hub.yml"
-
-concurrency:
-  group: ${{ github.workflow }}
+      erports:
+        description: 'Comma-separated list of ERPort values (e.g., ERPort1,ERPort2)'
+        required: true
+      approval_decision:
+        description: 'Approve to continue? (approve/reject)'
+        required: true
+        default: 'reject'
 
 jobs:
-  ###########################
-  #   Initialize pipeline   #
-  ###########################
-  job_initialize_pipeline:
+  prepare-matrix:
     runs-on: ubuntu-latest
-    name: "Initialize pipeline"
-    steps:
-      - name: "Checkout"
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: "Set input parameters to output variables"
-        id: get-workflow-param
-        uses: ./.github/actions/templates/avm-getWorkflowInput
-        with:
-          workflowPath: "${{ env.workflowPath}}"
-      - name: "Get module test file paths"
-        id: get-module-test-file-paths
-        uses: ./.github/actions/templates/avm-getModuleTestFiles
-        with:
-          modulePath: "${{ env.modulePath }}"
     outputs:
-      workflowInput: ${{ steps.get-workflow-param.outputs.workflowInput }}
-      moduleTestFilePaths: ${{ steps.get-module-test-file-paths.outputs.moduleTestFilePaths }}
-      psRuleModuleTestFilePaths: ${{ steps.get-module-test-file-paths.outputs.psRuleModuleTestFilePaths }}
-      modulePath: "${{ env.modulePath }}"
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - id: set-matrix
+        run: |
+          erports="${{ github.event.inputs.erports }}"
+          json=$(echo "$erports" | jq -R 'split(",") | map({erport: .})')
+          echo "matrix={\"include\": $json}" >> $GITHUB_OUTPUT
 
-  ##############################
-  #   Call reusable workflow   #
-  ##############################
-  call-workflow-passing-data:
-    name: "Run"
-    permissions:
-      id-token: write # For OIDC
-      contents: write # For release tags
-    needs:
-      - job_initialize_pipeline
-    uses: ./.github/workflows/avm.template.module.yml
+  run-erport:
+    needs: prepare-matrix
+    strategy:
+      matrix: ${{ fromJson(needs.prepare-matrix.outputs.matrix) }}
+    uses: ./.github/workflows/erport-sequence.yml
     with:
-      workflowInput: "${{ needs.job_initialize_pipeline.outputs.workflowInput }}"
-      moduleTestFilePaths: "${{ needs.job_initialize_pipeline.outputs.moduleTestFilePaths }}"
-      psRuleModuleTestFilePaths: "${{ needs.job_initialize_pipeline.outputs.psRuleModuleTestFilePaths }}"
-      modulePath: "${{ needs.job_initialize_pipeline.outputs.modulePath}}"
-    secrets: inherit
+      erport: ${{ matrix.erport }}
+      approval_decision: ${{ github.event.inputs.approval_decision }}
+
+
+# on:
+#   workflow_dispatch:
+#     inputs:
+#       staticValidation:
+#         type: boolean
+#         description: "Execute static validation"
+#         required: false
+#         default: true
+#       deploymentValidation:
+#         type: boolean
+#         description: "Execute deployment validation"
+#         required: false
+#         default: true
+#       removeDeployment:
+#         type: boolean
+#         description: "Remove deployed module"
+#         required: false
+#         default: true
+#       customLocation:
+#         type: string
+#         description: "Default location overwrite (e.g., eastus)"
+#         required: false
+#   push:
+#     branches:
+#       - main
+#     paths:
+#       - ".github/actions/templates/avm-**"
+#       - ".github/workflows/avm.template.module.yml"
+#       - ".github/workflows/avm.res.synapse.private-link-hub.yml"
+#       - "avm/res/synapse/private-link-hub/**"
+#       - "utilities/pipelines/**"
+#       - "!utilities/pipelines/platform/**"
+#       - "!*/**/README.md"
+
+# env:
+#   modulePath: "avm/res/synapse/private-link-hub"
+#   workflowPath: ".github/workflows/avm.res.synapse.private-link-hub.yml"
+
+# concurrency:
+#   group: ${{ github.workflow }}
+
+# jobs:
+#   ###########################
+#   #   Initialize pipeline   #
+#   ###########################
+#   job_initialize_pipeline:
+#     runs-on: ubuntu-latest
+#     name: "Initialize pipeline"
+#     steps:
+#       - name: "Checkout"
+#         uses: actions/checkout@v4
+#         with:
+#           fetch-depth: 0
+#       - name: "Set input parameters to output variables"
+#         id: get-workflow-param
+#         uses: ./.github/actions/templates/avm-getWorkflowInput
+#         with:
+#           workflowPath: "${{ env.workflowPath}}"
+#       - name: "Get module test file paths"
+#         id: get-module-test-file-paths
+#         uses: ./.github/actions/templates/avm-getModuleTestFiles
+#         with:
+#           modulePath: "${{ env.modulePath }}"
+#     outputs:
+#       workflowInput: ${{ steps.get-workflow-param.outputs.workflowInput }}
+#       moduleTestFilePaths: ${{ steps.get-module-test-file-paths.outputs.moduleTestFilePaths }}
+#       psRuleModuleTestFilePaths: ${{ steps.get-module-test-file-paths.outputs.psRuleModuleTestFilePaths }}
+#       modulePath: "${{ env.modulePath }}"
+
+#   ##############################
+#   #   Call reusable workflow   #
+#   ##############################
+#   call-workflow-passing-data:
+#     name: "Run"
+#     permissions:
+#       id-token: write # For OIDC
+#       contents: write # For release tags
+#     needs:
+#       - job_initialize_pipeline
+#     uses: ./.github/workflows/avm.template.module.yml
+#     with:
+#       workflowInput: "${{ needs.job_initialize_pipeline.outputs.workflowInput }}"
+#       moduleTestFilePaths: "${{ needs.job_initialize_pipeline.outputs.moduleTestFilePaths }}"
+#       psRuleModuleTestFilePaths: "${{ needs.job_initialize_pipeline.outputs.psRuleModuleTestFilePaths }}"
+#       modulePath: "${{ needs.job_initialize_pipeline.outputs.modulePath}}"
+#     secrets: inherit

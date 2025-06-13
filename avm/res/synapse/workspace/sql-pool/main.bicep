@@ -51,19 +51,10 @@ param storageAccountType (
     | 'LRS'
     | 'ZRS') = 'GRS'
 
-@description('Optional. Enable metadata sync for the SQL pool.')
-param metadataSync bool = false
-
-@description('Optional. The metadata sync interval in minutes.')
-@minValue(1)
-@maxValue(1440)
-param metadataSyncIntervalInMinutes int?
-
 @description('Optional. Enable database transparent data encryption.')
 param transparentDataEncryption (
     | 'Enabled'
-    | 'Disabled'
-    | 'NotSpecified') = 'NotSpecified'
+    | 'Disabled') = 'Disabled'
 
 import { diagnosticSettingFullType } from 'br/public:avm/utl/types/avm-common-types:0.5.1'
 @description('Optional. The diagnostic settings of the service.')
@@ -126,24 +117,11 @@ resource sqlPool 'Microsoft.Synapse/workspaces/sqlPools@2021-06-01' = {
   }
 }
 
-resource sqlPool_metadataSync 'Microsoft.Synapse/workspaces/sqlPools/metadataSync@2021-06-01' = {
-  name: 'config'
-  parent: sqlPool
-  properties: {
-    enabled: metadataSync
-    syncIntervalInMinutes: metadataSyncIntervalInMinutes ?? 60 // Default to 60 minutes if not specified
-  }
-}
-
-resource sqlPool_transparentDataEncryption 'Microsoft.Synapse/workspaces/sqlPools/transparentDataEncryption@2021-06-01' = if (transparentDataEncryption != 'NotSpecified') {
+resource sqlPool_transparentDataEncryption 'Microsoft.Synapse/workspaces/sqlPools/transparentDataEncryption@2021-06-01' = if (transparentDataEncryption != 'Enabled') {
   name: 'current'
   parent: sqlPool
   properties: {
-    status: transparentDataEncryption == 'NotSpecified'
-      ? 'Disabled'
-      : transparentDataEncryption == 'Enabled'
-        ? 'Enabled'
-        : 'Disabled'
+    status: transparentDataEncryption
   }
 }
 
