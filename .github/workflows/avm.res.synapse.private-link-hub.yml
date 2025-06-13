@@ -18,8 +18,6 @@ jobs:
         with:
           fetch-depth: 0
 
-
-
   prepare-matrix:
     name: "Prepare Matrix for ERPort Sequence"
     runs-on: ubuntu-latest
