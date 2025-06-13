@@ -37,14 +37,15 @@ jobs:
 
           Add-Content -Path $env:GITHUB_OUTPUT -Value "matrix=$matrixMetadataArray"
 
-  fanout:
-    name: "Fanout for ERPort Sequence"
+  updae-erport-sequence:
+    name: "${{ matrix.erport }} - update"
     needs: prepare-matrix
     permissions:
       id-token: write
       contents: read
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }} # Unique concurrency group for subscriptions with similar workload identifier (e.g. "pxs-azure-fferrara")
+      cancel-in-progress: false
     strategy:
       matrix:
         erport: ${{ fromJson(needs.prepare-matrix.outputs.matrix) }} #[ERPort1, ERPort2]
