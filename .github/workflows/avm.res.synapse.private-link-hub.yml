@@ -32,6 +32,10 @@ jobs:
           if (![String]::IsNullOrEmpty($erPort)) {
               $erPortsArray = $erPortsArray | Where-Object { $_ -eq $erPort }
           }
+          if ($erPortsArray.Count -eq 0) {
+              Write-Host "No ERPorts found for the specified input."
+              exit 1
+          }
           $matrixMetadataArray = $erPortsArray | ConvertTo-Json -AsArray -Compress
           Write-Host "Matrix Metadata: $matrixMetadataArray"
           Add-Content -Path $env:GITHUB_OUTPUT -Value "matrix=$matrixMetadataArray"
