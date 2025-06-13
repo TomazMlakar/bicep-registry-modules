@@ -30,8 +30,8 @@ jobs:
       - id: set-matrix
         shell: pwsh
         run: |
-          $erports = "${{ github.event.inputs.erports }}"
-          $matrixMetadataArray = $erports | ConvertTo-Json -AsArray -Compress
+          $erportsArray = $erports -split ',' | ForEach-Object { $_.Trim() }
+          $matrixMetadataArray = $erportsArray | ConvertTo-Json -AsArray -Compress
           Write-Host "Matrix Metadata: $matrixMetadataArray"
           Add-Content -Path $env:GITHUB_OUTPUT -Value "matrix=$matrixMetadataArray"
 
@@ -42,7 +42,7 @@ jobs:
       id-token: write
       contents: read
     concurrency:
-      group: ${{ github.workflow }} # Unique concurrency group for subscriptions with similar workload identifier (e.g. "pxs-azure-fferrara")
+      group: ${{ github.workflow }}-${{ github.ref }}-${{ matrix.erport }} # Unique concurrency group for subscriptions with similar workload identifier (e.g. "pxs-azure-fferrara")
     strategy:
       matrix:
         erport: ${{ fromJson(needs.prepare-matrix.outputs.matrix) }} #[ERPort1, ERPort2]
