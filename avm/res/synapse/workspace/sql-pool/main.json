@@ -6,7 +6,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.36.1.42791",
-      "templateHash": "17871615287908776627"
+      "templateHash": "4496454105046968460"
     },
     "name": "Synapse Workspaces SQL Pools",
     "description": "This module deploys a Synapse Workspaces SQL Pool."
@@ -296,7 +296,7 @@
       ],
       "nullable": true,
       "metadata": {
-        "description": "Required. The performance level of the SQL pool."
+        "description": "Optional. The performance level of the SQL pool."
       }
     },
     "restorePointInTime": {

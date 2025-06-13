@@ -6,7 +6,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.36.1.42791",
-      "templateHash": "15112214790203827753"
+      "templateHash": "17934255231793918358"
     },
     "name": "Synapse Workspaces",
     "description": "This module deploys a Synapse Workspace."
@@ -304,7 +304,7 @@
           "type": "int",
           "nullable": true,
           "metadata": {
-            "description": "Required. The max size of the SQL pool in bytes."
+            "description": "Optional. The max size of the SQL pool in bytes."
           }
         },
         "sku": {
@@ -329,7 +329,7 @@
           ],
           "nullable": true,
           "metadata": {
-            "description": "Required. The performance level of the SQL pool."
+            "description": "Optional. The performance level of the SQL pool."
           }
         },
         "restorePointInTime": {
@@ -2857,7 +2857,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.36.1.42791",
-              "templateHash": "17871615287908776627"
+              "templateHash": "4496454105046968460"
             },
             "name": "Synapse Workspaces SQL Pools",
             "description": "This module deploys a Synapse Workspaces SQL Pool."
@@ -3147,7 +3147,7 @@
               ],
               "nullable": true,
               "metadata": {
-                "description": "Required. The performance level of the SQL pool."
+                "description": "Optional. The performance level of the SQL pool."
               }
             },
             "restorePointInTime": {

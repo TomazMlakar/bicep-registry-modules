@@ -20,7 +20,7 @@ param collation string?
 @description('Optional. The max size of the SQL pool in bytes.')
 param maxSizeBytes int?
 
-@description('Required. The performance level of the SQL pool.')
+@description('Optional. The performance level of the SQL pool.')
 param sku (
     | 'DW100c'
     | 'DW200c'

@@ -3254,9 +3254,7 @@ List of SQL Pools to be created in the workspace.
 
 | Parameter | Type | Description |
 | :-- | :-- | :-- |
-| [`maxSizeBytes`](#parameter-sqlpoolsmaxsizebytes) | int | The max size of the SQL pool in bytes. |
 | [`name`](#parameter-sqlpoolsname) | string | The name of the SQL Pool. |
-| [`sku`](#parameter-sqlpoolssku) | string | The performance level of the SQL pool. |
 
 **Optional parameters**
 
@@ -3265,19 +3263,14 @@ List of SQL Pools to be created in the workspace.
 | [`collation`](#parameter-sqlpoolscollation) | string | The collation of the SQL pool. |
 | [`diagnosticSettings`](#parameter-sqlpoolsdiagnosticsettings) | array | The diagnostic settings of the service. |
 | [`lock`](#parameter-sqlpoolslock) | object | The lock settings of the service. |
+| [`maxSizeBytes`](#parameter-sqlpoolsmaxsizebytes) | int | The max size of the SQL pool in bytes. |
 | [`recoverableDatabaseId`](#parameter-sqlpoolsrecoverabledatabaseid) | string | The recoverable database ID to restore from. |
 | [`restorePointInTime`](#parameter-sqlpoolsrestorepointintime) | string | The restore point in time to restore from (ISO8601 format). |
 | [`roleAssignments`](#parameter-sqlpoolsroleassignments) | array | Array of role assignments to create. |
+| [`sku`](#parameter-sqlpoolssku) | string | The performance level of the SQL pool. |
 | [`storageAccountType`](#parameter-sqlpoolsstorageaccounttype) | string | The storage account type to use for the SQL pool. |
 | [`tags`](#parameter-sqlpoolstags) | object | Tags of the resource. |
 | [`transparentDataEncryption`](#parameter-sqlpoolstransparentdataencryption) | string | Enable database transparent data encryption. |
-
-### Parameter: `sqlPools.maxSizeBytes`
-
-The max size of the SQL pool in bytes.
-
-- Required: No
-- Type: int
 
 ### Parameter: `sqlPools.name`
 
@@ -3285,34 +3278,6 @@ The name of the SQL Pool.
 
 - Required: Yes
 - Type: string
-
-### Parameter: `sqlPools.sku`
-
-The performance level of the SQL pool.
-
-- Required: No
-- Type: string
-- Allowed:
-  ```Bicep
-  [
-    'DW10000c'
-    'DW1000c'
-    'DW100c'
-    'DW15000c'
-    'DW1500c'
-    'DW2000c'
-    'DW200c'
-    'DW2500c'
-    'DW30000c'
-    'DW3000c'
-    'DW300c'
-    'DW400c'
-    'DW5000c'
-    'DW500c'
-    'DW6000c'
-    'DW7500c'
-  ]
-  ```
 
 ### Parameter: `sqlPools.collation`
 
@@ -3503,6 +3468,13 @@ Specify the name of lock.
 - Required: No
 - Type: string
 
+### Parameter: `sqlPools.maxSizeBytes`
+
+The max size of the SQL pool in bytes.
+
+- Required: No
+- Type: int
+
 ### Parameter: `sqlPools.recoverableDatabaseId`
 
 The recoverable database ID to restore from.
@@ -3617,6 +3589,34 @@ The principal type of the assigned principal ID.
     'Group'
     'ServicePrincipal'
     'User'
+  ]
+  ```
+
+### Parameter: `sqlPools.sku`
+
+The performance level of the SQL pool.
+
+- Required: No
+- Type: string
+- Allowed:
+  ```Bicep
+  [
+    'DW10000c'
+    'DW1000c'
+    'DW100c'
+    'DW15000c'
+    'DW1500c'
+    'DW2000c'
+    'DW200c'
+    'DW2500c'
+    'DW30000c'
+    'DW3000c'
+    'DW300c'
+    'DW400c'
+    'DW5000c'
+    'DW500c'
+    'DW6000c'
+    'DW7500c'
   ]
   ```
 

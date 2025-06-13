@@ -26,7 +26,6 @@ This module deploys a Synapse Workspaces SQL Pool.
 | Parameter | Type | Description |
 | :-- | :-- | :-- |
 | [`name`](#parameter-name) | string | The name of the SQL Pool. |
-| [`sku`](#parameter-sku) | string | The performance level of the SQL pool. |
 
 **Conditional parameters**
 
@@ -46,6 +45,7 @@ This module deploys a Synapse Workspaces SQL Pool.
 | [`recoverableDatabaseId`](#parameter-recoverabledatabaseid) | string | The recoverable database ID to restore from. |
 | [`restorePointInTime`](#parameter-restorepointintime) | string | The restore point in time to restore from (ISO8601 format). |
 | [`roleAssignments`](#parameter-roleassignments) | array | Array of role assignments to create. |
+| [`sku`](#parameter-sku) | string | The performance level of the SQL pool. |
 | [`storageAccountType`](#parameter-storageaccounttype) | string | The storage account type to use for the SQL pool. |
 | [`tags`](#parameter-tags) | object | Tags of the resource. |
 | [`transparentDataEncryption`](#parameter-transparentdataencryption) | string | Enable database transparent data encryption. |
@@ -56,34 +56,6 @@ The name of the SQL Pool.
 
 - Required: Yes
 - Type: string
-
-### Parameter: `sku`
-
-The performance level of the SQL pool.
-
-- Required: No
-- Type: string
-- Allowed:
-  ```Bicep
-  [
-    'DW10000c'
-    'DW1000c'
-    'DW100c'
-    'DW15000c'
-    'DW1500c'
-    'DW2000c'
-    'DW200c'
-    'DW2500c'
-    'DW30000c'
-    'DW3000c'
-    'DW300c'
-    'DW400c'
-    'DW5000c'
-    'DW500c'
-    'DW6000c'
-    'DW7500c'
-  ]
-  ```
 
 ### Parameter: `workspaceName`
 
@@ -410,6 +382,34 @@ The principal type of the assigned principal ID.
     'Group'
     'ServicePrincipal'
     'User'
+  ]
+  ```
+
+### Parameter: `sku`
+
+The performance level of the SQL pool.
+
+- Required: No
+- Type: string
+- Allowed:
+  ```Bicep
+  [
+    'DW10000c'
+    'DW1000c'
+    'DW100c'
+    'DW15000c'
+    'DW1500c'
+    'DW2000c'
+    'DW200c'
+    'DW2500c'
+    'DW30000c'
+    'DW3000c'
+    'DW300c'
+    'DW400c'
+    'DW5000c'
+    'DW500c'
+    'DW6000c'
+    'DW7500c'
   ]
   ```
 
