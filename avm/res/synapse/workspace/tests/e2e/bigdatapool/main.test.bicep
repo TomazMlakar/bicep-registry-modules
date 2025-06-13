@@ -1,7 +1,7 @@
 targetScope = 'subscription'
 
-metadata name = 'Using SQL Pool'
-metadata description = 'This instance deploys the module with the configuration of SQL Pool.'
+metadata name = 'Using Big Data Pool'
+metadata description = 'This instance deploys the module with the configuration of Big Data Pool.'
 
 // ========== //
 // Parameters //
@@ -12,7 +12,7 @@ metadata description = 'This instance deploys the module with the configuration 
 param resourceGroupName string = 'dep-${namePrefix}-synapse.workspaces-${serviceShort}-rg'
 
 @description('Optional. A short identifier for the kind of deployment. Should be kept short to not run into resource-name length-constraints.')
-param serviceShort string = 'swsqlp'
+param serviceShort string = 'swbdp'
 
 @description('Optional. A token to inject into the name of each resource.')
 param namePrefix string = '#_namePrefix_#'
@@ -54,17 +54,28 @@ module testDeployment '../../../main.bicep' = [
       defaultDataLakeStorageAccountResourceId: nestedDependencies.outputs.storageAccountResourceId
       defaultDataLakeStorageFilesystem: nestedDependencies.outputs.storageContainerName
       sqlAdministratorLogin: 'synwsadmin'
-      sqlPools: [
+      bigDataPools: [
         {
-          name: 'dep${namePrefix}sqlp01'
+          name: 'dep${namePrefix}bdp01'
+          nodeSizeFamily: 'MemoryOptimized'
+          nodeSize: 'Small'
+          autoScale: {
+            minNodeCount: 3
+            maxNodeCount: 5
+          }
+          dynamicExecutorAllocation: {
+            minExecutors: 1
+            maxExecutors: 4
+          }
+          autoPauseDelayInMinutes: 10
+          sessionLevelPackagesEnabled: true
+          cacheSize: 50
+          autotuneEnabled: true
         }
         {
-          name: 'dep${namePrefix}sqlp02'
-          collation: 'SQL_Latin1_General_CP1_CI_AS'
-          maxSizeBytes: 1099511627776 // 1 TB
-          sku: 'DW200c'
-          storageAccountType: 'LRS'
-          transparentDataEncryption: 'Enabled'
+          name: 'dep${namePrefix}bdp02'
+          nodeSizeFamily: 'MemoryOptimized'
+          nodeSize: 'Small'
         }
       ]
     }

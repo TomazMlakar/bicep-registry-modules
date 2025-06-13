@@ -165,7 +165,7 @@ resource sqlPool_diagnosticSettings 'Microsoft.Insights/diagnosticSettings@2021-
   }
 ]
 
-resource bigDataPool_roleAssignments 'Microsoft.Authorization/roleAssignments@2022-04-01' = [
+resource sqlPool_roleAssignments 'Microsoft.Authorization/roleAssignments@2022-04-01' = [
   for (roleAssignment, index) in (formattedRoleAssignments ?? []): {
     name: roleAssignment.?name ?? guid(sqlPool.id, roleAssignment.principalId, roleAssignment.roleDefinitionId)
     properties: {
