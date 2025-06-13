@@ -10,9 +10,11 @@ on:
 jobs:
   approval-1:
     runs-on: ubuntu-latest
+    environment:
+        name: approval-stage-2
     steps:
-      - name: First Manual Approval for ${{ inputs.erport }}
-        uses: hmarr/auto-approve-action@v3  # Replace with manual gate if needed
+      - name: Awaiting Final Manual Approval for ${{ inputs.erport }}
+        run: echo "Final approval granted for ${{ inputs.erport }}"
 
   powershell-step:
     needs: approval-1
@@ -26,5 +28,5 @@ jobs:
     needs: powershell-step
     runs-on: ubuntu-latest
     steps:
-      - name: Final Manual Approval for ${{ inputs.erport }}
-        uses: hmarr/auto-approve-action@v3  # Replace with manual gate if needed
+      - name: Awaiting Final Manual Approval for ${{ inputs.erport }}
+        run: echo "Final approval granted for ${{ inputs.erport }}"

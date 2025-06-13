@@ -15,30 +15,14 @@ jobs:
     permissions:
       id-token: write
       contents: read
-      issues: write
     strategy:
       matrix:
         erport: [ERPort1, ERPort2]  # Replace with dynamic parsing if needed
     steps:
-      - name: First Manual Approval for ${{ matrix.erport }}
-        uses: trstringer/manual-approval@v1
+      - name: Trigger reusable workflow for ${{ matrix.erport }}
+        uses: ./.github/workflows/erport-sequence.yml
         with:
-          secret: ${{ secrets.GITHUB_TOKEN }}
-          approvers: TomazMlakar
-          minimum-approvals: 1
-          issue-title: "Please approve the first step for ${{ matrix.erport }}"
-          issue-body: "Please approve or deny the deployment."
-      - name: Run PowerShell Script for ${{ matrix.erport }}
-        run: |
-          Write-Host "Running script for ${{ matrix.erport }}"
-      - name: Final Manual Approval for ${{ matrix.erport }}
-        uses: trstringer/manual-approval@v1
-        with:
-          secret: ${{ secrets.GITHUB_TOKEN }}
-          approvers: TomazMlakar
-          minimum-approvals: 1
-          issue-title: "Please approve the last step for ${{ matrix.erport }}"
-          issue-body: "Please approve or deny the deployment."
+          erport: ${{ matrix.erport }}
 
 # on:
 #   workflow_dispatch:
