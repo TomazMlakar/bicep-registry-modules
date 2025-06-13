@@ -13,7 +13,6 @@ jobs:
     environment:
         name: approval-stage-2
     steps:
-      - uses: actions/checkout@v2
       - name: Awaiting Final Manual Approval for ${{ inputs.erport }}
         run: echo "Final approval granted for ${{ inputs.erport }}"
 
