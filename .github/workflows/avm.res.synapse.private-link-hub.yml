@@ -28,11 +28,13 @@ jobs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
       - id: set-matrix
-        run: |
-          erports="${{ github.event.inputs.erports }}"
-          json=$(echo "$erports" | jq -R 'split(",") | map({erport: .})')
-          echo "matrix={\"include\": $json}"
-          echo "matrix={\"include\": $json}" >> $GITHUB_OUTPUT
+        uses: powershell/pwsh@v2
+        with:
+          script: |
+            $erports = "${{ github.event.inputs.erports }}"
+            $matrixMetadataArray = $erports | ConvertTo-Json -AsArray -Compress
+            Write-Host "Matrix Metadata: $matrixMetadataArray"
+            Add-Content -Path $env:GITHUB_OUTPUT -Value "matrix=$matrixMetadataArray"
 
   fanout:
     name: "Fanout for ERPort Sequence"
