@@ -8,18 +8,12 @@ on:
         type: string
 
 jobs:
-  checkout:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
-
   approval-1:
-    needs: checkout
     runs-on: ubuntu-latest
     environment:
         name: approval-stage-2
     steps:
+      - uses: actions/checkout@v2
       - name: Awaiting Final Manual Approval for ${{ inputs.erport }}
         run: echo "Final approval granted for ${{ inputs.erport }}"
 
