@@ -67,7 +67,6 @@ module testDeployment '../../../main.bicep' = [
     params: {
       name: '${namePrefix}${serviceShort}001'
       skuName: 'S1'
-      skuCapacity: 1
       tags: {
         'hidden-title': 'This is visible in the resource name'
         Environment: 'Non-Prod'
