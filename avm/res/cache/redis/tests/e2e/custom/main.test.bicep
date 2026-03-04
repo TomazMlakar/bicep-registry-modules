@@ -1,7 +1,7 @@
 targetScope = 'subscription'
 
-metadata name = 'WAF-aligned'
-metadata description = 'This instance deploys the module in alignment with the best-practices of the Azure Well-Architected Framework.'
+metadata name = 'Using custom parameter set'
+metadata description = 'This instance deploys the module with most of its features enabled.'
 
 // ========== //
 // Parameters //
@@ -15,10 +15,47 @@ param resourceGroupName string = 'dep-${namePrefix}-cache.redis-${serviceShort}-
 param resourceLocation string = deployment().location
 
 @description('Optional. A short identifier for the kind of deployment. Should be kept short to not run into resource-name length-constraints.')
-param serviceShort string = 'crwaf'
+param serviceShort string = 'crcst'
 
 @description('Optional. A token to inject into the name of each resource.')
 param namePrefix string = '#_namePrefix_#'
+
+// ========== //
+// Variables //
+// ========== //
+
+var diagnosticLogCategoriesToEnable array = [
+  'allLogs'
+]
+
+var diagnosticsLogsSpecified = [
+  for category in filter(diagnosticLogCategoriesToEnable, item => item != 'allLogs'): {
+    category: category
+    enabled: true
+  }
+]
+
+var diagnosticsLogs = contains(diagnosticLogCategoriesToEnable, 'allLogs')
+  ? [
+      {
+        categoryGroup: 'allLogs'
+        enabled: true
+      }
+    ]
+  : diagnosticsLogsSpecified
+
+var diagnosticMetricsToEnable array = [
+  'AllMetrics'
+]
+
+var diagnosticsMetrics = [
+  for metric in diagnosticMetricsToEnable: {
+    category: metric
+    enabled: true
+  }
+]
+
+var redisConfiguration object = {}
 
 // ============ //
 // Dependencies //
@@ -65,59 +102,32 @@ module testDeployment '../../../main.bicep' = [
     name: '${uniqueString(deployment().name, resourceLocation)}-test-${serviceShort}-${iteration}'
     params: {
       name: '${namePrefix}${serviceShort}001'
-      location: resourceLocation
       capacity: 2
       diagnosticSettings: [
         {
           name: 'customSetting'
-          metricCategories: [
-            {
-              category: 'AllMetrics'
-            }
-          ]
-          eventHubName: diagnosticDependencies.outputs.eventHubNamespaceEventHubName
-          eventHubAuthorizationRuleResourceId: diagnosticDependencies.outputs.eventHubAuthorizationRuleId
-          storageAccountResourceId: diagnosticDependencies.outputs.storageAccountResourceId
           workspaceResourceId: diagnosticDependencies.outputs.logAnalyticsWorkspaceResourceId
+          metricCategories: diagnosticsMetrics
+          logCategoriesAndGroups: diagnosticsLogs
         }
       ]
-      lock: {
-        kind: 'CanNotDelete'
-        name: 'myCustomLockName'
+      enableNonSslPort: false
+      location: resourceLocation
+      managedIdentities: {
+        systemAssigned: false
+        userAssignedResourceIds: []
       }
       minimumTlsVersion: '1.2'
-      zoneRedundant: true
-      availabilityZones: [1, 2, 3]
-      zonalAllocationPolicy: 'UserDefined'
-      privateEndpoints: [
-        {
-          privateDnsZoneGroup: {
-            privateDnsZoneGroupConfigs: [
-              {
-                privateDnsZoneResourceId: nestedDependencies.outputs.privateDNSZoneResourceId
-              }
-            ]
-          }
-          subnetResourceId: nestedDependencies.outputs.subnetResourceId
-          tags: {
-            'hidden-title': 'This is visible in the resource name'
-            Environment: 'Non-Prod'
-            Role: 'DeploymentValidation'
-          }
-        }
-      ]
+      shardCount: null
+      skuName: 'Standard'
+      publicNetworkAccess: null
+      redisConfiguration: !empty(redisConfiguration) ? redisConfiguration : null
       redisVersion: '6'
-      replicasPerMaster: 3
-      replicasPerPrimary: 3
-      shardCount: 1
-      skuName: 'Premium'
-      managedIdentities: {
-        systemAssigned: true
-      }
-      tags: {
-        'hidden-title': 'This is visible in the resource name'
-        resourceType: 'Redis Cache'
-      }
+      replicasPerMaster: null
+      replicasPerPrimary: null
+      subnetResourceId: null
+      zoneRedundant: null
+      availabilityZones: null
     }
   }
 ]
