@@ -55,8 +55,6 @@ var diagnosticsMetrics = [
   }
 ]
 
-var redisConfiguration object = {}
-
 // ============ //
 // Dependencies //
 // ============ //
@@ -113,21 +111,10 @@ module testDeployment '../../../main.bicep' = [
       ]
       enableNonSslPort: false
       location: resourceLocation
-      managedIdentities: {
-        systemAssigned: false
-        userAssignedResourceIds: []
-      }
       minimumTlsVersion: '1.2'
-      shardCount: null
       skuName: 'Standard'
-      publicNetworkAccess: null
-      redisConfiguration: !empty(redisConfiguration) ? redisConfiguration : null
       redisVersion: '6'
-      replicasPerMaster: null
-      replicasPerPrimary: null
-      subnetResourceId: null
-      zoneRedundant: null
-      availabilityZones: null
+      zoneRedundant: false
     }
   }
 ]
