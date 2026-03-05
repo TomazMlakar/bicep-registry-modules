@@ -319,7 +319,7 @@ runs:
           Write-Verbose 'Invoke task with' -Verbose
           Write-Verbose ($functionInput | ConvertTo-Json | Out-String) -Verbose
 
-          #Test-TemplateDeployment @functionInput -Verbose
+          Test-TemplateDeployment @functionInput -Verbose
 
           Write-Output '::endgroup::'
 
