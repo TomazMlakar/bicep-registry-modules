@@ -55,11 +55,11 @@ param redisVersion string = '6'
 
 @minValue(1)
 @description('Optional. The number of replicas to be created per primary.')
-param replicasPerMaster int?
+param replicasPerMaster int = 3
 
 @minValue(1)
 @description('Optional. The number of replicas to be created per primary. Needs to be the same as replicasPerMaster for a Premium Cluster Cache.')
-param replicasPerPrimary int?
+param replicasPerPrimary int = 3
 
 @minValue(1)
 @description('Optional. The number of shards to be created on a Premium Cluster Cache.')
@@ -95,11 +95,11 @@ param subnetResourceId string?
 param tenantSettings resourceInput<'Microsoft.Cache/redis@2024-11-01'>.properties.tenantSettings = {}
 
 @description('Optional. When true, replicas will be provisioned in availability zones specified in the zones parameter.')
-param zoneRedundant bool?
+param zoneRedundant bool = true
 
 @description('Optional. If the zoneRedundant parameter is true, replicas will be provisioned in the availability zones specified here. Otherwise, the service will choose where replicas are deployed.')
 @allowed([1, 2, 3])
-param availabilityZones int[]?
+param availabilityZones int[] = [1, 2, 3]
 
 @description('Optional. Specifies how availability zones are allocated to the Redis cache. "Automatic" enables zone redundancy and Azure will automatically select zones. "UserDefined" will select availability zones passed in by you using the "availabilityZones" parameter. "NoZones" will produce a non-zonal cache. Only applicable when zoneRedundant is true.')
 @allowed([
@@ -138,8 +138,8 @@ param secretsExportConfiguration secretsExportConfigurationType?
 var enableReferencedModulesTelemetry = false
 
 var zones = skuName == 'Premium'
-  ? (zoneRedundant ?? true)
-      ? !empty(availabilityZones ?? []) ? availabilityZones! : pickZones('Microsoft.Cache', 'redis', location, 3)
+  ? zoneRedundant
+      ? !empty(availabilityZones) ? availabilityZones : pickZones('Microsoft.Cache', 'redis', location, 3)
       : []
   : []
 
@@ -188,7 +188,7 @@ var formattedRoleAssignments = [
 ]
 
 #disable-next-line no-deployments-resources
-resource avmTelemetry 'Microsoft.Resources/deployments@2025-04-01' = if (enableTelemetry) {
+resource avmTelemetry 'Microsoft.Resources/deployments@2024-03-01' = if (enableTelemetry) {
   name: '46d3xbcp.res.cache-redis.${replace('-..--..-', '.', '-')}.${substring(uniqueString(deployment().name, location), 0, 4)}'
   properties: {
     mode: 'Incremental'
@@ -220,8 +220,8 @@ resource redis 'Microsoft.Cache/redis@2024-11-01' = {
       : (!empty(privateEndpoints) ? 'Disabled' : null)
     redisConfiguration: redisConfiguration
     redisVersion: redisVersion
-    replicasPerMaster: skuName == 'Premium' ? (replicasPerMaster ?? 3) : null
-    replicasPerPrimary: skuName == 'Premium' ? (replicasPerPrimary ?? 3) : null
+    replicasPerMaster: skuName == 'Premium' ? replicasPerMaster : null
+    replicasPerPrimary: skuName == 'Premium' ? replicasPerPrimary : null
     shardCount: skuName == 'Premium' ? shardCount : null // Not supported in free tier
     sku: {
       capacity: capacity
@@ -231,7 +231,7 @@ resource redis 'Microsoft.Cache/redis@2024-11-01' = {
     staticIP: staticIP
     subnetId: subnetResourceId
     tenantSettings: tenantSettings
-    zonalAllocationPolicy: skuName == 'Premium' && (zoneRedundant ?? true) ? zonalAllocationPolicy : null
+    zonalAllocationPolicy: skuName == 'Premium' && zoneRedundant ? zonalAllocationPolicy : null
   }
   zones: zones
 }
@@ -321,7 +321,7 @@ resource redis_roleAssignments 'Microsoft.Authorization/roleAssignments@2022-04-
   }
 ]
 
-module redis_privateEndpoints 'br/public:avm/res/network/private-endpoint:0.11.1' = [
+module redis_privateEndpoints 'br/public:avm/res/network/private-endpoint:0.11.0' = [
   for (privateEndpoint, index) in (privateEndpoints ?? []): {
     name: '${uniqueString(deployment().name, location)}-redis-PrivateEndpoint-${index}'
     scope: resourceGroup(
