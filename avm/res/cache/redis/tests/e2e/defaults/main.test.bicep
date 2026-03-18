@@ -36,6 +36,7 @@ module nestedDependencies 'dependencies.bicep' = {
   name: '${uniqueString(deployment().name, resourceLocation)}-nestedDependencies'
   params: {
     managedIdentityName: 'dep-${namePrefix}-msi-${serviceShort}'
+    managedIdentityName2: 'dep-${namePrefix}-msi2-${serviceShort}'
     location: resourceLocation
   }
 }
@@ -77,8 +78,8 @@ module testDeployment '../../../main.bicep' = [
           accessPolicyName: 'Custom Pattern Policy'
         }
         {
-          objectId: nestedDependencies.outputs.managedIdentityPrincipalId
-          objectIdAlias: 'dep-${namePrefix}-msi-${serviceShort}'
+          objectId: nestedDependencies.outputs.managedIdentityPrincipalId2
+          objectIdAlias: 'dep-${namePrefix}-msi2-${serviceShort}'
           accessPolicyName: 'Admin Policy'
         }
       ]
