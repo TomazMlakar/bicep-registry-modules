@@ -237,6 +237,7 @@ resource redis 'Microsoft.Cache/redis@2024-11-01' = {
 }
 
 // Deploy access policies
+//@batchSize(1)
 module redis_accessPolicies 'access-policy/main.bicep' = [
   for (policy, index) in (accessPolicies ?? []): {
     name: '${uniqueString(deployment().name, location)}-redis-AccessPolicy-${index}'
@@ -245,10 +246,10 @@ module redis_accessPolicies 'access-policy/main.bicep' = [
       name: policy.name
       permissions: policy.permissions
     }
-    // dependsOn: [
-    //   #disable-next-line no-unnecessary-dependson
-    //   redis
-    // ]
+    dependsOn: [
+      #disable-next-line no-unnecessary-dependson
+      redis
+    ]
   }
 ]
 
