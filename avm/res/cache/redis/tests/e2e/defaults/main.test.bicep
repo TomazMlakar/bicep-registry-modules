@@ -76,6 +76,11 @@ module testDeployment '../../../main.bicep' = [
           objectIdAlias: 'dep-${namePrefix}-msi-${serviceShort}'
           accessPolicyName: 'Custom Pattern Policy'
         }
+        {
+          objectId: nestedDependencies.outputs.managedIdentityPrincipalId
+          objectIdAlias: 'dep-${namePrefix}-msi-${serviceShort}'
+          accessPolicyName: 'Admin Policy'
+        }
       ]
     }
   }
