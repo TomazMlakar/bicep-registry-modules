@@ -54,15 +54,27 @@ module testDeployment '../../../main.bicep' = [
       location: resourceLocation
       accessPolicies: [
         {
-          name: 'policy1'
-          permissions: '+@read +@connection +cluster|info allkeys'
+          name: 'Read Only Policy'
+          permissions: '+@read'
+        }
+        {
+          name: 'Write Only Policy'
+          permissions: '+@write'
+        }
+        {
+          name: 'Admin Policy'
+          permissions: '+@all'
+        }
+        {
+          name: 'Custom Pattern Policy'
+          permissions: '+@read +set ~cache:*'
         }
       ]
       accessPolicyAssignments: [
         {
           objectId: nestedDependencies.outputs.managedIdentityPrincipalId
           objectIdAlias: 'dep-${namePrefix}-msi-${serviceShort}'
-          accessPolicyName: 'policy1'
+          accessPolicyName: 'Custom Pattern Policy'
         }
       ]
     }
