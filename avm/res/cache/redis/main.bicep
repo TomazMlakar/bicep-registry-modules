@@ -250,6 +250,7 @@ module redis_accessPolicies 'access-policy/main.bicep' = [
 ]
 
 // Deploy access policy assignments
+@batchSize(1)
 module redis_policyAssignments 'access-policy-assignment/main.bicep' = [
   for (assignment, index) in (accessPolicyAssignments ?? []): {
     name: '${uniqueString(deployment().name, location)}-redis-PolicyAssignment-${index}'
