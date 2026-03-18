@@ -31,6 +31,15 @@ resource resourceGroup 'Microsoft.Resources/resourceGroups@2025-04-01' = {
   location: resourceLocation
 }
 
+module nestedDependencies 'dependencies.bicep' = {
+  scope: resourceGroup
+  name: '${uniqueString(deployment().name, resourceLocation)}-nestedDependencies'
+  params: {
+    managedIdentityName: 'dep-${namePrefix}-msi-${serviceShort}'
+    location: resourceLocation
+  }
+}
+
 // ============== //
 // Test Execution //
 // ============== //
@@ -43,6 +52,19 @@ module testDeployment '../../../main.bicep' = [
     params: {
       name: '${namePrefix}${serviceShort}001'
       location: resourceLocation
+      accessPolicies: [
+        {
+          name: 'policy1'
+          permissions: '+@read +@connection +cluster|info allkeys'
+        }
+      ]
+      accessPolicyAssignments: [
+        {
+          objectId: nestedDependencies.outputs.managedIdentityPrincipalId
+          objectIdAlias: 'dep-${namePrefix}-msi-${serviceShort}'
+          accessPolicyName: 'policy1'
+        }
+      ]
     }
   }
 ]
