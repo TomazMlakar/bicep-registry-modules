@@ -87,7 +87,7 @@
       "type": "Microsoft.DataFactory/factories/integrationRuntimes",
       "apiVersion": "2018-06-01",
       "name": "[format('{0}/{1}', parameters('dataFactoryName'), parameters('name'))]",
-      "properties": "[shallowMerge(createArray(createObject('type', parameters('type')), if(equals(parameters('type'), 'Managed'), createObject('description', parameters('integrationRuntimeCustomDescription'), 'managedVirtualNetwork', createObject('referenceName', parameters('managedVirtualNetworkName'), 'type', 'ManagedVirtualNetworkReference'), 'typeProperties', parameters('typeProperties')), createObject())))]"
+      "properties": "[shallowMerge(createArray(createObject('type', parameters('type')), if(not(empty(parameters('typeProperties'))), createObject('typeProperties', parameters('typeProperties')), createObject()), if(equals(parameters('type'), 'Managed'), createObject('description', parameters('integrationRuntimeCustomDescription'), 'managedVirtualNetwork', createObject('referenceName', parameters('managedVirtualNetworkName'), 'type', 'ManagedVirtualNetworkReference')), createObject())))]"
     }
   ],
   "outputs": {
