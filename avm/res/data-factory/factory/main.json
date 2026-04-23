@@ -77,7 +77,7 @@
             "description": "Optional. Integration Runtime type properties. Required if type is \"Managed\"."
           }
         },
-        "roleDefinitionId": {
+        "linkedResourceRoleDefinitionId": {
           "type": "string",
           "nullable": true,
           "metadata": {
@@ -1543,7 +1543,7 @@
             "value": "[coalesce(tryGet(tryGet(reference('dataFactory', '2018-06-01', 'full'), 'identity'), 'principalId'), variables('sharedSHIRRequiresSystemAssignedIdentity'))]"
           },
           "roleDefinitionId": {
-            "value": "[coalesce(tryGet(variables('sharedSelfHostedIntegrationRuntimes')[copyIndex()], 'roleDefinitionId'), roleDefinitions('Contributor').id)]"
+            "value": "[coalesce(tryGet(variables('sharedSelfHostedIntegrationRuntimes')[copyIndex()], 'linkedResourceRoleDefinitionId'), roleDefinitions('Contributor').id)]"
           },
           "principalType": {
             "value": "ServicePrincipal"
