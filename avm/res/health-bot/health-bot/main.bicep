@@ -94,7 +94,7 @@ module healthBot_create './modules/heatltBot.bicep' = {
 }
 
 module healthBot_cmk './modules/heatltBot.bicep' = if (!empty(customerManagedKey)) {
-  name: '${deployment().name}-create'
+  name: '${deployment().name}-cmk'
   params: {
     name: name
     location: location
