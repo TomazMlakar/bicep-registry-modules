@@ -5,8 +5,8 @@
   "metadata": {
     "_generator": {
       "name": "bicep",
-      "version": "0.42.1.51946",
-      "templateHash": "9847941904989799682"
+      "version": "0.43.1.21952",
+      "templateHash": "2444051381446395803"
     },
     "name": "Data Factories",
     "description": "This module deploys a Data Factory."
@@ -1212,8 +1212,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.42.1.51946",
-              "templateHash": "5556006933704974683"
+              "version": "0.43.1.21952",
+              "templateHash": "13073229421844664632"
             },
             "name": "Data Factory Managed Virtual Networks",
             "description": "This module deploys a Data Factory Managed Virtual Network."
@@ -1366,8 +1366,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.42.1.51946",
-                      "templateHash": "2874950919005636816"
+                      "version": "0.43.1.21952",
+                      "templateHash": "12703728926650924070"
                     },
                     "name": "Data Factory Managed Virtual Network Managed PrivateEndpoints",
                     "description": "This module deploys a Data Factory Managed Virtual Network Managed Private Endpoint."
@@ -1820,8 +1820,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.42.1.51946",
-              "templateHash": "2053861810761034603"
+              "version": "0.43.1.21952",
+              "templateHash": "14402928367762586800"
             },
             "name": "Data Factory Integration RunTimes",
             "description": "This module deploys a Data Factory Managed or Self-Hosted Integration Runtime."
@@ -1982,8 +1982,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.42.1.51946",
-              "templateHash": "8570063255617525144"
+              "version": "0.43.1.21952",
+              "templateHash": "16961971490542634597"
             },
             "name": "Data Factory Linked Service",
             "description": "This module deploys a Data Factory Linked Service."
