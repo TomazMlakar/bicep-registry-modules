@@ -103,10 +103,17 @@ module healthBot_cmk './modules/heatltBot.bicep' = if (!empty(customerManagedKey
     sku: sku
     customerManagedKey: customerManagedKey
   }
+  dependsOn: [
+    healthBot_create
+  ]
 }
 
 resource healthBot_existing 'Microsoft.HealthBot/healthBots@2025-11-01' existing = {
   name: name
+  dependsOn: [
+    healthBot_cmk
+    healthBot_create
+  ]
 }
 
 resource healthBot_lock 'Microsoft.Authorization/locks@2020-05-01' = if (!empty(lock ?? {}) && lock.?kind != 'None') {
