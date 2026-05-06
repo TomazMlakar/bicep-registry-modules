@@ -125,6 +125,16 @@ resource healthBot 'Microsoft.HealthBot/healthBots@2025-11-01' = {
   sku: {
     name: sku
   }
+}
+
+resource healthBot_CMK 'Microsoft.HealthBot/healthBots@2025-11-01' = if (!empty(customerManagedKey)) {
+  name: name
+  location: location
+  tags: tags
+  identity: identity
+  sku: {
+    name: sku
+  }
   properties: {
     keyVaultProperties: !empty(customerManagedKey)
       ? {
@@ -145,6 +155,9 @@ resource healthBot 'Microsoft.HealthBot/healthBots@2025-11-01' = {
         }
       : null
   }
+  dependsOn: [
+    healthBot
+  ]
 }
 
 resource healthBot_lock 'Microsoft.Authorization/locks@2020-05-01' = if (!empty(lock ?? {}) && lock.?kind != 'None') {
