@@ -38,19 +38,6 @@ param tags resourceInput<'Microsoft.HealthBot/healthBots@2025-11-01'>.tags?
 @description('Optional. Enable/Disable usage telemetry for module.')
 param enableTelemetry bool = true
 
-var formattedUserAssignedIdentities = reduce(
-  map((managedIdentities.?userAssignedResourceIds ?? []), (id) => { '${id}': {} }),
-  {},
-  (cur, next) => union(cur, next)
-) // Converts the flat array to an object like { '${id1}': {}, '${id2}': {} }
-
-var identity = !empty(managedIdentities)
-  ? {
-      type: !empty(managedIdentities.?userAssignedResourceIds ?? {}) ? 'UserAssigned' : null
-      userAssignedIdentities: !empty(formattedUserAssignedIdentities) ? formattedUserAssignedIdentities : null
-    }
-  : null
-
 var builtInRoleNames = {
   Contributor: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', 'b24988ac-6180-42a0-ab88-20f7382dd24c')
   Owner: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', '8e3af657-a8ff-443c-a75c-2fe8c4bcb635')
@@ -76,28 +63,6 @@ var formattedRoleAssignments = [
   })
 ]
 
-var isHSMManagedCMK = split(customerManagedKey.?keyVaultResourceId ?? '', '/')[?7] == 'managedHSMs'
-
-resource cMKKeyVault 'Microsoft.KeyVault/vaults@2025-05-01' existing = if (!empty(customerManagedKey) && !isHSMManagedCMK) {
-  name: last(split((customerManagedKey.?keyVaultResourceId!), '/'))
-  scope: resourceGroup(
-    split(customerManagedKey.?keyVaultResourceId!, '/')[2],
-    split(customerManagedKey.?keyVaultResourceId!, '/')[4]
-  )
-
-  resource cMKKey 'keys@2025-05-01' existing = if (!empty(customerManagedKey) && !isHSMManagedCMK) {
-    name: customerManagedKey.?keyName!
-  }
-}
-
-resource cMKUserAssignedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2024-11-30' existing = if (!empty(customerManagedKey.?userAssignedIdentityResourceId)) {
-  name: last(split(customerManagedKey.?userAssignedIdentityResourceId!, '/'))
-  scope: resourceGroup(
-    split(customerManagedKey.?userAssignedIdentityResourceId!, '/')[2],
-    split(customerManagedKey.?userAssignedIdentityResourceId!, '/')[4]
-  )
-}
-
 #disable-next-line no-deployments-resources
 resource avmTelemetry 'Microsoft.Resources/deployments@2025-04-01' = if (enableTelemetry) {
   name: '46d3xbcp.res.healthbot-healthbot.${replace('-..--..-', '.', '-')}.${substring(uniqueString(deployment().name, location), 0, 4)}'
@@ -117,47 +82,31 @@ resource avmTelemetry 'Microsoft.Resources/deployments@2025-04-01' = if (enableT
   }
 }
 
-resource healthBot 'Microsoft.HealthBot/healthBots@2025-11-01' = {
-  name: name
-  location: location
-  tags: tags
-  identity: identity
-  sku: {
-    name: sku
+module healthBot_create './modules/heatltBot.bicep' = {
+  name: '${deployment().name}-create'
+  params: {
+    name: name
+    location: location
+    tags: tags
+    managedIdentities: managedIdentities
+    sku: sku
   }
 }
 
-resource healthBot_CMK 'Microsoft.HealthBot/healthBots@2025-11-01' = if (!empty(customerManagedKey)) {
+module healthBot_cmk './modules/heatltBot.bicep' = if (!empty(customerManagedKey)) {
+  name: '${deployment().name}-create'
+  params: {
+    name: name
+    location: location
+    tags: tags
+    managedIdentities: managedIdentities
+    sku: sku
+    customerManagedKey: customerManagedKey
+  }
+}
+
+resource healthBot_existing 'Microsoft.HealthBot/healthBots@2025-11-01' existing = {
   name: name
-  location: location
-  tags: tags
-  identity: identity
-  sku: {
-    name: sku
-  }
-  properties: {
-    keyVaultProperties: !empty(customerManagedKey)
-      ? {
-          keyName: customerManagedKey!.keyName
-          keyVaultUri: !isHSMManagedCMK
-                ? cMKKeyVault!.properties.vaultUri
-                : 'https://${last(split((customerManagedKey!.keyVaultResourceId), '/'))}.managedhsm.azure.net/'
-          keyVersion: !empty(customerManagedKey.?keyVersion)
-                ? customerManagedKey!.keyVersion!
-                : (customerManagedKey.?autoRotationEnabled ?? true)
-                    ? null
-                    : (!isHSMManagedCMK
-                        ? last(split(cMKKeyVault::cMKKey!.properties.keyUriWithVersion, '/'))
-                        : fail('Managed HSM CMK encryption requires either specifying the \'keyVersion\' or omitting the \'autoRotationEnabled\' property. Setting \'autoRotationEnabled\' to false without a \'keyVersion\' is not allowed.'))
-          userIdentity: !empty(customerManagedKey.?userAssignedIdentityResourceId)
-                ? cMKUserAssignedIdentity.id
-                : null
-        }
-      : null
-  }
-  dependsOn: [
-    healthBot
-  ]
 }
 
 resource healthBot_lock 'Microsoft.Authorization/locks@2020-05-01' = if (!empty(lock ?? {}) && lock.?kind != 'None') {
@@ -168,12 +117,12 @@ resource healthBot_lock 'Microsoft.Authorization/locks@2020-05-01' = if (!empty(
       ? 'Cannot delete resource or child resources.'
       : 'Cannot delete or modify the resource or child resources.')
   }
-  scope: healthBot
+  scope: healthBot_existing
 }
 
 resource healthBot_roleAssignments 'Microsoft.Authorization/roleAssignments@2022-04-01' = [
   for (roleAssignment, index) in (formattedRoleAssignments ?? []): {
-    name: roleAssignment.?name ?? guid(healthBot.id, roleAssignment.principalId, roleAssignment.roleDefinitionId)
+    name: roleAssignment.?name ?? guid(healthBot_existing.id, roleAssignment.principalId, roleAssignment.roleDefinitionId)
     properties: {
       roleDefinitionId: roleAssignment.roleDefinitionId
       principalId: roleAssignment.principalId
@@ -183,7 +132,7 @@ resource healthBot_roleAssignments 'Microsoft.Authorization/roleAssignments@2022
       conditionVersion: !empty(roleAssignment.?condition) ? (roleAssignment.?conditionVersion ?? '2.0') : null // Must only be set if condtion is set
       delegatedManagedIdentityResourceId: roleAssignment.?delegatedManagedIdentityResourceId
     }
-    scope: healthBot
+    scope: healthBot_existing
   }
 ]
 
@@ -191,10 +140,10 @@ resource healthBot_roleAssignments 'Microsoft.Authorization/roleAssignments@2022
 output resourceGroupName string = resourceGroup().name
 
 @description('The name of the health bot.')
-output name string = healthBot.name
+output name string = healthBot_existing.name
 
 @description('The resource ID of the health bot.')
-output resourceId string = healthBot.id
+output resourceId string = healthBot_existing.id
 
 @description('The location the resource was deployed into.')
-output location string = healthBot.location
+output location string = healthBot_existing.location
