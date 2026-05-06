@@ -48,6 +48,7 @@ module nestedDependencies 'dependencies.bicep' = {
 // ============== //
 // Test Execution //
 // ============== //
+
 @batchSize(1)
 module testDeployment '../../../main.bicep' = [
   for iteration in ['init', 'idem']: {
@@ -57,6 +58,11 @@ module testDeployment '../../../main.bicep' = [
       name: '${namePrefix}${serviceShort}002'
       location: resourceGroup.location
       sku: 'F0'
+      managedIdentities: {
+        userAssignedResourceIds: [
+          nestedDependencies.outputs.managedIdentityResourceId
+        ]
+      }
       customerManagedKey: {
         keyName: nestedDependencies.outputs.keyName
         keyVaultResourceId: nestedDependencies.outputs.keyVaultResourceId
