@@ -20,6 +20,10 @@ param managedIdentities managedIdentityOnlyUserAssignedType?
 @description('Optional. Location for all resources.')
 param location string = resourceGroup().location
 
+import { customerManagedKeyWithAutoRotateType } from 'br/public:avm/utl/types/avm-common-types:0.6.1'
+@description('Optional. The customer managed key definition.')
+param customerManagedKey customerManagedKeyWithAutoRotateType?
+
 import { lockType } from 'br/public:avm/utl/types/avm-common-types:0.7.0'
 @description('Optional. The lock settings of the service.')
 param lock lockType?
@@ -72,6 +76,28 @@ var formattedRoleAssignments = [
   })
 ]
 
+var isHSMManagedCMK = split(customerManagedKey.?keyVaultResourceId ?? '', '/')[?7] == 'managedHSMs'
+
+resource cMKKeyVault 'Microsoft.KeyVault/vaults@2025-05-01' existing = if (!empty(customerManagedKey) && !isHSMManagedCMK) {
+  name: last(split((customerManagedKey.?keyVaultResourceId!), '/'))
+  scope: resourceGroup(
+    split(customerManagedKey.?keyVaultResourceId!, '/')[2],
+    split(customerManagedKey.?keyVaultResourceId!, '/')[4]
+  )
+
+  resource cMKKey 'keys@2025-05-01' existing = if (!empty(customerManagedKey) && !isHSMManagedCMK) {
+    name: customerManagedKey.?keyName!
+  }
+}
+
+resource cMKUserAssignedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2024-11-30' existing = if (!empty(customerManagedKey.?userAssignedIdentityResourceId)) {
+  name: last(split(customerManagedKey.?userAssignedIdentityResourceId!, '/'))
+  scope: resourceGroup(
+    split(customerManagedKey.?userAssignedIdentityResourceId!, '/')[2],
+    split(customerManagedKey.?userAssignedIdentityResourceId!, '/')[4]
+  )
+}
+
 #disable-next-line no-deployments-resources
 resource avmTelemetry 'Microsoft.Resources/deployments@2025-04-01' = if (enableTelemetry) {
   name: '46d3xbcp.res.healthbot-healthbot.${replace('-..--..-', '.', '-')}.${substring(uniqueString(deployment().name, location), 0, 4)}'
@@ -99,7 +125,26 @@ resource healthBot 'Microsoft.HealthBot/healthBots@2025-11-01' = {
   sku: {
     name: sku
   }
-  properties: {}
+  properties: {
+    keyVaultProperties: !empty(customerManagedKey)
+      ? {
+          keyName: customerManagedKey!.keyName
+          keyVaultUri: !isHSMManagedCMK
+                ? cMKKeyVault!.properties.vaultUri
+                : 'https://${last(split((customerManagedKey!.keyVaultResourceId), '/'))}.managedhsm.azure.net/'
+          keyVersion: !empty(customerManagedKey.?keyVersion)
+                ? customerManagedKey!.keyVersion!
+                : (customerManagedKey.?autoRotationEnabled ?? true)
+                    ? null
+                    : (!isHSMManagedCMK
+                        ? last(split(cMKKeyVault::cMKKey!.properties.keyUriWithVersion, '/'))
+                        : fail('Managed HSM CMK encryption requires either specifying the \'keyVersion\' or omitting the \'autoRotationEnabled\' property. Setting \'autoRotationEnabled\' to false without a \'keyVersion\' is not allowed.'))
+          userIdentity: !empty(customerManagedKey.?userAssignedIdentityResourceId)
+                ? cMKUserAssignedIdentity.id
+                : null
+        }
+      : null
+  }
 }
 
 resource healthBot_lock 'Microsoft.Authorization/locks@2020-05-01' = if (!empty(lock ?? {}) && lock.?kind != 'None') {
