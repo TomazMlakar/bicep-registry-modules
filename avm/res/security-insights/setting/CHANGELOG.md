@@ -6,6 +6,17 @@ The latest version of the changelog can be found [here](https://github.com/Azure
 
 ### Changes
 
+- Updated resource API versions to use latest versions
+- Updated all 'avm-common-types' reference to `0.7.0`
+
+### Breaking Changes
+
+- None
+
+## 0.1.1
+
+### Changes
+
 - Removed deprecated metadata
 
 ### Breaking Changes
