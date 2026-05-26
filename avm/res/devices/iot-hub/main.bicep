@@ -106,6 +106,7 @@ import { privateEndpointSingleServiceType } from 'br/public:avm/utl/types/avm-co
 @description('Optional. Configuration details for private endpoints. For security reasons, it is recommended to use private endpoints whenever possible.')
 param privateEndpoints privateEndpointSingleServiceType[]?
 
+@description('Optional. The consumer groups to create on the IoT Hub. This is an array of strings where each string is the name of a consumer group. If not specified, no consumer groups will be created.')
 param consumerGroups string[]?
 
 @description('Optional. Resource tags.')
@@ -205,17 +206,14 @@ resource iotHub 'Microsoft.Devices/IotHubs@2023-06-30' = {
   }
 }
 
-module consumerGroupsModule 'consumer-group/main.bicep' = [
+module consumerGroupsModule 'consumergroup/main.bicep' = [
   for (consumerGroup, index) in (consumerGroups ?? []): {
-  name: '${name}-consumerGroups'
+  name: '${deployment().name}-ConsumerGroup-${index}'
   params: {
     iotHubName: iotHub.name
     name: consumerGroup
     enableTelemetry: enableReferencedModulesTelemetry
   }
-  dependsOn: [
-    iotHub
-  ]
 }
 ]
 

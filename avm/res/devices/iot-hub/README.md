@@ -26,9 +26,10 @@ For examples, please refer to the [Usage Examples](#usage-examples) section.
 | `Microsoft.Authorization/locks` | 2020-05-01 | <ul style="padding-left: 0px;"><li>[AzAdvertizer](https://www.azadvertizer.net/azresourcetypes/microsoft.authorization_locks.html)</li><li>[Template reference](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Authorization/2020-05-01/locks)</li></ul> |
 | `Microsoft.Authorization/roleAssignments` | 2022-04-01 | <ul style="padding-left: 0px;"><li>[AzAdvertizer](https://www.azadvertizer.net/azresourcetypes/microsoft.authorization_roleassignments.html)</li><li>[Template reference](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Authorization/2022-04-01/roleAssignments)</li></ul> |
 | `Microsoft.Devices/IotHubs` | 2023-06-30 | <ul style="padding-left: 0px;"><li>[AzAdvertizer](https://www.azadvertizer.net/azresourcetypes/microsoft.devices_iothubs.html)</li><li>[Template reference](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Devices/2023-06-30/IotHubs)</li></ul> |
+| `Microsoft.Devices/IotHubs/eventHubEndpoints/ConsumerGroups` | 2023-06-30 | <ul style="padding-left: 0px;"><li>[AzAdvertizer](https://www.azadvertizer.net/azresourcetypes/microsoft.devices_iothubs_eventhubendpoints_consumergroups.html)</li><li>[Template reference](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Devices/2023-06-30/IotHubs/eventHubEndpoints/ConsumerGroups)</li></ul> |
 | `Microsoft.Insights/diagnosticSettings` | 2021-05-01-preview | <ul style="padding-left: 0px;"><li>[AzAdvertizer](https://www.azadvertizer.net/azresourcetypes/microsoft.insights_diagnosticsettings.html)</li><li>[Template reference](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Insights/2021-05-01-preview/diagnosticSettings)</li></ul> |
-| `Microsoft.Network/privateEndpoints` | 2024-10-01 | <ul style="padding-left: 0px;"><li>[AzAdvertizer](https://www.azadvertizer.net/azresourcetypes/microsoft.network_privateendpoints.html)</li><li>[Template reference](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Network/2024-10-01/privateEndpoints)</li></ul> |
-| `Microsoft.Network/privateEndpoints/privateDnsZoneGroups` | 2024-10-01 | <ul style="padding-left: 0px;"><li>[AzAdvertizer](https://www.azadvertizer.net/azresourcetypes/microsoft.network_privateendpoints_privatednszonegroups.html)</li><li>[Template reference](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Network/2024-10-01/privateEndpoints/privateDnsZoneGroups)</li></ul> |
+| `Microsoft.Network/privateEndpoints` | 2025-05-01 | <ul style="padding-left: 0px;"><li>[AzAdvertizer](https://www.azadvertizer.net/azresourcetypes/microsoft.network_privateendpoints.html)</li><li>[Template reference](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Network/2025-05-01/privateEndpoints)</li></ul> |
+| `Microsoft.Network/privateEndpoints/privateDnsZoneGroups` | 2025-05-01 | <ul style="padding-left: 0px;"><li>[AzAdvertizer](https://www.azadvertizer.net/azresourcetypes/microsoft.network_privateendpoints_privatednszonegroups.html)</li><li>[Template reference](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Network/2025-05-01/privateEndpoints/privateDnsZoneGroups)</li></ul> |
 
 ## Usage examples
 
@@ -39,9 +40,89 @@ The following section provides usage examples for the module, which were used to
 >**Note**: To reference the module, please use the following syntax `br/public:avm/res/devices/iot-hub:<version>`.
 
 - [Using only defaults](#example-1-using-only-defaults)
-- [WAF-aligned](#example-2-waf-aligned)
+- [Using only defaults](#example-2-using-only-defaults)
+- [WAF-aligned](#example-3-waf-aligned)
 
 ### Example 1: _Using only defaults_
+
+This instance deploys the module testing consumer groups.
+
+You can find the full example and the setup of its dependencies in the deployment test folder path [/tests/e2e/consumer-groups]
+
+
+<details>
+
+<summary>via Bicep module</summary>
+
+```bicep
+module iotHub 'br/public:avm/res/devices/iot-hub:<version>' = {
+  params: {
+    // Required parameters
+    name: 'dihcg001'
+    skuName: 'S1'
+    // Non-required parameters
+    consumerGroups: [
+      'dihcgcg001'
+      'dihcgcg002'
+    ]
+  }
+}
+```
+
+</details>
+<p>
+
+<details>
+
+<summary>via JSON parameters file</summary>
+
+```json
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    // Required parameters
+    "name": {
+      "value": "dihcg001"
+    },
+    "skuName": {
+      "value": "S1"
+    },
+    // Non-required parameters
+    "consumerGroups": {
+      "value": [
+        "dihcgcg001",
+        "dihcgcg002"
+      ]
+    }
+  }
+}
+```
+
+</details>
+<p>
+
+<details>
+
+<summary>via Bicep parameters file</summary>
+
+```bicep-params
+using 'br/public:avm/res/devices/iot-hub:<version>'
+
+// Required parameters
+param name = 'dihcg001'
+param skuName = 'S1'
+// Non-required parameters
+param consumerGroups = [
+  'dihcgcg001'
+  'dihcgcg002'
+]
+```
+
+</details>
+<p>
+
+### Example 2: _Using only defaults_
 
 This instance deploys the module with the minimum set of required parameters.
 
@@ -103,7 +184,7 @@ param skuName = 'S1'
 </details>
 <p>
 
-### Example 2: _WAF-aligned_
+### Example 3: _WAF-aligned_
 
 This instance deploys the module in alignment with the best-practices of the Azure Well-Architected Framework.
 
@@ -302,6 +383,7 @@ param tags = {
 | [`authorizationPolicies`](#parameter-authorizationpolicies) | array | The shared access policies you can use to secure a connection to the IoT hub. |
 | [`cloudToDevice`](#parameter-cloudtodevice) | object | The IoT hub cloud-to-device messaging properties. |
 | [`comments`](#parameter-comments) | string | IoT hub comments. |
+| [`consumerGroups`](#parameter-consumergroups) | array | The consumer groups to create on the IoT Hub. This is an array of strings where each string is the name of a consumer group. If not specified, no consumer groups will be created. |
 | [`diagnosticSettings`](#parameter-diagnosticsettings) | array | The diagnostic settings of the service. |
 | [`disableDeviceSAS`](#parameter-disabledevicesas) | bool | If true, all device(including Edge devices but excluding modules) scoped SAS keys cannot be used for authentication. |
 | [`disableLocalAuth`](#parameter-disablelocalauth) | bool | If true, SAS tokens with Iot hub scoped SAS keys cannot be used for authentication. |
@@ -369,6 +451,13 @@ IoT hub comments.
 
 - Required: No
 - Type: string
+
+### Parameter: `consumerGroups`
+
+The consumer groups to create on the IoT Hub. This is an array of strings where each string is the name of a consumer group. If not specified, no consumer groups will be created.
+
+- Required: No
+- Type: array
 
 ### Parameter: `diagnosticSettings`
 
@@ -1281,7 +1370,7 @@ This section gives you an overview of all local-referenced module files (i.e., o
 
 | Reference | Type |
 | :-- | :-- |
-| `br/public:avm/res/network/private-endpoint:0.11.1` | Remote reference |
+| `br/public:avm/res/network/private-endpoint:0.12.1` | Remote reference |
 | `br/public:avm/utl/types/avm-common-types:0.7.0` | Remote reference |
 
 ## Data Collection
