@@ -106,6 +106,8 @@ import { privateEndpointSingleServiceType } from 'br/public:avm/utl/types/avm-co
 @description('Optional. Configuration details for private endpoints. For security reasons, it is recommended to use private endpoints whenever possible.')
 param privateEndpoints privateEndpointSingleServiceType[]?
 
+param consumerGroups string[]?
+
 @description('Optional. Resource tags.')
 param tags resourceInput<'Microsoft.Devices/IotHubs@2023-06-30'>.tags?
 
@@ -203,6 +205,20 @@ resource iotHub 'Microsoft.Devices/IotHubs@2023-06-30' = {
   }
 }
 
+module consumerGroupsModule 'consumer-group/main.bicep' = [
+  for (consumerGroup, index) in (consumerGroups ?? []): {
+  name: '${name}-consumerGroups'
+  params: {
+    iotHubName: iotHub.name
+    name: consumerGroup
+    enableTelemetry: enableReferencedModulesTelemetry
+  }
+  dependsOn: [
+    iotHub
+  ]
+}
+]
+
 resource iothub_lock 'Microsoft.Authorization/locks@2020-05-01' = if (!empty(lock ?? {}) && lock.?kind != 'None') {
   name: lock.?name ?? 'lock-${name}'
   properties: {
@@ -243,7 +259,7 @@ resource iothub_diagnosticSettings 'Microsoft.Insights/diagnosticSettings@2021-0
   }
 ]
 
-module iothub_privateEndpoints 'br/public:avm/res/network/private-endpoint:0.11.1' = [
+module iothub_privateEndpoints 'br/public:avm/res/network/private-endpoint:0.12.1' = [
   for (privateEndpoint, index) in (privateEndpoints ?? []): {
     name: '${uniqueString(deployment().name, location)}-iothub-PrivateEndpoint-${index}'
     scope: resourceGroup(
