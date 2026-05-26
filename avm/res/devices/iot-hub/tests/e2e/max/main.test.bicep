@@ -31,6 +31,28 @@ resource resourceGroup 'Microsoft.Resources/resourceGroups@2025-04-01' = {
   location: resourceLocation
 }
 
+module nestedDependencies 'dependencies.bicep' = {
+  scope: resourceGroup
+  name: '${uniqueString(deployment().name, resourceLocation)}-nestedDependencies'
+  params: {
+    virtualNetworkName: 'dep-${namePrefix}-vnet-${serviceShort}'
+    managedIdentityName: 'dep-${namePrefix}-msi-${serviceShort}'
+  }
+}
+
+// Diagnostics
+// ===========
+module diagnosticDependencies '../../../../../../../utilities/e2e-template-assets/templates/diagnostic.dependencies.bicep' = {
+  scope: resourceGroup
+  name: '${uniqueString(deployment().name, resourceLocation)}-diagnosticDependencies'
+  params: {
+    storageAccountName: 'dep${namePrefix}diasa${serviceShort}01'
+    logAnalyticsWorkspaceName: 'dep-${namePrefix}-law-${serviceShort}'
+    eventHubNamespaceEventHubName: 'dep-${namePrefix}-evh-${serviceShort}'
+    eventHubNamespaceName: 'dep-${namePrefix}-evhns-${serviceShort}'
+  }
+}
+
 // ============== //
 // Test Execution //
 // ============== //
@@ -43,6 +65,84 @@ module testDeployment '../../../main.bicep' = [
     params: {
       name: '${namePrefix}${serviceShort}001'
       skuName: 'S1'
+      skuCapacity: 2
+      allowedFqdnList: [
+        'www.bing.com'
+        'www.microsoft.com'
+      ]
+      authorizationPolicies: [
+      ]
+      cloudToDevice: {
+        maxDeliveryCount: 5
+        defaultTtlAsIso8601: 'PT1H'
+      }
+      comments: 'Testing iot-hub with maximum configuration.'
+      diagnosticSettings: [
+        {
+          name: 'customSetting'
+          metricCategories: [
+            {
+              category: 'AllMetrics'
+            }
+          ]
+          eventHubName: diagnosticDependencies.outputs.eventHubNamespaceEventHubName
+          eventHubAuthorizationRuleResourceId: diagnosticDependencies.outputs.eventHubAuthorizationRuleId
+          storageAccountResourceId: diagnosticDependencies.outputs.storageAccountResourceId
+          workspaceResourceId: diagnosticDependencies.outputs.logAnalyticsWorkspaceResourceId
+        }
+      ]
+      disableDeviceSAS: true
+      disableLocalAuth: true
+      disableModuleSAS: true
+      enableDataResidency: true
+      enableFileUploadNotifications: true
+      eventHubEndpoints: {
+        events: {
+          retentionTimeInDays: 7
+          partitionCount: 4
+        }
+      }
+      managedIdentities: {
+        systemAssigned: true
+        userAssignedResourceIds: [
+          nestedDependencies.outputs.managedIdentityResourceId
+        ]
+      }
+      messagingEndpoints: {
+        fileNotifications: {
+          lockDurationAsIso8601: 'PT1H'
+          maxDeliveryCount: 5
+          ttlAsIso8601: 'PT1H'
+        }
+      }
+      privateEndpoints: [
+        {
+          service: 'iotHub'
+          privateDnsZoneGroup: {
+            privateDnsZoneGroupConfigs: [
+              {
+                privateDnsZoneResourceId: nestedDependencies.outputs.privateDNSZoneResourceId
+              }
+            ]
+          }
+          subnetResourceId: nestedDependencies.outputs.subnetResourceId
+          tags: {
+            'hidden-title': 'This is visible in the resource name'
+            application: 'AVM'
+          }
+        }
+        {
+          service: 'portal'
+          privateDnsZoneGroup: {
+            privateDnsZoneGroupConfigs: [
+              {
+                privateDnsZoneResourceId: nestedDependencies.outputs.privateDNSZoneResourceId
+              }
+            ]
+          }
+          subnetResourceId: nestedDependencies.outputs.subnetResourceId
+        }
+      ]
       consumerGroups: [
         '${namePrefix}${serviceShort}cg001'
         '${namePrefix}${serviceShort}cg002'
