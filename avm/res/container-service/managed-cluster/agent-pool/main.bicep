@@ -147,7 +147,7 @@ param spotMaxPrice int?
 param tags resourceInput<'Microsoft.ContainerService/managedClusters/agentPools@2025-10-01'>.tags?
 
 @description('Optional. The type of Agent Pool.')
-param type string?
+param type ('AvailabilitySet' | 'VirtualMachineScaleSets' | 'VirtualMachines')?
 
 @description('Optional. Upgrade settings.')
 param upgradeSettings resourceInput<'Microsoft.ContainerService/managedClusters/agentPools@2025-10-01'>.properties.upgradeSettings?

@@ -439,6 +439,14 @@ The type of Agent Pool.
 
 - Required: No
 - Type: string
+- Allowed:
+  ```Bicep
+  [
+    'AvailabilitySet'
+    'VirtualMachines'
+    'VirtualMachineScaleSets'
+  ]
+  ```
 
 ### Parameter: `upgradeSettings`
 
