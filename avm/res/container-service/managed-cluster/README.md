@@ -3658,6 +3658,7 @@ The type of the agent pool.
   ```Bicep
   [
     'AvailabilitySet'
+    'VirtualMachines'
     'VirtualMachineScaleSets'
   ]
   ```
@@ -4140,6 +4141,7 @@ The type of the agent pool.
   ```Bicep
   [
     'AvailabilitySet'
+    'VirtualMachines'
     'VirtualMachineScaleSets'
   ]
   ```
