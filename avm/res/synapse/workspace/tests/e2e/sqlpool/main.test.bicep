@@ -36,7 +36,8 @@ module nestedDependencies 'dependencies.bicep' = {
   name: '${uniqueString(deployment().name, enforcedLocation)}-nestedDependencies'
   params: {
     location: enforcedLocation
-    storageAccountName: 'dep${namePrefix}sa${serviceShort}01'
+    // Storage account names are globally unique, so the subscription is mixed in to avoid collisions between environments sharing a namePrefix.
+    storageAccountName: 'dep${namePrefix}sa${serviceShort}01${substring(uniqueString(subscription().id), 0, 4)}'
   }
 }
 

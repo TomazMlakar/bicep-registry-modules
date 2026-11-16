@@ -40,7 +40,8 @@ module nestedDependencies 'dependencies.bicep' = {
   params: {
     // Adding base time to make the name unique as purge protection must be enabled (but may not be longer than 24 characters total)
     keyVaultName: 'dep-${namePrefix}-kv-${serviceShort}-${substring(uniqueString(baseTime), 0, 3)}'
-    storageAccountName: 'dep${namePrefix}sa${serviceShort}01'
+    // Storage account names are globally unique, so the subscription is mixed in to avoid collisions between environments sharing a namePrefix.
+    storageAccountName: 'dep${namePrefix}sa${serviceShort}01${substring(uniqueString(subscription().id), 0, 4)}'
     location: resourceLocation
   }
 }

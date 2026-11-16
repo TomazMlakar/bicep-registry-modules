@@ -37,7 +37,8 @@ module nestedDependencies 'dependencies.bicep' = {
   params: {
     location: enforcedLocation
     virtualNetworkName: 'dep-${namePrefix}-vnet-${serviceShort}'
-    storageAccountName: 'dep${namePrefix}sa${serviceShort}01'
+    // Storage account names are globally unique, so the subscription is mixed in to avoid collisions between environments sharing a namePrefix.
+    storageAccountName: 'dep${namePrefix}sa${serviceShort}01${substring(uniqueString(subscription().id), 0, 4)}'
   }
 }
 
@@ -47,7 +48,7 @@ module diagnosticDependencies '../../../../../../../utilities/e2e-template-asset
   scope: resourceGroup
   name: '${uniqueString(deployment().name, enforcedLocation)}-diagnosticDependencies'
   params: {
-    storageAccountName: 'dep${namePrefix}diasa${serviceShort}03'
+    storageAccountName: 'dep${namePrefix}diasa${serviceShort}03${substring(uniqueString(subscription().id), 0, 4)}'
     logAnalyticsWorkspaceName: 'dep-${namePrefix}-law-${serviceShort}'
     eventHubNamespaceEventHubName: 'dep-${namePrefix}-evh-${serviceShort}01'
     eventHubNamespaceName: 'dep-${namePrefix}-evhns-${serviceShort}01'
