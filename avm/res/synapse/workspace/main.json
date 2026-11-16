@@ -5,8 +5,8 @@
   "metadata": {
     "_generator": {
       "name": "bicep",
-      "version": "0.48.1.52935",
-      "templateHash": "13187600129008269031"
+      "version": "0.49.2.45890",
+      "templateHash": "8957985737101819977"
     },
     "name": "Synapse Workspaces",
     "description": "This module deploys a Synapse Workspace."
@@ -1718,8 +1718,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.48.1.52935",
-              "templateHash": "14817252053872352187"
+              "version": "0.49.2.45890",
+              "templateHash": "16249719425291698250"
             },
             "name": "Synapse Workspace Integration Runtimes",
             "description": "This module deploys a Synapse Workspace Integration Runtime."
@@ -1848,8 +1848,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.48.1.52935",
-              "templateHash": "16024501471150173186"
+              "version": "0.49.2.45890",
+              "templateHash": "2943941390704894807"
             }
           },
           "parameters": {
@@ -1939,8 +1939,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.48.1.52935",
-              "templateHash": "15552678920822145870"
+              "version": "0.49.2.45890",
+              "templateHash": "6841742857548713281"
             },
             "name": "Synapse Workspaces Keys",
             "description": "This module deploys a Synapse Workspaces Key."
@@ -2079,8 +2079,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.48.1.52935",
-              "templateHash": "12674197767388869975"
+              "version": "0.49.2.45890",
+              "templateHash": "15713581726491648420"
             },
             "name": "Synapse Workspaces Administrators",
             "description": "This module deploys Synapse Workspaces Administrators."
@@ -2227,8 +2227,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.48.1.52935",
-              "templateHash": "8841447038024293267"
+              "version": "0.49.2.45890",
+              "templateHash": "12395755666149100965"
             },
             "name": "Synapse Workspaces Firewall Rules",
             "description": "This module deploys Synapse Workspaces Firewall Rules."
@@ -2424,8 +2424,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.48.1.52935",
-              "templateHash": "7470549391990030006"
+              "version": "0.49.2.45890",
+              "templateHash": "11491271321362052388"
             },
             "name": "Synapse Workspaces Big Data Pools",
             "description": "This module deploys a Synapse Workspaces Big Data Pool."
@@ -3255,8 +3255,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.48.1.52935",
-                      "templateHash": "16791189001939776552"
+                      "version": "0.49.2.45890",
+                      "templateHash": "13160739456805397463"
                     }
                   },
                   "definitions": {
@@ -4284,8 +4284,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.48.1.52935",
-                      "templateHash": "16791189001939776552"
+                      "version": "0.49.2.45890",
+                      "templateHash": "13160739456805397463"
                     }
                   },
                   "definitions": {
@@ -4751,8 +4751,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.48.1.52935",
-              "templateHash": "7559622951868434700"
+              "version": "0.49.2.45890",
+              "templateHash": "12417118533738389563"
             },
             "name": "Synapse Workspaces SQL Pools",
             "description": "This module deploys a Synapse Workspaces SQL Pool."
