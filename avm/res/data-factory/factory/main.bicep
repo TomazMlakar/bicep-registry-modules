@@ -179,9 +179,6 @@ resource dataFactory 'Microsoft.DataFactory/factories@2018-06-01' = {
   tags: tags
   identity: identity
   properties: {
-    trustModeClaimForMi: {
-      value: 'Disabled'
-    }
     repoConfiguration: gitConfiguration
     globalParameters: globalParameters
     publicNetworkAccess: !empty(publicNetworkAccess)
@@ -212,6 +209,10 @@ resource dataFactory 'Microsoft.DataFactory/factories@2018-06-01' = {
           purviewResourceId: purviewResourceId
         }
       : null
+    // #disable-next-line BCP037
+    // trustModeClaimForMi: {
+    //   value: 'Disabled'
+    // }
   }
 }
 
