@@ -180,7 +180,7 @@ resource dataFactory 'Microsoft.DataFactory/factories@2018-06-01' = {
   identity: identity
   properties: {
     trustModeClaimForMi: {
-      value: 'Disabled'
+      value: 'Enabled'
     }
     repoConfiguration: gitConfiguration
     globalParameters: globalParameters
