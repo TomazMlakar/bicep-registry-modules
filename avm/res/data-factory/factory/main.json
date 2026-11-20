@@ -6,7 +6,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.49.2.45890",
-      "templateHash": "15400531723796045735"
+      "templateHash": "16707777853846698702"
     },
     "name": "Data Factories",
     "description": "This module deploys a Data Factory."
@@ -1029,7 +1029,7 @@
       "identity": "[variables('identity')]",
       "properties": {
         "trustModeClaimForMi": {
-          "value": "Enabled"
+          "value": "Disabled"
         },
         "repoConfiguration": "[parameters('gitConfiguration')]",
         "globalParameters": "[parameters('globalParameters')]",
