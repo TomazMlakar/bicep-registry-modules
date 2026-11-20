@@ -179,6 +179,9 @@ resource dataFactory 'Microsoft.DataFactory/factories@2018-06-01' = {
   tags: tags
   identity: identity
   properties: {
+    trustModeClaimForMi: {
+      value: 'Enabled'
+    }
     repoConfiguration: gitConfiguration
     globalParameters: globalParameters
     publicNetworkAccess: !empty(publicNetworkAccess)
