@@ -216,6 +216,8 @@ module testDeployment '../../../main.bicep' = [
         Environment: 'Non-Prod'
         Role: 'DeploymentValidation'
       }
+      // 'Disabled' corresponds to the 'Modern' trusted service mode
+      trustModeClaimForMi: 'Disabled'
     }
   }
 ]

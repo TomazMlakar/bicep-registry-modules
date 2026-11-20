@@ -24,6 +24,13 @@ param location string = resourceGroup().location
 ])
 param publicNetworkAccess string = ''
 
+@description('Optional. The trusted service mode (`Factory settings > Trusted service` in Data Factory Studio) that controls how the Data Factory uses its managed identity to access firewall-protected Azure Storage accounts and Azure Key Vaults. `Disabled` corresponds to `Modern` (recommended) and `Enabled` to `Legacy`, which is scheduled for retirement in August 2027. If not provided, the property is not set and new Data Factories default to `Modern`. This setting is independent of `publicNetworkAccess` and private endpoints, which control network access to the Data Factory itself.')
+@allowed([
+  'Enabled'
+  'Disabled'
+])
+param trustModeClaimForMi string?
+
 @description('Optional. The Git repository configuration of the Data Factory. If omitted, the Data Factory is deployed without a Git repository configuration.')
 param gitConfiguration resourceInput<'Microsoft.DataFactory/factories@2018-06-01'>.properties.repoConfiguration?
 
@@ -178,6 +185,7 @@ resource dataFactory 'Microsoft.DataFactory/factories@2018-06-01' = {
   location: location
   tags: tags
   identity: identity
+  #disable-next-line BCP037 // The 'trustModeClaimForMi' property (spread in below) is supported by the API but is not yet part of the '2018-06-01' Bicep type definition.
   properties: {
     repoConfiguration: gitConfiguration
     globalParameters: globalParameters
@@ -209,10 +217,8 @@ resource dataFactory 'Microsoft.DataFactory/factories@2018-06-01' = {
           purviewResourceId: purviewResourceId
         }
       : null
-    // #disable-next-line BCP037
-    // trustModeClaimForMi: {
-    //   value: 'Disabled'
-    // }
+    // Spread instead of 'null' so the property is omitted from the request entirely when not provided.
+    ...(!empty(trustModeClaimForMi) ? { trustModeClaimForMi: { value: trustModeClaimForMi } } : {})
   }
 }
 

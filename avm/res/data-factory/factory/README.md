@@ -193,6 +193,10 @@ This instance deploys the module with a Git (Azure DevOps) repository configurat
 
 You can find the full example and the setup of its dependencies in the deployment test folder path [/tests/e2e/git-config]
 
+> **Note**: This test is skipped from the CI deployment validation due to the presence of a `.e2eignore` file in the test folder. The reason for skipping the deployment is:
+```text
+The test is skipped because running the HSM scenario requires a persistent Managed HSM instance to be available and configured at all times, which would incur significant costs for contributors.
+```
 
 <details>
 
@@ -263,6 +267,10 @@ This instance deploys the module with most of its features enabled.
 
 You can find the full example and the setup of its dependencies in the deployment test folder path [/tests/e2e/max]
 
+> **Note**: This test is skipped from the CI deployment validation due to the presence of a `.e2eignore` file in the test folder. The reason for skipping the deployment is:
+```text
+The test is skipped because running the HSM scenario requires a persistent Managed HSM instance to be available and configured at all times, which would incur significant costs for contributors.
+```
 
 <details>
 
@@ -415,6 +423,7 @@ module factory 'br/public:avm/res/data-factory/factory:<version>' = {
       'hidden-title': 'This is visible in the resource name'
       Role: 'DeploymentValidation'
     }
+    trustModeClaimForMi: 'Disabled'
   }
 }
 ```
@@ -600,6 +609,9 @@ module factory 'br/public:avm/res/data-factory/factory:<version>' = {
         "hidden-title": "This is visible in the resource name",
         "Role": "DeploymentValidation"
       }
+    },
+    "trustModeClaimForMi": {
+      "value": "Disabled"
     }
   }
 }
@@ -759,6 +771,7 @@ param tags = {
   'hidden-title': 'This is visible in the resource name'
   Role: 'DeploymentValidation'
 }
+param trustModeClaimForMi = 'Disabled'
 ```
 
 </details>
@@ -770,6 +783,10 @@ This instance deploys the module in alignment with the best-practices of the Azu
 
 You can find the full example and the setup of its dependencies in the deployment test folder path [/tests/e2e/waf-aligned]
 
+> **Note**: This test is skipped from the CI deployment validation due to the presence of a `.e2eignore` file in the test folder. The reason for skipping the deployment is:
+```text
+The test is skipped because running the HSM scenario requires a persistent Managed HSM instance to be available and configured at all times, which would incur significant costs for contributors.
+```
 
 <details>
 
@@ -1058,6 +1075,7 @@ param tags = {
 | [`purviewResourceId`](#parameter-purviewresourceid) | string | Purview Account resource identifier. |
 | [`roleAssignments`](#parameter-roleassignments) | array | Array of role assignments to create. |
 | [`tags`](#parameter-tags) | object | Tags of the resource. |
+| [`trustModeClaimForMi`](#parameter-trustmodeclaimformi) | string | The trusted service mode (`Factory settings > Trusted service` in Data Factory Studio) that controls how the Data Factory uses its managed identity to access firewall-protected Azure Storage accounts and Azure Key Vaults. `Disabled` corresponds to `Modern` (recommended) and `Enabled` to `Legacy`, which is scheduled for retirement in August 2027. If not provided, the property is not set and new Data Factories default to `Modern`. This setting is independent of `publicNetworkAccess` and private endpoints, which control network access to the Data Factory itself. |
 
 ### Parameter: `name`
 
@@ -2130,6 +2148,20 @@ Tags of the resource.
 
 - Required: No
 - Type: object
+
+### Parameter: `trustModeClaimForMi`
+
+The trusted service mode (`Factory settings > Trusted service` in Data Factory Studio) that controls how the Data Factory uses its managed identity to access firewall-protected Azure Storage accounts and Azure Key Vaults. `Disabled` corresponds to `Modern` (recommended) and `Enabled` to `Legacy`, which is scheduled for retirement in August 2027. If not provided, the property is not set and new Data Factories default to `Modern`. This setting is independent of `publicNetworkAccess` and private endpoints, which control network access to the Data Factory itself.
+
+- Required: No
+- Type: string
+- Allowed:
+  ```Bicep
+  [
+    'Disabled'
+    'Enabled'
+  ]
+  ```
 
 ## Outputs
 
