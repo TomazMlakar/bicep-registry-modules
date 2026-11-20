@@ -24,7 +24,7 @@ param location string = resourceGroup().location
 ])
 param publicNetworkAccess string = ''
 
-@description('Optional. The trusted service mode (`Factory settings > Trusted service` in Data Factory Studio) that controls how the Data Factory uses its managed identity to access firewall-protected Azure Storage accounts and Azure Key Vaults. `Disabled` corresponds to `Modern` (recommended) and `Enabled` to `Legacy`, which is scheduled for retirement in August 2027. If not provided, the property is not set and new Data Factories default to `Modern`. This setting is independent of `publicNetworkAccess` and private endpoints, which control network access to the Data Factory itself.')
+@description('Optional. The trusted service mode (`Factory settings > Trusted service` in Data Factory Studio) that controls how the Data Factory uses its managed identity to access firewall-protected Azure Storage accounts and Azure Key Vaults. `Disabled` corresponds to `Modern` (recommended) and `Enabled` to `Legacy`, which is scheduled for retirement in August 2027. If not provided, the property is not set: new Data Factories default to `Modern` and existing Data Factories keep their current mode. This setting is independent of `publicNetworkAccess` and private endpoints, which control network access to the Data Factory itself.')
 @allowed([
   'Enabled'
   'Disabled'

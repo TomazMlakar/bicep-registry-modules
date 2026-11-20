@@ -6,7 +6,7 @@ The latest version of the changelog can be found [here](https://github.com/Azure
 
 ### Changes
 
-- Added the optional `trustModeClaimForMi` parameter to configure the trusted service mode (`Factory settings > Trusted service` in Data Factory Studio). `Disabled` corresponds to `Modern` and `Enabled` to `Legacy`. If not provided, the property is not set and new Data Factories default to `Modern`.
+- Added the optional `trustModeClaimForMi` parameter to configure the trusted service mode (`Factory settings > Trusted service` in Data Factory Studio). `Disabled` corresponds to `Modern` and `Enabled` to `Legacy`. If not provided, the property is not set: new Data Factories default to `Modern` and existing Data Factories keep their current mode.
 
 ### Breaking Changes
 
